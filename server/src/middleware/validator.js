@@ -125,3 +125,86 @@ export const productQueryValidation = [
     .isFloat({ min: 0 }).withMessage('Maximum price must be a positive number'),
   validate,
 ];
+
+// Cart validation rules
+export const validateCartItem = [
+  body('productId')
+    .notEmpty().withMessage('Product ID is required')
+    .isMongoId().withMessage('Invalid product ID format'),
+  body('quantity')
+    .optional()
+    .isInt({ min: 1 }).withMessage('Quantity must be at least 1'),
+  validate,
+];
+
+export const validateUpdateCartItem = [
+  param('itemId')
+    .notEmpty().withMessage('Item ID is required'),
+  body('quantity')
+    .notEmpty().withMessage('Quantity is required')
+    .isInt({ min: 1 }).withMessage('Quantity must be at least 1'),
+  validate,
+];
+
+// Order validation rules
+export const validateCreateOrder = [
+  body('items')
+    .isArray({ min: 1 }).withMessage('Order must contain at least one item'),
+  body('items.*.productId')
+    .isMongoId().withMessage('Invalid product ID'),
+  body('items.*.quantity')
+    .isInt({ min: 1 }).withMessage('Quantity must be at least 1'),
+  body('shippingAddress')
+    .notEmpty().withMessage('Shipping address is required'),
+  body('shippingAddress.firstName')
+    .trim()
+    .notEmpty().withMessage('First name is required'),
+  body('shippingAddress.lastName')
+    .trim()
+    .notEmpty().withMessage('Last name is required'),
+  body('shippingAddress.address')
+    .trim()
+    .notEmpty().withMessage('Address is required'),
+  body('shippingAddress.city')
+    .trim()
+    .notEmpty().withMessage('City is required'),
+  body('shippingAddress.state')
+    .trim()
+    .notEmpty().withMessage('State is required'),
+  body('shippingAddress.zipCode')
+    .trim()
+    .notEmpty().withMessage('Zip code is required'),
+  body('shippingAddress.country')
+    .trim()
+    .notEmpty().withMessage('Country is required'),
+  body('shippingAddress.phone')
+    .trim()
+    .notEmpty().withMessage('Phone is required')
+    .matches(/^[\d\s\-\+\(\)]+$/).withMessage('Invalid phone format'),
+  body('paymentMethod')
+    .trim()
+    .notEmpty().withMessage('Payment method is required'),
+  validate,
+];
+
+export const validateUpdateOrderStatus = [
+  param('id')
+    .isMongoId().withMessage('Invalid order ID'),
+  body('status')
+    .notEmpty().withMessage('Status is required')
+    .isIn(['pending', 'processing', 'shipped', 'delivered', 'cancelled'])
+    .withMessage('Invalid status value'),
+  validate,
+];
+
+// Review validation rules
+export const validateReview = [
+  body('rating')
+    .notEmpty().withMessage('Rating is required')
+    .isInt({ min: 1, max: 5 }).withMessage('Rating must be between 1 and 5'),
+  body('comment')
+    .trim()
+    .notEmpty().withMessage('Comment is required')
+    .isLength({ min: 10, max: 500 }).withMessage('Comment must be between 10 and 500 characters'),
+  validate,
+];
