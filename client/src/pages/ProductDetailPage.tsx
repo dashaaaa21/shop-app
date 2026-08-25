@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import Header from '../components/Header';
+import Footer from '../components/Footer';
 import './ProductDetailPage.css';
 
 const ProductDetailPage = () => {
@@ -165,6 +166,8 @@ const ProductDetailPage = () => {
           </div>
         </div>
       </div>
+
+      <Footer />
     </div>
   );
 };
