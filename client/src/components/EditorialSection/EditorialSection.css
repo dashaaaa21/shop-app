@@ -1,0 +1,129 @@
+.editorial-section {
+  background-color: var(--color-almost-black);
+  padding: 120px 0;
+  position: relative;
+  overflow: hidden;
+}
+
+.editorial-section__container {
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding: 0 var(--container-padding);
+  position: relative;
+  min-height: 600px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.editorial-section__images {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 var(--container-padding);
+}
+
+.editorial-section__image {
+  position: absolute;
+  width: 320px;
+  height: 420px;
+  object-fit: cover;
+  opacity: 0.3;
+  filter: grayscale(40%);
+  transition: all var(--transition-slow);
+}
+
+.editorial-section__image--1 {
+  left: 10%;
+  top: 10%;
+  animation: fadeIn var(--transition-elegant) forwards;
+  animation-delay: 0.3s;
+}
+
+.editorial-section__image--2 {
+  right: 15%;
+  bottom: 15%;
+  width: 280px;
+  height: 360px;
+  animation: fadeIn var(--transition-elegant) forwards;
+  animation-delay: 0.5s;
+}
+
+.editorial-section__content {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  max-width: 900px;
+}
+
+.editorial-section__title {
+  font-family: var(--font-serif);
+  font-size: clamp(48px, 5vw, 72px);
+  font-weight: 400;
+  line-height: 1.2;
+  color: var(--color-text-light);
+  margin-bottom: var(--spacing-lg);
+  opacity: 0;
+  animation: fadeInUp var(--transition-elegant) forwards;
+  animation-delay: 0.2s;
+}
+
+.editorial-section__title--blur {
+  filter: blur(0.8px);
+  opacity: 0.7;
+}
+
+.editorial-section__description {
+  font-family: var(--font-sans);
+  font-size: 16px;
+  font-weight: 300;
+  line-height: 1.8;
+  color: var(--color-text-light);
+  opacity: 0.8;
+  animation: fadeInUp var(--transition-elegant) forwards;
+  animation-delay: 0.4s;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .editorial-section {
+    padding: 100px 0;
+  }
+
+  .editorial-section__image {
+    width: 280px;
+    height: 360px;
+  }
+
+  .editorial-section__image--2 {
+    width: 240px;
+    height: 320px;
+  }
+}
+
+@media (max-width: 768px) {
+  .editorial-section {
+    padding: 80px 0;
+  }
+
+  .editorial-section__container {
+    min-height: 400px;
+  }
+
+  .editorial-section__images {
+    display: none;
+  }
+
+  .editorial-section__title {
+    font-size: clamp(36px, 8vw, 48px);
+  }
+
+  .editorial-section__description {
+    font-size: 14px;
+  }
+}
