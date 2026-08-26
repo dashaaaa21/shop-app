@@ -4,6 +4,7 @@ import { useAuthStore } from './store/auth.store';
 import { useCartStore } from './store/cart.store';
 import { ROUTES } from './constants/routes';
 import HomePage from './pages/HomePage';
+import ProductDetailPage from './pages/ProductDetailPage';
 
 // Placeholder pages
 
@@ -62,6 +63,7 @@ function App() {
     <div className="app">
       <Routes>
         <Route path={ROUTES.HOME} element={<HomePage />} />
+        <Route path="/product/:id" element={<ProductDetailPage />} />
         <Route path={ROUTES.LOGIN} element={<LoginPage />} />
         <Route path={ROUTES.REGISTER} element={<RegisterPage />} />
         <Route path={ROUTES.PRODUCTS} element={<ProductsPage />} />
