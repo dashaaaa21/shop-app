@@ -1,19 +1,11 @@
-export type UserRole = 'customer' | 'admin';
-
 export interface User {
   id: string;
   email: string;
-  firstName: string;
-  lastName: string;
-  role: UserRole;
+  name: string;
   avatar?: string;
-  phone?: string;
+  role: 'user' | 'admin';
   createdAt: string;
-}
-
-export interface AuthResponse {
-  user: User;
-  token: string;
+  updatedAt: string;
 }
 
 export interface LoginCredentials {
@@ -22,9 +14,8 @@ export interface LoginCredentials {
 }
 
 export interface RegisterData {
+  name: string;
   email: string;
   password: string;
-  firstName: string;
-  lastName: string;
-  phone?: string;
+  confirmPassword: string;
 }

@@ -4,7 +4,9 @@ import { useAuthStore } from './store/auth.store';
 import { useCartStore } from './store/cart.store';
 import { ROUTES } from './constants/routes';
 import HomePage from './pages/HomePage';
+import ProductsPage from './pages/ProductsPage';
 import ProductDetailPage from './pages/ProductDetailPage';
+import CartPage from './pages/CartPage';
 
 // Placeholder pages
 
@@ -19,20 +21,6 @@ const RegisterPage = () => (
   <div className="container">
     <h1>Register</h1>
     <p>Register page - Coming soon</p>
-  </div>
-);
-
-const ProductsPage = () => (
-  <div className="container">
-    <h1>Products</h1>
-    <p>Products page - Coming soon</p>
-  </div>
-);
-
-const CartPage = () => (
-  <div className="container">
-    <h1>Shopping Cart</h1>
-    <p>Cart page - Coming soon</p>
   </div>
 );
 
@@ -63,10 +51,10 @@ function App() {
     <div className="app">
       <Routes>
         <Route path={ROUTES.HOME} element={<HomePage />} />
-        <Route path="/product/:id" element={<ProductDetailPage />} />
         <Route path={ROUTES.LOGIN} element={<LoginPage />} />
         <Route path={ROUTES.REGISTER} element={<RegisterPage />} />
         <Route path={ROUTES.PRODUCTS} element={<ProductsPage />} />
+        <Route path={ROUTES.PRODUCT_DETAIL} element={<ProductDetailPage />} />
         <Route path={ROUTES.CART} element={<CartPage />} />
         <Route path={ROUTES.CHECKOUT} element={<CheckoutPage />} />
         <Route path={ROUTES.ORDERS} element={<OrdersPage />} />

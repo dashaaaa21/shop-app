@@ -1,6 +1,6 @@
 import { create } from 'zustand';
-import { User } from '@/types/user.types';
-import { storage, STORAGE_KEYS } from '@/utils/storage';
+import { User } from '../types/user.types';
+import { storage, STORAGE_KEYS } from '../utils/storage';
 
 interface AuthState {
   user: User | null;
