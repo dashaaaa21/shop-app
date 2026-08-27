@@ -1,14 +1,16 @@
 import { Product } from './product.types';
 
 export interface CartItem {
-  product: Product;
+  id: string;
+  productId: string;
+  name: string;
+  price: number;
   quantity: number;
+  image: string;
+  attributes?: Record<string, string>;
 }
 
-export interface Cart {
-  items: CartItem[];
-  totalItems: number;
-  subtotal: number;
-  tax: number;
-  total: number;
+export interface CartItemLegacy {
+  product: Product;
+  quantity: number;
 }

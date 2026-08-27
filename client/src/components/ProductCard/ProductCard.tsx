@@ -36,7 +36,7 @@ const ProductCard = ({ id, name, price, discountPrice, images, category }: Produ
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
-      <Link to={`/product/${id}`} className="product-card__link">
+      <Link to={`/products/${id}`} className="product-card__link">
         <div className="product-card__image-wrapper">
           <img
             src={images[imageIndex] || images[0]}

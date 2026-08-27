@@ -5,7 +5,6 @@ import { Footer } from '../components/Footer';
 import { ProductGrid } from '../components/ProductGrid';
 import { Loader } from '../components/loader';
 import { useProductStore } from '../store/product.store';
-import { Product } from '../types/product.types';
 import './ProductsPage.css';
 
 interface FilterState {

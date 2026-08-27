@@ -51,7 +51,7 @@ const CartPage = () => {
         <main className="main-content">
           <div className="container">
             <div className="empty-cart">
-              <div className="empty-cart-icon">🛒</div>
+              <div className="empty-cart-message">Cart</div>
               <h2>Your Cart is Empty</h2>
               <p>Looks like you haven't added any items to your cart yet.</p>
               <Button onClick={() => navigate(ROUTES.PRODUCTS)} className="continue-shopping-btn">
@@ -189,7 +189,6 @@ const CartPage = () => {
 
                 {total < 50 && (
                   <div className="shipping-notice">
-                    <span className="shipping-icon">🚚</span>
                     <span>Add ${(50 - total).toFixed(2)} more for free shipping!</span>
                   </div>
                 )}
@@ -210,9 +209,9 @@ const CartPage = () => {
                 <div className="payment-methods">
                   <p>We accept:</p>
                   <div className="payment-icons">
-                    <span>💳</span>
-                    <span>🏦</span>
-                    <span>📱</span>
+                    <span>Card</span>
+                    <span>Bank</span>
+                    <span>Mobile</span>
                   </div>
                 </div>
               </div>
@@ -221,21 +220,18 @@ const CartPage = () => {
 
           <div className="cart-features">
             <div className="feature">
-              <span className="feature-icon">🔒</span>
               <div>
                 <h4>Secure Checkout</h4>
                 <p>Your payment information is encrypted and secure</p>
               </div>
             </div>
             <div className="feature">
-              <span className="feature-icon">↩️</span>
               <div>
                 <h4>Easy Returns</h4>
                 <p>30-day return policy on all items</p>
               </div>
             </div>
             <div className="feature">
-              <span className="feature-icon">🚚</span>
               <div>
                 <h4>Fast Shipping</h4>
                 <p>Free shipping on orders over $50</p>

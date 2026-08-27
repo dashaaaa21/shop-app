@@ -1,10 +1,17 @@
+export const STORAGE_KEYS = {
+  AUTH_TOKEN: 'auth_token',
+  USER: 'user',
+  CART: 'cart',
+  PREFERENCES: 'preferences',
+} as const;
+
 export const storage = {
   get: <T>(key: string): T | null => {
     try {
       const item = localStorage.getItem(key);
       return item ? JSON.parse(item) : null;
     } catch (error) {
-      console.error(`Error reading from localStorage: ${error}`);
+      console.error(`Error getting item ${key} from localStorage:`, error);
       return null;
     }
   },
@@ -13,7 +20,7 @@ export const storage = {
     try {
       localStorage.setItem(key, JSON.stringify(value));
     } catch (error) {
-      console.error(`Error writing to localStorage: ${error}`);
+      console.error(`Error setting item ${key} in localStorage:`, error);
     }
   },
 
@@ -21,7 +28,7 @@ export const storage = {
     try {
       localStorage.removeItem(key);
     } catch (error) {
-      console.error(`Error removing from localStorage: ${error}`);
+      console.error(`Error removing item ${key} from localStorage:`, error);
     }
   },
 
@@ -29,14 +36,7 @@ export const storage = {
     try {
       localStorage.clear();
     } catch (error) {
-      console.error(`Error clearing localStorage: ${error}`);
+      console.error('Error clearing localStorage:', error);
     }
   },
 };
-
-export const STORAGE_KEYS = {
-  AUTH_TOKEN: 'auth_token',
-  USER: 'user',
-  CART: 'cart',
-  THEME: 'theme',
-} as const;
