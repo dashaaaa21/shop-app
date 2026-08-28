@@ -180,11 +180,15 @@
   letter-spacing: 1px;
   cursor: pointer;
   transition: all var(--transition-base);
+  text-decoration: none;
+  display: inline-block;
+  text-align: center;
 }
 
 .category-btn:hover {
   background: var(--color-accent-red);
   color: var(--color-pure-white);
+  text-decoration: none;
 }
 
 .category-info {

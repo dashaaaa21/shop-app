@@ -1,4 +1,5 @@
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { Header } from '../components/Header';
 import { Footer } from '../components/Footer';
 import { Newsletter } from '../components/Newsletter';
@@ -70,8 +71,9 @@ const newArrivals = [
     price: 129,
     images: [
       'https://images.unsplash.com/photo-1506629905607-47d67ee3bb67?w=600&h=600&fit=crop&q=80',
+      'https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?w=600&h=600&fit=crop&q=80',
     ],
-    category: 'Trousers',
+    category: 'TROUSERS',
   },
   {
     id: 'w7',
@@ -86,10 +88,12 @@ const newArrivals = [
     id: 'w8',
     name: 'Minimalist Sweater',
     price: 149,
+    discountPrice: 129,
     images: [
       'https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=600&h=600&fit=crop&q=80',
+      'https://images.unsplash.com/photo-1583744946564-b52ac1c389c8?w=600&h=600&fit=crop&q=80',
     ],
-    category: 'Sweaters',
+    category: 'SWEATERS',
   },
 ];
 
@@ -97,27 +101,31 @@ const categories = [
   {
     id: 'cat1',
     name: 'Dresses',
+    slug: 'dresses',
     image: 'https://images.unsplash.com/photo-1572804013309-59a88b7e92f1?w=800&h=600&fit=crop&q=80',
     description: 'Elegant dresses for every occasion',
     itemCount: '24+ styles',
   },
   {
     id: 'cat2',
-    name: 'Outerwear', 
-    image: 'https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=800&h=600&fit=crop&q=80',
-    description: 'Sophisticated coats and jackets',
-    itemCount: '18+ styles',
+    name: 'TROUSERS', 
+    slug: 'trousers',
+    image: 'https://images.unsplash.com/photo-1506629905607-47d67ee3bb67?w=800&h=600&fit=crop&q=80',
+    description: 'Sophisticated trousers for modern women',
+    itemCount: '15+ styles',
   },
   {
     id: 'cat3',
-    name: 'Knitwear',
-    image: 'https://images.unsplash.com/photo-1434389677669-e08b4cac3105?w=800&h=600&fit=crop&q=80',
-    description: 'Luxurious sweaters and cardigans',
-    itemCount: '32+ styles',
+    name: 'SWEATERS',
+    slug: 'sweaters',
+    image: 'https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=800&h=600&fit=crop&q=80',
+    description: 'Minimalist sweaters and cozy knitwear',
+    itemCount: '28+ styles',
   },
   {
     id: 'cat4',
     name: 'Evening Wear',
+    slug: 'evening-wear',
     image: 'https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?w=800&h=600&fit=crop&q=80',
     description: 'Exceptional pieces for special moments',
     itemCount: '15+ styles',
@@ -125,8 +133,6 @@ const categories = [
 ];
 
 const WomenPage = () => {
-  const [selectedCategory, setSelectedCategory] = useState('all');
-
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
@@ -183,9 +189,12 @@ const WomenPage = () => {
                   <div className="category-image">
                     <img src={category.image} alt={category.name} onError={handleImageError} />
                     <div className="category-overlay">
-                      <button className="category-btn">
+                      <Link 
+                        to={`/shop/women/category/${category.slug}`}
+                        className="category-btn"
+                      >
                         Shop {category.name}
-                      </button>
+                      </Link>
                     </div>
                   </div>
                   <div className="category-info">
