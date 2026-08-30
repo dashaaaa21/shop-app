@@ -6,7 +6,7 @@ import { Newsletter } from '../components/Newsletter';
 import { ProductGrid } from '../components/ProductGrid';
 import './CategoryPage.css';
 
-// Image error handling
+// Image error handling with fallback placeholder
 const handleImageError = (e: React.SyntheticEvent<HTMLImageElement, Event>) => {
   const img = e.currentTarget;
   img.src = 'https://via.placeholder.com/600x600/f8f7f4/777777?text=Fashion+Image';
