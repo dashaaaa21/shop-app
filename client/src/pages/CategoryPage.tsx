@@ -229,7 +229,7 @@ const CategoryPage = () => {
             <div className="category-hero__image">
               <img 
                 src={currentCategory.heroImage}
-                alt={currentCategory.title}
+                alt={`${currentCategory.title} collection hero image`}
                 onError={handleImageError}
               />
               <div className="category-hero__overlay">
@@ -267,6 +267,7 @@ const CategoryPage = () => {
                   value={priceRange} 
                   onChange={(e) => setPriceRange(e.target.value)}
                   className="category-filter__select"
+                  aria-label="Filter products by price range"
                 >
                   <option value="all">All Prices</option>
                   <option value="under-100">Under €100</option>
