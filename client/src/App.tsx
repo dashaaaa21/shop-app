@@ -7,6 +7,8 @@ import HomePage from './pages/HomePage';
 import ProductsPage from './pages/ProductsPage';
 import ProductDetailPage from './pages/ProductDetailPage';
 import CartPage from './pages/CartPage';
+import WomenPage from './pages/WomenPage';
+import CategoryPage from './pages/CategoryPage';
 
 // Placeholder pages
 
@@ -53,6 +55,8 @@ function App() {
         <Route path={ROUTES.HOME} element={<HomePage />} />
         <Route path={ROUTES.LOGIN} element={<LoginPage />} />
         <Route path={ROUTES.REGISTER} element={<RegisterPage />} />
+        <Route path="/shop/women" element={<WomenPage />} />
+        <Route path="/shop/women/category/:category" element={<CategoryPage />} />
         <Route path={ROUTES.PRODUCTS} element={<ProductsPage />} />
         <Route path={ROUTES.PRODUCT_DETAIL} element={<ProductDetailPage />} />
         <Route path={ROUTES.CART} element={<CartPage />} />
