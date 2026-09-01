@@ -166,7 +166,9 @@ const CategoryPage = () => {
 
   useEffect(() => {
     window.scrollTo(0, 0);
-  }, [category]);
+    // Update page title for SEO
+    document.title = `${currentCategory.title} - Women's Collection | Shop`;
+  }, [category, currentCategory.title]);
 
   if (!category || !categoryInfo[category as keyof typeof categoryInfo]) {
     return <Navigate to="/shop/women" replace />;

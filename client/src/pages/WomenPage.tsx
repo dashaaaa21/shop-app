@@ -135,6 +135,8 @@ const categories = [
 const WomenPage = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
+    // Update page title
+    document.title = "Women's Collection | Shop";
   }, []);
 
   return (
