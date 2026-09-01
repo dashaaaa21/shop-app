@@ -27,6 +27,11 @@ const ProductCard = ({ id, name, price, discountPrice, images, category }: Produ
     setImageIndex(0);
   };
 
+  const handleImageError = (e: React.SyntheticEvent<HTMLImageElement, Event>) => {
+    const img = e.currentTarget;
+    img.src = 'https://via.placeholder.com/600x600/f8f7f4/777777?text=Fashion+Item';
+  };
+
   const currentPrice = discountPrice || price;
   const hasDiscount = !!discountPrice;
 
@@ -42,6 +47,7 @@ const ProductCard = ({ id, name, price, discountPrice, images, category }: Produ
             src={images[imageIndex] || images[0]}
             alt={name}
             className="product-card__image"
+            onError={handleImageError}
           />
           {hasDiscount && (
             <span className="product-card__badge">Sale</span>
