@@ -6,7 +6,7 @@ export const useCart = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const { items, addItem, removeItem, updateQuantity, clearCart } = useCartStore();
+  const { items, removeFromCart: removeFromCartStore, updateQuantity, clearCart } = useCartStore();
 
   const syncCart = async () => {
     try {
@@ -57,7 +57,7 @@ export const useCart = () => {
       setIsLoading(true);
       setError(null);
       await cartApi.removeFromCart(productId);
-      removeItem(productId);
+      removeFromCartStore(productId);
     } catch (err: any) {
       const message = err.response?.data?.message || 'Failed to remove item from cart';
       setError(message);

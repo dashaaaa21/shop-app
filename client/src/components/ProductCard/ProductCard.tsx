@@ -7,17 +7,17 @@ interface ProductCardProps {
   name: string;
   price: number;
   discountPrice?: number;
-  images: string[];
+  images?: string[];
   category: string;
 }
 
-const ProductCard = ({ id, name, price, discountPrice, images, category }: ProductCardProps) => {
+const ProductCard = ({ id, name, price, discountPrice, images = [], category }: ProductCardProps) => {
   const [isHovered, setIsHovered] = useState(false);
   const [imageIndex, setImageIndex] = useState(0);
 
   const handleMouseEnter = () => {
     setIsHovered(true);
-    if (images.length > 1) {
+    if (images && images.length > 1) {
       setImageIndex(1);
     }
   };
@@ -44,7 +44,7 @@ const ProductCard = ({ id, name, price, discountPrice, images, category }: Produ
       <Link to={`/products/${id}`} className="product-card__link">
         <div className="product-card__image-wrapper">
           <img
-            src={images[imageIndex] || images[0]}
+            src={images && images[imageIndex] ? images[imageIndex] : (images && images[0]) || 'https://via.placeholder.com/600x600/f8f7f4/777777?text=Fashion+Item'}
             alt={name}
             className="product-card__image"
             onError={handleImageError}
