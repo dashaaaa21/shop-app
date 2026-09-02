@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+import { womenProducts } from '../data/products.data';
 
 export interface Product {
   id: string;
@@ -23,6 +24,21 @@ interface ProductState {
   fetchProductById: (id: string) => Promise<void>;
   searchProducts: (query: string) => Promise<void>;
 }
+
+// Convert women products to store format
+const womenMockProducts: Product[] = womenProducts.map((p) => ({
+  id: p.id,
+  name: p.name,
+  description: p.description,
+  price: p.discountPrice ?? p.price,
+  originalPrice: p.discountPrice ? p.price : undefined,
+  image: p.images[0],
+  images: p.images,
+  category: p.category,
+  stock: p.stock,
+  rating: p.rating,
+  specifications: p.specifications,
+}));
 
 // Mock data
 const mockProducts: Product[] = [
@@ -131,6 +147,9 @@ const mockProducts: Product[] = [
   }
 ];
 
+// All products combined (general + women's)
+const allProducts: Product[] = [...mockProducts, ...womenMockProducts];
+
 export const useProductStore = create<ProductState>((set) => ({
   products: [],
   currentProduct: null,
@@ -139,82 +158,58 @@ export const useProductStore = create<ProductState>((set) => ({
 
   fetchProducts: async (filters) => {
     set({ loading: true, error: null });
-    
+
     try {
-      // Simulate API call
       await new Promise(resolve => setTimeout(resolve, 500));
-      
-      let filteredProducts = mockProducts;
-      
+
+      let filteredProducts = allProducts;
+
       if (filters?.category) {
-        filteredProducts = mockProducts.filter(
+        filteredProducts = allProducts.filter(
           product => product.category.toLowerCase() === filters.category?.toLowerCase()
         );
       }
-      
-      set({ 
-        products: filteredProducts, 
-        loading: false 
-      });
+
+      set({ products: filteredProducts, loading: false });
     } catch (error) {
-      set({ 
-        error: 'Failed to fetch products', 
-        loading: false 
-      });
+      set({ error: 'Failed to fetch products', loading: false });
     }
   },
 
   fetchProductById: async (id) => {
     set({ loading: true, error: null });
-    
+
     try {
-      // Simulate API call
       await new Promise(resolve => setTimeout(resolve, 300));
-      
-      const product = mockProducts.find(p => p.id === id);
-      
+
+      const product = allProducts.find(p => p.id === id);
+
       if (product) {
-        set({ 
-          currentProduct: product, 
-          loading: false 
-        });
+        set({ currentProduct: product, loading: false });
       } else {
-        set({ 
-          error: 'Product not found', 
-          loading: false 
-        });
+        set({ error: 'Product not found', loading: false });
       }
     } catch (error) {
-      set({ 
-        error: 'Failed to fetch product', 
-        loading: false 
-      });
+      set({ error: 'Failed to fetch product', loading: false });
     }
   },
 
   searchProducts: async (query) => {
     set({ loading: true, error: null });
-    
+
     try {
-      // Simulate API call
       await new Promise(resolve => setTimeout(resolve, 300));
-      
-      const filteredProducts = mockProducts.filter(
-        product => 
+
+      const filteredProducts = allProducts.filter(
+        product =>
           product.name.toLowerCase().includes(query.toLowerCase()) ||
           product.description.toLowerCase().includes(query.toLowerCase()) ||
           product.category.toLowerCase().includes(query.toLowerCase())
       );
-      
-      set({ 
-        products: filteredProducts, 
-        loading: false 
-      });
+
+      set({ products: filteredProducts, loading: false });
     } catch (error) {
-      set({ 
-        error: 'Failed to search products', 
-        loading: false 
-      });
+      set({ error: 'Failed to search products', loading: false });
     }
-  }
+  },
 }));

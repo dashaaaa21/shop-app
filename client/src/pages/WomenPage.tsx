@@ -4,98 +4,16 @@ import { Header } from '../components/Header';
 import { Footer } from '../components/Footer';
 import { Newsletter } from '../components/Newsletter';
 import { ProductGrid } from '../components/ProductGrid';
+import { getFeaturedProducts, getNewArrivals } from '../data/products.data';
 import './WomenPage.css';
 
-// Image error handling with fallback placeholder
 const handleImageError = (e: React.SyntheticEvent<HTMLImageElement, Event>) => {
   const img = e.currentTarget;
   img.src = 'https://via.placeholder.com/600x600/f8f7f4/777777?text=Fashion+Image';
 };
 
-// Sample women's products data
-const featuredProducts = [
-  {
-    id: 'w1',
-    name: 'Elegant Silk Blouse',
-    price: 189,
-    discountPrice: 149,
-    images: [
-      'https://images.unsplash.com/photo-1551488831-00ddcb6c6bd3?w=600&h=600&fit=crop&q=80',
-      'https://images.unsplash.com/photo-1583744946564-b52ac1c389c8?w=600&h=600&fit=crop&q=80',
-    ],
-    category: 'Blouses',
-  },
-  {
-    id: 'w2',
-    name: 'Luxe Cashmere Cardigan',
-    price: 299,
-    images: [
-      'https://images.unsplash.com/photo-1434389677669-e08b4cac3105?w=600&h=600&fit=crop&q=80',
-    ],
-    category: 'Knitwear',
-  },
-  {
-    id: 'w3',
-    name: 'Designer Midi Dress',
-    price: 259,
-    images: [
-      'https://images.unsplash.com/photo-1572804013309-59a88b7e92f1?w=600&h=600&fit=crop&q=80',
-    ],
-    category: 'Dresses',
-  },
-  {
-    id: 'w4',
-    name: 'Tailored Wool Coat',
-    price: 399,
-    discountPrice: 319,
-    images: [
-      'https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=600&h=600&fit=crop&q=80',
-    ],
-    category: 'Outerwear',
-  },
-];
-
-const newArrivals = [
-  {
-    id: 'w5',
-    name: 'Vintage Inspired Jacket',
-    price: 179,
-    images: [
-      'https://images.unsplash.com/photo-1544022613-e87ca75a784a?w=600&h=600&fit=crop&q=80',
-    ],
-    category: 'Jackets',
-  },
-  {
-    id: 'w6',
-    name: 'Sophisticated Trousers',
-    price: 129,
-    images: [
-      'https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?w=600&h=600&fit=crop&q=80',
-      'https://images.unsplash.com/photo-1509631179647-0177331693ae?w=600&h=600&fit=crop&q=80',
-    ],
-    category: 'TROUSERS',
-  },
-  {
-    id: 'w7',
-    name: 'Ethereal Evening Gown',
-    price: 459,
-    images: [
-      'https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?w=600&h=600&fit=crop&q=80',
-    ],
-    category: 'Evening Wear',
-  },
-  {
-    id: 'w8',
-    name: 'Minimalist Sweater',
-    price: 149,
-    discountPrice: 129,
-    images: [
-      'https://images.unsplash.com/photo-1583744946564-b52ac1c389c8?w=600&h=600&fit=crop&q=80',
-      'https://images.unsplash.com/photo-1434389677669-e08b4cac3105?w=600&h=600&fit=crop&q=80',
-    ],
-    category: 'SWEATERS',
-  },
-];
+const featuredProducts = getFeaturedProducts();
+const newArrivals = getNewArrivals();
 
 const categories = [
   {
@@ -108,7 +26,7 @@ const categories = [
   },
   {
     id: 'cat2',
-    name: 'TROUSERS', 
+    name: 'TROUSERS',
     slug: 'trousers',
     image: 'https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?w=800&h=600&fit=crop&q=80',
     description: 'Sophisticated trousers for modern women',
@@ -135,14 +53,13 @@ const categories = [
 const WomenPage = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
-    // Update page title
     document.title = "Women's Collection | Shop";
   }, []);
 
   return (
     <div className="women-page">
       <Header />
-      
+
       <main className="main-content">
         <div className="container">
           {/* Hero Section */}
@@ -150,7 +67,7 @@ const WomenPage = () => {
             <div className="hero-content">
               <h1 className="hero-title">Women's Collection</h1>
               <p className="hero-description">
-                Discover our carefully curated selection of sophisticated pieces designed 
+                Discover our carefully curated selection of sophisticated pieces designed
                 for the modern woman who values timeless elegance and exceptional quality.
               </p>
               <div className="hero-stats">
@@ -169,8 +86,8 @@ const WomenPage = () => {
               </div>
             </div>
             <div className="hero-image">
-              <img 
-                src="https://images.unsplash.com/photo-1551488831-00ddcb6c6bd3?w=800&h=1000&fit=crop&q=80" 
+              <img
+                src="https://images.unsplash.com/photo-1551488831-00ddcb6c6bd3?w=800&h=1000&fit=crop&q=80"
                 alt="Women's Fashion"
                 onError={handleImageError}
               />
@@ -191,7 +108,7 @@ const WomenPage = () => {
                   <div className="category-image">
                     <img src={category.image} alt={category.name} onError={handleImageError} />
                     <div className="category-overlay">
-                      <Link 
+                      <Link
                         to={`/shop/women/category/${category.slug}`}
                         className="category-btn"
                       >
@@ -228,11 +145,11 @@ const WomenPage = () => {
                 The latest additions to our curated collection
               </p>
             </div>
-            <ProductGrid products={newArrivals} />
+            <ProductGrid products={newArrivals.slice(0, 4)} />
             <div className="section-actions">
-              <button className="view-all-btn">
+              <Link to="/shop/women/new-arrivals" className="view-all-btn">
                 View All New Arrivals
-              </button>
+              </Link>
             </div>
           </section>
         </div>
