@@ -67,8 +67,8 @@ const allProducts = [
     name: 'Sophisticated Trousers',
     price: 129,
     images: [
-      'https://images.unsplash.com/photo-1506629905607-47d67ee3bb67?w=600&h=600&fit=crop&q=80',
       'https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?w=600&h=600&fit=crop&q=80',
+      'https://images.unsplash.com/photo-1509631179647-0177331693ae?w=600&h=600&fit=crop&q=80',
     ],
     category: 'TROUSERS',
   },
@@ -87,8 +87,8 @@ const allProducts = [
     price: 149,
     discountPrice: 129,
     images: [
-      'https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=600&h=600&fit=crop&q=80',
       'https://images.unsplash.com/photo-1583744946564-b52ac1c389c8?w=600&h=600&fit=crop&q=80',
+      'https://images.unsplash.com/photo-1434389677669-e08b4cac3105?w=600&h=600&fit=crop&q=80',
     ],
     category: 'SWEATERS',
   },
@@ -126,7 +126,7 @@ const allProducts = [
     price: 179,
     discountPrice: 149,
     images: [
-      'https://images.unsplash.com/photo-1583744946564-b52ac1c389c8?w=600&h=600&fit=crop&q=80',
+      'https://images.unsplash.com/photo-1434389677669-e08b4cac3105?w=600&h=600&fit=crop&q=80',
     ],
     category: 'SWEATERS',
   },
@@ -142,13 +142,13 @@ const categoryInfo = {
   'trousers': {
     title: 'Trousers',
     description: 'Sophisticated trousers crafted for the modern woman who values comfort and style',
-    heroImage: 'https://images.unsplash.com/photo-1506629905607-47d67ee3bb67?w=1200&h=600&fit=crop&q=80',
+    heroImage: 'https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?w=1200&h=600&fit=crop&q=80',
     filter: 'TROUSERS'
   },
   'sweaters': {
     title: 'Sweaters',
     description: 'Minimalist sweaters and cozy knitwear for timeless elegance',
-    heroImage: 'https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=1200&h=600&fit=crop&q=80',
+    heroImage: 'https://images.unsplash.com/photo-1583744946564-b52ac1c389c8?w=1200&h=600&fit=crop&q=80',
     filter: 'SWEATERS'
   },
   'evening-wear': {
@@ -164,17 +164,18 @@ const CategoryPage = () => {
   const [sortBy, setSortBy] = useState('name');
   const [priceRange, setPriceRange] = useState('all');
 
-  useEffect(() => {
-    window.scrollTo(0, 0);
-    // Update page title for SEO
-    document.title = `${currentCategory.title} - Women's Collection | Shop`;
-  }, [category, currentCategory.title]);
-
+  // Check if category exists first
   if (!category || !categoryInfo[category as keyof typeof categoryInfo]) {
     return <Navigate to="/shop/women" replace />;
   }
 
   const currentCategory = categoryInfo[category as keyof typeof categoryInfo];
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+    // Update page title for SEO
+    document.title = `${currentCategory.title} - Women's Collection | Shop`;
+  }, [category, currentCategory.title]);
   
   // Filter products by category
   let filteredProducts = allProducts.filter(product => 
