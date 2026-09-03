@@ -10,6 +10,9 @@ import CartPage from './pages/CartPage';
 import WomenPage from './pages/WomenPage';
 import CategoryPage from './pages/CategoryPage';
 import NewArrivalsPage from './pages/NewArrivalsPage';
+import MenPage from './pages/MenPage';
+import MenCategoryPage from './pages/MenCategoryPage';
+import MenNewArrivalsPage from './pages/MenNewArrivalsPage';
 
 // Placeholder pages
 
@@ -57,8 +60,12 @@ function App() {
         <Route path={ROUTES.LOGIN} element={<LoginPage />} />
         <Route path={ROUTES.REGISTER} element={<RegisterPage />} />
         <Route path="/shop/women" element={<WomenPage />} />
+        <Route path="/new-arrivals" element={<NewArrivalsPage />} />
         <Route path="/shop/women/new-arrivals" element={<NewArrivalsPage />} />
         <Route path="/shop/women/category/:category" element={<CategoryPage />} />
+        <Route path="/shop/men" element={<MenPage />} />
+        <Route path="/shop/men/new-arrivals" element={<MenNewArrivalsPage />} />
+        <Route path="/shop/men/category/:category" element={<MenCategoryPage />} />
         <Route path={ROUTES.PRODUCTS} element={<ProductsPage />} />
         <Route path={ROUTES.PRODUCT_DETAIL} element={<ProductDetailPage />} />
         <Route path={ROUTES.CART} element={<CartPage />} />

@@ -4,24 +4,24 @@ import { Header } from '../components/Header';
 import { Footer } from '../components/Footer';
 import { Newsletter } from '../components/Newsletter';
 import { ProductGrid } from '../components/ProductGrid';
-import { getNewArrivals } from '../data/products.data';
-import './NewArrivalsPage.css';
+import { getMenNewArrivals } from '../data/products.data';
+import './MenNewArrivalsPage.css';
 
 const handleImageError = (e: React.SyntheticEvent<HTMLImageElement, Event>) => {
   const img = e.currentTarget;
   img.src = 'https://via.placeholder.com/600x600/f8f7f4/777777?text=Fashion+Image';
 };
 
-const allNewArrivals = getNewArrivals();
+const allNewArrivals = getMenNewArrivals();
 
-const NewArrivalsPage = () => {
+const MenNewArrivalsPage = () => {
   const navigate = useNavigate();
   const [sortBy, setSortBy] = useState('default');
   const [categoryFilter, setCategoryFilter] = useState('all');
 
   useEffect(() => {
     window.scrollTo(0, 0);
-    document.title = "New Arrivals — Women's Collection | Shop";
+    document.title = "New Arrivals — Men's Collection | Shop";
   }, []);
 
   const categories = ['all', ...Array.from(new Set(allNewArrivals.map((p) => p.category)))];
@@ -40,32 +40,33 @@ const NewArrivalsPage = () => {
   });
 
   return (
-    <div className="new-arrivals-page">
+    <div className="men-na-page">
       <Header />
 
-      <main className="new-arrivals-main">
+      <main className="men-na-main">
         <div className="container">
+
           {/* Breadcrumbs */}
-          <nav className="na-breadcrumbs">
-            <Link to="/" className="na-breadcrumb-link">Home</Link>
-            <span className="na-breadcrumb-sep">/</span>
-            <Link to="/shop/women" className="na-breadcrumb-link">Women</Link>
-            <span className="na-breadcrumb-sep">/</span>
-            <span className="na-breadcrumb-current">New Arrivals</span>
+          <nav className="men-na-breadcrumbs">
+            <Link to="/" className="men-na-breadcrumb-link">Home</Link>
+            <span className="men-na-breadcrumb-sep">/</span>
+            <Link to="/shop/men" className="men-na-breadcrumb-link">Men</Link>
+            <span className="men-na-breadcrumb-sep">/</span>
+            <span className="men-na-breadcrumb-current">New Arrivals</span>
           </nav>
 
           {/* Hero */}
-          <section className="na-hero">
-            <div className="na-hero__image">
+          <section className="men-na-hero">
+            <div className="men-na-hero__image">
               <img
-                src="https://images.unsplash.com/photo-1483985988355-763728e1935b?w=1400&h=500&fit=crop&q=80"
-                alt="New Arrivals"
+                src="https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=1400&h=500&fit=crop&q=80"
+                alt="Men's New Arrivals"
                 onError={handleImageError}
               />
-              <div className="na-hero__overlay">
-                <h1 className="na-hero__title">New Arrivals</h1>
-                <p className="na-hero__subtitle">
-                  The latest additions to our curated women's collection
+              <div className="men-na-hero__overlay">
+                <h1 className="men-na-hero__title">New Arrivals</h1>
+                <p className="men-na-hero__subtitle">
+                  The latest additions to our curated men's collection
                 </p>
               </div>
             </div>
@@ -74,44 +75,42 @@ const NewArrivalsPage = () => {
           {/* Gender switcher */}
           <div className="na-gender-switcher">
             <button
-              className="na-gender-btn na-gender-btn--active"
-              aria-current="page"
+              className="na-gender-btn"
+              onClick={() => navigate('/shop/women/new-arrivals')}
             >
               Women
             </button>
             <button
-              className="na-gender-btn"
-              onClick={() => navigate('/shop/men/new-arrivals')}
+              className="na-gender-btn na-gender-btn--active"
+              aria-current="page"
             >
               Men
             </button>
           </div>
 
           {/* Controls */}
-          <section className="na-controls">
-            <div className="na-controls__left">
-              <p className="na-controls__count">
+          <section className="men-na-controls">
+            <div className="men-na-controls__left">
+              <p className="men-na-controls__count">
                 {filtered.length} {filtered.length === 1 ? 'item' : 'items'}
               </p>
             </div>
-
-            <div className="na-controls__right">
-              <div className="na-category-tabs">
+            <div className="men-na-controls__right">
+              <div className="men-na-category-tabs">
                 {categories.map((cat) => (
                   <button
                     key={cat}
-                    className={`na-category-tab ${categoryFilter === cat ? 'na-category-tab--active' : ''}`}
+                    className={`men-na-tab ${categoryFilter === cat ? 'men-na-tab--active' : ''}`}
                     onClick={() => setCategoryFilter(cat)}
                   >
                     {cat === 'all' ? 'All' : cat}
                   </button>
                 ))}
               </div>
-
               <select
                 value={sortBy}
                 onChange={(e) => setSortBy(e.target.value)}
-                className="na-sort-select"
+                className="men-na-sort-select"
                 aria-label="Sort new arrivals"
               >
                 <option value="default">Latest First</option>
@@ -123,24 +122,25 @@ const NewArrivalsPage = () => {
           </section>
 
           {/* Grid */}
-          <section className="na-products">
+          <section className="men-na-products">
             {filtered.length > 0 ? (
               <ProductGrid products={filtered} columns={4} />
             ) : (
-              <div className="na-empty">
+              <div className="men-na-empty">
                 <p>No items match the selected filter.</p>
-                <button className="na-reset-btn" onClick={() => setCategoryFilter('all')}>
+                <button className="men-na-reset-btn" onClick={() => setCategoryFilter('all')}>
                   Show All
                 </button>
               </div>
             )}
           </section>
 
-          <div className="na-back">
-            <Link to="/shop/women" className="na-back-link">
-              ← Back to Women's Collection
+          <div className="men-na-back">
+            <Link to="/shop/men" className="men-na-back-link">
+              ← Back to Men's Collection
             </Link>
           </div>
+
         </div>
       </main>
 
@@ -150,4 +150,4 @@ const NewArrivalsPage = () => {
   );
 };
 
-export default NewArrivalsPage;
+export default MenNewArrivalsPage;

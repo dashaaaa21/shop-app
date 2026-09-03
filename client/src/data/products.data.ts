@@ -364,3 +364,377 @@ export const getProductsByCategory = (categoryFilter: string) =>
 
 export const getProductById = (id: string) =>
   womenProducts.find((p) => p.id === id) ?? null;
+
+// ══════════════════════════════════════════════════════════════
+// MEN
+// ══════════════════════════════════════════════════════════════
+
+export interface MenProduct {
+  id: string;
+  name: string;
+  price: number;
+  discountPrice?: number;
+  images: string[];
+  category: 'Suits' | 'TROUSERS' | 'SWEATERS' | 'Outerwear' | 'Shirts' | 'Jackets' | 'Knitwear' | 'Accessories';
+  gender: 'men';
+  isNewArrival: boolean;
+  isFeatured: boolean;
+  description: string;
+  stock: number;
+  rating: number;
+  specifications: Record<string, string>;
+}
+
+export const menProducts: MenProduct[] = [
+  // ── FEATURED ──────────────────────────────────────────────────
+  {
+    id: 'm1',
+    name: 'Tailored Wool Suit',
+    price: 599,
+    discountPrice: 499,
+    images: [
+      'https://images.unsplash.com/photo-1507679799987-c73779587ccf?w=600&h=600&fit=crop&q=80',
+      'https://images.unsplash.com/photo-1617137984095-74e4e5e3613f?w=600&h=600&fit=crop&q=80',
+    ],
+    category: 'Suits',
+    gender: 'men',
+    isNewArrival: false,
+    isFeatured: true,
+    description:
+      'A masterpiece of modern tailoring. This two-piece suit is crafted from a Super 120s wool, offering an exceptionally smooth hand feel and natural drape. The slim-fit silhouette is cut to flatter without restricting movement — ideal for both boardroom and formal occasions.',
+    stock: 8,
+    rating: 4.9,
+    specifications: {
+      Material: '100% Super 120s Wool',
+      Lining: '100% Viscose',
+      Fit: 'Slim fit',
+      Care: 'Dry clean only',
+      Origin: 'Made in Italy',
+    },
+  },
+  {
+    id: 'm2',
+    name: 'Premium Oxford Shirt',
+    price: 129,
+    images: [
+      'https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?w=600&h=600&fit=crop&q=80',
+      'https://images.unsplash.com/photo-1598033129183-c4f50c736f10?w=600&h=600&fit=crop&q=80',
+    ],
+    category: 'Shirts',
+    gender: 'men',
+    isNewArrival: false,
+    isFeatured: true,
+    description:
+      'The cornerstone of any well-dressed gentleman\'s wardrobe. Woven from a two-ply Oxford cotton, this shirt offers a subtle texture and exceptional durability. The classic fit allows for comfortable layering under a blazer or wearing alone.',
+    stock: 22,
+    rating: 4.7,
+    specifications: {
+      Material: '100% Two-ply Oxford Cotton',
+      Fit: 'Classic fit',
+      Care: 'Machine wash 40°C',
+      Collar: 'Button-down',
+      Origin: 'Made in Portugal',
+    },
+  },
+  {
+    id: 'm3',
+    name: 'Merino Wool Overcoat',
+    price: 449,
+    discountPrice: 369,
+    images: [
+      'https://images.unsplash.com/photo-1539533018447-63fcce2678e3?w=600&h=600&fit=crop&q=80',
+    ],
+    category: 'Outerwear',
+    gender: 'men',
+    isNewArrival: false,
+    isFeatured: true,
+    description:
+      'A defining outerwear piece for the modern gentleman. Cut from a luxurious merino wool blend, this overcoat features a clean single-breasted front, structured shoulders, and a slightly longer length that commands attention. Timeless in every season.',
+    stock: 6,
+    rating: 4.9,
+    specifications: {
+      Material: '90% Merino Wool, 10% Cashmere',
+      Lining: '100% Silk',
+      Length: 'Below knee',
+      Care: 'Dry clean only',
+      Closure: 'Single-breasted, 3 buttons',
+    },
+  },
+  {
+    id: 'm4',
+    name: 'Cashmere Crewneck Sweater',
+    price: 279,
+    images: [
+      'https://images.unsplash.com/photo-1576566588028-4147f3842f27?w=600&h=600&fit=crop&q=80',
+    ],
+    category: 'SWEATERS',
+    gender: 'men',
+    isNewArrival: false,
+    isFeatured: true,
+    description:
+      'Pure indulgence in knitwear form. This crewneck sweater is knitted from Grade-A Mongolian cashmere in a fine gauge that drapes beautifully. Understated and versatile, it elevates any outfit from casual to refined effortlessly.',
+    stock: 10,
+    rating: 4.8,
+    specifications: {
+      Material: '100% Grade-A Cashmere',
+      Gauge: 'Fine (12 GG)',
+      Fit: 'Regular',
+      Care: 'Hand wash cold',
+      Neckline: 'Crew neck',
+    },
+  },
+
+  // ── NEW ARRIVALS ───────────────────────────────────────────────
+  {
+    id: 'm5',
+    name: 'Slim Fit Chinos',
+    price: 119,
+    images: [
+      'https://images.unsplash.com/photo-1624378439575-d8705ad7ae80?w=600&h=600&fit=crop&q=80',
+      'https://images.unsplash.com/photo-1473966968600-fa801b869a1a?w=600&h=600&fit=crop&q=80',
+    ],
+    category: 'TROUSERS',
+    gender: 'men',
+    isNewArrival: true,
+    isFeatured: false,
+    description:
+      'The perfect balance of smart and casual. These slim-fit chinos are cut from a premium stretch-cotton twill, offering a clean silhouette and all-day comfort. An essential piece that pairs seamlessly with shirts, sweaters, or casual jackets.',
+    stock: 20,
+    rating: 4.6,
+    specifications: {
+      Material: '97% Cotton, 3% Elastane',
+      Rise: 'Mid',
+      Leg: 'Slim',
+      Care: 'Machine wash 30°C',
+      Closure: 'Zip fly with button',
+    },
+  },
+  {
+    id: 'm6',
+    name: 'Linen Summer Shirt',
+    price: 99,
+    images: [
+      'https://images.unsplash.com/photo-1598033129183-c4f50c736f10?w=600&h=600&fit=crop&q=80',
+    ],
+    category: 'Shirts',
+    gender: 'men',
+    isNewArrival: true,
+    isFeatured: false,
+    description:
+      'Effortlessly cool for warmer days. This relaxed linen shirt is crafted from a premium Belgian linen that softens beautifully with each wash. The slightly oversized cut and subtle texture make it ideal for warm-weather dressing, on or off duty.',
+    stock: 18,
+    rating: 4.5,
+    specifications: {
+      Material: '100% Belgian Linen',
+      Fit: 'Relaxed',
+      Care: 'Machine wash 40°C',
+      Collar: 'Camp collar',
+      Origin: 'Made in Portugal',
+    },
+  },
+  {
+    id: 'm7',
+    name: 'Technical Field Jacket',
+    price: 299,
+    images: [
+      'https://images.unsplash.com/photo-1544022613-e87ca75a784a?w=600&h=600&fit=crop&q=80',
+    ],
+    category: 'Jackets',
+    gender: 'men',
+    isNewArrival: true,
+    isFeatured: false,
+    description:
+      'Where function meets refined style. This field jacket is constructed from a water-resistant technical fabric and features multiple utility pockets, adjustable cuffs, and a concealed hood. Designed for the man who moves between city streets and open landscapes.',
+    stock: 12,
+    rating: 4.7,
+    specifications: {
+      Material: 'Water-resistant Nylon Shell',
+      Lining: 'Polyester',
+      Pockets: '6 pockets',
+      Care: 'Machine wash 30°C',
+      Hood: 'Concealed',
+    },
+  },
+  {
+    id: 'm8',
+    name: 'Ribbed Merino Sweater',
+    price: 159,
+    discountPrice: 129,
+    images: [
+      'https://images.unsplash.com/photo-1583744946564-b52ac1c389c8?w=600&h=600&fit=crop&q=80',
+      'https://images.unsplash.com/photo-1434389677669-e08b4cac3105?w=600&h=600&fit=crop&q=80',
+    ],
+    category: 'SWEATERS',
+    gender: 'men',
+    isNewArrival: true,
+    isFeatured: false,
+    description:
+      'A modern essential with a fine ribbed texture that adds subtle dimension. Knitted in extra-fine merino wool, this sweater offers exceptional softness and natural temperature regulation. The slightly tapered fit makes it ideal for layering.',
+    stock: 16,
+    rating: 4.8,
+    specifications: {
+      Material: '100% Extra-fine Merino Wool',
+      Texture: 'Fine rib',
+      Fit: 'Tapered',
+      Care: 'Hand wash cold',
+      Neckline: 'Round neck',
+    },
+  },
+  {
+    id: 'm9',
+    name: 'Wool Flannel Trousers',
+    price: 189,
+    images: [
+      'https://images.unsplash.com/photo-1473966968600-fa801b869a1a?w=600&h=600&fit=crop&q=80',
+    ],
+    category: 'TROUSERS',
+    gender: 'men',
+    isNewArrival: true,
+    isFeatured: false,
+    description:
+      'Refined trousers cut from a brushed wool flannel with a soft, matte finish. The slightly tapered leg and high-rise waist create a timeless silhouette that works equally well with a blazer or a fine knit sweater.',
+    stock: 9,
+    rating: 4.6,
+    specifications: {
+      Material: '100% Wool Flannel',
+      Rise: 'High',
+      Leg: 'Tapered',
+      Care: 'Dry clean recommended',
+      Closure: 'Zip fly with hook',
+    },
+  },
+  {
+    id: 'm10',
+    name: 'Classic Denim Jacket',
+    price: 199,
+    images: [
+      'https://images.unsplash.com/photo-1517445312882-bc9910d016b7?w=600&h=600&fit=crop&q=80',
+    ],
+    category: 'Jackets',
+    gender: 'men',
+    isNewArrival: true,
+    isFeatured: false,
+    description:
+      'The denim jacket, perfected. Cut from a premium selvedge denim with a mid-weight feel, it features a classic trucker silhouette, contrast stitching, and a slightly faded wash that only improves with age. A true wardrobe classic.',
+    stock: 14,
+    rating: 4.5,
+    specifications: {
+      Material: '100% Selvedge Denim',
+      Weight: '12 oz',
+      Fit: 'Classic',
+      Care: 'Machine wash cold, inside out',
+      Closure: 'Button front',
+    },
+  },
+  {
+    id: 'm11',
+    name: 'Turtleneck Wool Sweater',
+    price: 169,
+    images: [
+      'https://images.unsplash.com/photo-1434389677669-e08b4cac3105?w=600&h=600&fit=crop&q=80',
+    ],
+    category: 'SWEATERS',
+    gender: 'men',
+    isNewArrival: true,
+    isFeatured: false,
+    description:
+      'A sculptural, sophisticated silhouette for colder months. This turtleneck sweater is knitted in a chunky gauge pure wool, offering maximum warmth with minimal bulk. The clean lines and relaxed fit make it a versatile hero piece.',
+    stock: 11,
+    rating: 4.7,
+    specifications: {
+      Material: '100% Pure Wool',
+      Gauge: 'Chunky',
+      Fit: 'Relaxed',
+      Care: 'Dry clean only',
+      Neckline: 'Roll neck',
+    },
+  },
+  {
+    id: 'm12',
+    name: 'Tailored Dress Shirt',
+    price: 149,
+    images: [
+      'https://images.unsplash.com/photo-1607345366928-199ea26cfe3e?w=600&h=600&fit=crop&q=80',
+    ],
+    category: 'Shirts',
+    gender: 'men',
+    isNewArrival: true,
+    isFeatured: false,
+    description:
+      'Precision tailoring in every stitch. Cut from a fine two-ply poplin cotton, this dress shirt features a slim fit, cutaway collar, and French placket for a clean, modern finish. Equally suited to formal events or an elevated everyday look.',
+    stock: 19,
+    rating: 4.6,
+    specifications: {
+      Material: '100% Two-ply Poplin Cotton',
+      Fit: 'Slim fit',
+      Care: 'Machine wash 40°C',
+      Collar: 'Cutaway',
+      Cuffs: 'Single button',
+    },
+  },
+
+  // ── CATEGORY EXTRAS ───────────────────────────────────────────
+  {
+    id: 'm13',
+    name: 'Straight Leg Chinos',
+    price: 109,
+    images: [
+      'https://images.unsplash.com/photo-1624378439575-d8705ad7ae80?w=600&h=600&fit=crop&q=80',
+    ],
+    category: 'TROUSERS',
+    gender: 'men',
+    isNewArrival: false,
+    isFeatured: false,
+    description:
+      'A relaxed take on the classic chino. Cut in a straight leg from a garment-dyed cotton twill, these trousers offer a lived-in feel from the very first wear. Versatile enough for weekends or casual Fridays.',
+    stock: 17,
+    rating: 4.4,
+    specifications: {
+      Material: '100% Cotton Twill',
+      Rise: 'Mid',
+      Leg: 'Straight',
+      Care: 'Machine wash 30°C',
+      Closure: 'Zip fly with button',
+    },
+  },
+  {
+    id: 'm14',
+    name: 'Wool Blazer',
+    price: 349,
+    discountPrice: 299,
+    images: [
+      'https://images.unsplash.com/photo-1617137984095-74e4e5e3613f?w=600&h=600&fit=crop&q=80',
+    ],
+    category: 'Suits',
+    gender: 'men',
+    isNewArrival: false,
+    isFeatured: false,
+    description:
+      'A standalone blazer that carries the precision of a suit jacket with the versatility of a casual piece. Cut from a mid-weight wool in a classic herringbone weave, it pairs as naturally with tailored trousers as it does with dark denim.',
+    stock: 7,
+    rating: 4.8,
+    specifications: {
+      Material: '100% Wool (Herringbone)',
+      Lining: '100% Viscose',
+      Fit: 'Slim fit',
+      Care: 'Dry clean only',
+      Pockets: 'Chest welt, two flap',
+    },
+  },
+];
+
+// ── Men Helpers ────────────────────────────────────────────────
+
+export const getMenFeaturedProducts = () =>
+  menProducts.filter((p) => p.isFeatured);
+
+export const getMenNewArrivals = () =>
+  menProducts.filter((p) => p.isNewArrival);
+
+export const getMenProductsByCategory = (categoryFilter: string) =>
+  menProducts.filter(
+    (p) => p.category.toLowerCase() === categoryFilter.toLowerCase()
+  );
+
+export const getMenProductById = (id: string) =>
+  menProducts.find((p) => p.id === id) ?? null;
