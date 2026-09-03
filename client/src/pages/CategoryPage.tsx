@@ -44,19 +44,22 @@ const CategoryPage = () => {
   const [sortBy, setSortBy] = useState('name');
   const [priceRange, setPriceRange] = useState('all');
 
-  if (!category || !categoryInfo[category as keyof typeof categoryInfo]) {
+  const currentCategory = category
+    ? categoryInfo[category as keyof typeof categoryInfo]
+    : null;
+
+  useEffect(() => {
+    if (!currentCategory) return;
+    window.scrollTo(0, 0);
+    document.title = `${currentCategory.title} - Women's Collection | Shop`;
+  }, [category, currentCategory]);
+
+  if (!category || !currentCategory) {
     return <Navigate to="/shop/women" replace />;
   }
 
-  const currentCategory = categoryInfo[category as keyof typeof categoryInfo];
-
   // Get all products for this category from centralized data
   const allCategoryProducts = getProductsByCategory(currentCategory.filter);
-
-  useEffect(() => {
-    window.scrollTo(0, 0);
-    document.title = `${currentCategory.title} - Women's Collection | Shop`;
-  }, [category, currentCategory.title]);
 
   // Apply price filter
   let filteredProducts = allCategoryProducts.filter((product) => {

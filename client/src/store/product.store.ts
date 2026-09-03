@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { womenProducts } from '../data/products.data';
+import { womenProducts, menProducts } from '../data/products.data';
 
 export interface Product {
   id: string;
@@ -27,6 +27,21 @@ interface ProductState {
 
 // Convert women products to store format
 const womenMockProducts: Product[] = womenProducts.map((p) => ({
+  id: p.id,
+  name: p.name,
+  description: p.description,
+  price: p.discountPrice ?? p.price,
+  originalPrice: p.discountPrice ? p.price : undefined,
+  image: p.images[0],
+  images: p.images,
+  category: p.category,
+  stock: p.stock,
+  rating: p.rating,
+  specifications: p.specifications,
+}));
+
+// Convert men products to store format
+const menMockProducts: Product[] = menProducts.map((p) => ({
   id: p.id,
   name: p.name,
   description: p.description,
@@ -147,8 +162,8 @@ const mockProducts: Product[] = [
   }
 ];
 
-// All products combined (general + women's)
-const allProducts: Product[] = [...mockProducts, ...womenMockProducts];
+// All products combined (general + women's + men's)
+const allProducts: Product[] = [...mockProducts, ...womenMockProducts, ...menMockProducts];
 
 export const useProductStore = create<ProductState>((set) => ({
   products: [],
