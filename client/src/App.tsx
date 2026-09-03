@@ -4,7 +4,6 @@ import { useAuthStore } from './store/auth.store';
 import { useCartStore } from './store/cart.store';
 import { ROUTES } from './constants/routes';
 import HomePage from './pages/HomePage';
-import ProductsPage from './pages/ProductsPage';
 import ProductDetailPage from './pages/ProductDetailPage';
 import CartPage from './pages/CartPage';
 import WomenPage from './pages/WomenPage';
@@ -66,7 +65,6 @@ function App() {
         <Route path="/shop/men" element={<MenPage />} />
         <Route path="/shop/men/new-arrivals" element={<MenNewArrivalsPage />} />
         <Route path="/shop/men/category/:category" element={<MenCategoryPage />} />
-        <Route path={ROUTES.PRODUCTS} element={<ProductsPage />} />
         <Route path={ROUTES.PRODUCT_DETAIL} element={<ProductDetailPage />} />
         <Route path={ROUTES.CART} element={<CartPage />} />
         <Route path={ROUTES.CHECKOUT} element={<CheckoutPage />} />

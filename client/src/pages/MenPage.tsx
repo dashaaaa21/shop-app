@@ -20,7 +20,7 @@ const categories = [
     id: 'mcat1',
     name: 'Suits',
     slug: 'suits',
-    image: 'https://images.unsplash.com/photo-1507679799987-c73779587ccf?w=800&h=600&fit=crop&q=80',
+    image: 'https://images.unsplash.com/photo-1593030761757-71fae45fa0e7?w=800&h=600&fit=crop&q=80',
     description: 'Precision tailoring for the modern man',
     itemCount: '12+ styles',
   },
@@ -28,7 +28,7 @@ const categories = [
     id: 'mcat2',
     name: 'TROUSERS',
     slug: 'trousers',
-    image: 'https://images.unsplash.com/photo-1624378439575-d8705ad7ae80?w=800&h=600&fit=crop&q=80',
+    image: 'https://images.unsplash.com/photo-1519238263530-99bdd11df2ea?w=800&h=600&fit=crop&q=80',
     description: 'Refined trousers for every occasion',
     itemCount: '18+ styles',
   },
@@ -36,7 +36,7 @@ const categories = [
     id: 'mcat3',
     name: 'SWEATERS',
     slug: 'sweaters',
-    image: 'https://images.unsplash.com/photo-1576566588028-4147f3842f27?w=800&h=600&fit=crop&q=80',
+    image: 'https://images.unsplash.com/photo-1611312449408-fcece27cdbb7?w=800&h=600&fit=crop&q=80',
     description: 'Premium knitwear and cozy essentials',
     itemCount: '22+ styles',
   },
@@ -44,7 +44,7 @@ const categories = [
     id: 'mcat4',
     name: 'Outerwear',
     slug: 'outerwear',
-    image: 'https://images.unsplash.com/photo-1539533018447-63fcce2678e3?w=800&h=600&fit=crop&q=80',
+    image: 'https://images.unsplash.com/photo-1520975954732-35dd22299614?w=800&h=600&fit=crop&q=80',
     description: 'Coats and jackets built to last',
     itemCount: '16+ styles',
   },
@@ -149,7 +149,7 @@ const MenPage = () => {
             </div>
             <ProductGrid products={newArrivals.slice(0, 4)} />
             <div className="men-section-actions">
-              <Link to="/new-arrivals" className="men-view-all-btn">
+              <Link to="/shop/men/new-arrivals" className="men-view-all-btn">
                 View All New Arrivals
               </Link>
             </div>

@@ -393,7 +393,7 @@ export const menProducts: MenProduct[] = [
     price: 599,
     discountPrice: 499,
     images: [
-      'https://images.unsplash.com/photo-1507679799987-c73779587ccf?w=600&h=600&fit=crop&q=80',
+      'https://images.unsplash.com/photo-1593030761757-71fae45fa0e7?w=600&h=600&fit=crop&q=80',
       'https://images.unsplash.com/photo-1617137984095-74e4e5e3613f?w=600&h=600&fit=crop&q=80',
     ],
     category: 'Suits',
@@ -417,8 +417,8 @@ export const menProducts: MenProduct[] = [
     name: 'Premium Oxford Shirt',
     price: 129,
     images: [
-      'https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?w=600&h=600&fit=crop&q=80',
-      'https://images.unsplash.com/photo-1598033129183-c4f50c736f10?w=600&h=600&fit=crop&q=80',
+      'https://images.unsplash.com/photo-1621072156002-e2fccdc0b176?w=600&h=600&fit=crop&q=80',
+      'https://images.unsplash.com/photo-1607345366928-199ea26cfe3e?w=600&h=600&fit=crop&q=80',
     ],
     category: 'Shirts',
     gender: 'men',
@@ -442,7 +442,7 @@ export const menProducts: MenProduct[] = [
     price: 449,
     discountPrice: 369,
     images: [
-      'https://images.unsplash.com/photo-1539533018447-63fcce2678e3?w=600&h=600&fit=crop&q=80',
+      'https://images.unsplash.com/photo-1520975954732-35dd22299614?w=600&h=600&fit=crop&q=80',
     ],
     category: 'Outerwear',
     gender: 'men',
@@ -465,7 +465,7 @@ export const menProducts: MenProduct[] = [
     name: 'Cashmere Crewneck Sweater',
     price: 279,
     images: [
-      'https://images.unsplash.com/photo-1576566588028-4147f3842f27?w=600&h=600&fit=crop&q=80',
+      'https://images.unsplash.com/photo-1611312449408-fcece27cdbb7?w=600&h=600&fit=crop&q=80',
     ],
     category: 'SWEATERS',
     gender: 'men',
@@ -490,8 +490,8 @@ export const menProducts: MenProduct[] = [
     name: 'Slim Fit Chinos',
     price: 119,
     images: [
-      'https://images.unsplash.com/photo-1624378439575-d8705ad7ae80?w=600&h=600&fit=crop&q=80',
       'https://images.unsplash.com/photo-1473966968600-fa801b869a1a?w=600&h=600&fit=crop&q=80',
+      'https://images.unsplash.com/photo-1552902865-b72c031ac5ea?w=600&h=600&fit=crop&q=80',
     ],
     category: 'TROUSERS',
     gender: 'men',
@@ -514,7 +514,7 @@ export const menProducts: MenProduct[] = [
     name: 'Linen Summer Shirt',
     price: 99,
     images: [
-      'https://images.unsplash.com/photo-1598033129183-c4f50c736f10?w=600&h=600&fit=crop&q=80',
+      'https://images.unsplash.com/photo-1621072156002-e2fccdc0b176?w=600&h=600&fit=crop&q=80',
     ],
     category: 'Shirts',
     gender: 'men',
@@ -537,7 +537,7 @@ export const menProducts: MenProduct[] = [
     name: 'Technical Field Jacket',
     price: 299,
     images: [
-      'https://images.unsplash.com/photo-1544022613-e87ca75a784a?w=600&h=600&fit=crop&q=80',
+      'https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=600&h=600&fit=crop&q=80',
     ],
     category: 'Jackets',
     gender: 'men',
@@ -561,8 +561,8 @@ export const menProducts: MenProduct[] = [
     price: 159,
     discountPrice: 129,
     images: [
-      'https://images.unsplash.com/photo-1583744946564-b52ac1c389c8?w=600&h=600&fit=crop&q=80',
-      'https://images.unsplash.com/photo-1434389677669-e08b4cac3105?w=600&h=600&fit=crop&q=80',
+      'https://images.unsplash.com/photo-1578932750294-f5075e85f44a?w=600&h=600&fit=crop&q=80',
+      'https://images.unsplash.com/photo-1611312449408-fcece27cdbb7?w=600&h=600&fit=crop&q=80',
     ],
     category: 'SWEATERS',
     gender: 'men',
@@ -585,7 +585,7 @@ export const menProducts: MenProduct[] = [
     name: 'Wool Flannel Trousers',
     price: 189,
     images: [
-      'https://images.unsplash.com/photo-1473966968600-fa801b869a1a?w=600&h=600&fit=crop&q=80',
+      'https://images.unsplash.com/photo-1519238263530-99bdd11df2ea?w=600&h=600&fit=crop&q=80',
     ],
     category: 'TROUSERS',
     gender: 'men',
@@ -608,7 +608,7 @@ export const menProducts: MenProduct[] = [
     name: 'Classic Denim Jacket',
     price: 199,
     images: [
-      'https://images.unsplash.com/photo-1517445312882-bc9910d016b7?w=600&h=600&fit=crop&q=80',
+      'https://images.unsplash.com/photo-1576995853123-5a10305d93c0?w=600&h=600&fit=crop&q=80',
     ],
     category: 'Jackets',
     gender: 'men',
@@ -631,7 +631,7 @@ export const menProducts: MenProduct[] = [
     name: 'Turtleneck Wool Sweater',
     price: 169,
     images: [
-      'https://images.unsplash.com/photo-1434389677669-e08b4cac3105?w=600&h=600&fit=crop&q=80',
+      'https://images.unsplash.com/photo-1578932750294-f5075e85f44a?w=600&h=600&fit=crop&q=80',
     ],
     category: 'SWEATERS',
     gender: 'men',
@@ -654,7 +654,7 @@ export const menProducts: MenProduct[] = [
     name: 'Tailored Dress Shirt',
     price: 149,
     images: [
-      'https://images.unsplash.com/photo-1607345366928-199ea26cfe3e?w=600&h=600&fit=crop&q=80',
+      'https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?w=600&h=600&fit=crop&q=80',
     ],
     category: 'Shirts',
     gender: 'men',
@@ -679,7 +679,7 @@ export const menProducts: MenProduct[] = [
     name: 'Straight Leg Chinos',
     price: 109,
     images: [
-      'https://images.unsplash.com/photo-1624378439575-d8705ad7ae80?w=600&h=600&fit=crop&q=80',
+      'https://images.unsplash.com/photo-1473966968600-fa801b869a1a?w=600&h=600&fit=crop&q=80',
     ],
     category: 'TROUSERS',
     gender: 'men',
