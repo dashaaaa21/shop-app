@@ -59,7 +59,7 @@ const MenNewArrivalsPage = () => {
           <section className="men-na-hero">
             <div className="men-na-hero__image">
               <img
-                src="https://images.unsplash.com/photo-1552902865-b72c031ac5ea?w=1400&h=500&fit=crop&q=80"
+                src="https://images.unsplash.com/photo-1617137984095-74e4e5e3613f?w=1400&h=500&fit=crop&q=80"
                 alt="Men's New Arrivals"
                 onError={handleImageError}
               />
