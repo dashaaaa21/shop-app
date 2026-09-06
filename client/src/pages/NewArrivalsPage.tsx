@@ -87,6 +87,19 @@ const NewArrivalsPage = () => {
             </button>
           </div>
 
+          {/* New Collection button */}
+          <div className="na-new-collection-bar">
+            <Link to="/#new-collection" className="na-new-collection-btn"
+              onClick={(e) => {
+                e.preventDefault();
+                navigate('/');
+                setTimeout(() => document.getElementById('new-collection')?.scrollIntoView({ behavior: 'smooth' }), 300);
+              }}
+            >
+              New Collection
+            </Link>
+          </div>
+
           {/* Controls */}
           <section className="na-controls">
             <div className="na-controls__left">
