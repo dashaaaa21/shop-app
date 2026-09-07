@@ -35,7 +35,7 @@
 
 /* Hero Section */
 .category-hero {
-  margin-bottom: 4rem;
+  margin-bottom: 2rem;
 }
 
 .category-hero__image {
@@ -116,11 +116,11 @@
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
-  margin-bottom: 3rem;
-  padding-bottom: 2rem;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
   border-bottom: 1px solid #e5e5e5;
   flex-wrap: wrap;
-  gap: 2rem;
+  gap: 1rem;
 }
 
 .category-controls__left h2 {
@@ -180,7 +180,7 @@
 
 /* Products Section */
 .category-products {
-  margin-bottom: 4rem;
+  margin-bottom: 2rem;
 }
 
 .category-actions {

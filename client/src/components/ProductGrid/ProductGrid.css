@@ -1,5 +1,5 @@
 .product-grid {
-  padding: var(--spacing-3xl) 0;
+  padding: var(--spacing-lg) 0;
   background-color: var(--color-warm-white);
 }
 
@@ -53,7 +53,7 @@
 
 @media (max-width: 768px) {
   .product-grid {
-    padding: var(--spacing-2xl) 0;
+    padding: var(--spacing-md, 1.5rem) 0;
   }
 
   .product-grid__items--col-4,

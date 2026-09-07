@@ -14,9 +14,9 @@
 .men-hero {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 4rem;
+  gap: 2rem;
   align-items: center;
-  margin-bottom: 6rem;
+  margin-bottom: 3rem;
   min-height: 70vh;
 }
 
@@ -87,7 +87,7 @@
 /* ── Section headers ──────────────────────────────────────── */
 .men-section-header {
   text-align: center;
-  margin-bottom: 4rem;
+  margin-bottom: 2rem;
 }
 
 .men-section-title {
@@ -108,7 +108,7 @@
 
 /* ── Categories ───────────────────────────────────────────── */
 .men-categories {
-  margin-bottom: 6rem;
+  margin-bottom: 3rem;
 }
 
 .men-categories__grid {
@@ -216,7 +216,7 @@
 /* ── Featured / New Arrivals ──────────────────────────────── */
 .men-featured,
 .men-new-arrivals {
-  margin-bottom: 6rem;
+  margin-bottom: 3rem;
 }
 
 .men-section-actions {
@@ -260,7 +260,7 @@
     grid-template-columns: 1fr;
     gap: 2rem;
     min-height: auto;
-    margin-bottom: 4rem;
+    margin-bottom: 2rem;
   }
 
   .men-hero__stats { flex-wrap: wrap; gap: 1.5rem; }
@@ -273,5 +273,5 @@
 
   .men-featured,
   .men-new-arrivals,
-  .men-categories { margin-bottom: 4rem; }
+  .men-categories { margin-bottom: 2rem; }
 }
