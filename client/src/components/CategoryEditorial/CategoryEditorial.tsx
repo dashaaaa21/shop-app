@@ -1,69 +1,54 @@
-import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import './CategoryEditorial.css';
 
-const categories = [
-  { name: 'Jackets', slug: 'jackets' },
-  { name: 'Hoodies', slug: 'hoodies' },
-  { name: 'Shirts', slug: 'shirts' },
-  { name: 'Pants', slug: 'pants' },
-  { name: 'Sweaters', slug: 'sweaters' },
-  { name: 'Blazers', slug: 'blazers' },
-  { name: 'Trousers', slug: 'trousers' },
-  { name: 'Outerwear', slug: 'outerwear' },
+const editorialItems = [
+  {
+    label: 'Wedding Collection',
+    slug: 'wedding-collection',
+    // Elegant bride in white wedding gown — Unsplash (José Antonio Gallego Vázquez)
+    image: 'https://images.unsplash.com/photo-1519741497674-611481863552?w=800&h=1100&fit=crop&crop=top&q=90',
+    size: 'tall',
+  },
+  {
+    label: 'Party Collection',
+    slug: 'party-collection',
+    // Glamorous evening dress editorial — Unsplash (Chalo Garcia)
+    image: 'https://images.unsplash.com/photo-1539109136881-3be0616acf4b?w=800&h=1100&fit=crop&crop=top&q=90',
+    size: 'tall',
+  },
+  {
+    label: 'Halloween Collection',
+    slug: 'halloween-collection',
+    // Halloween kids costumes — Unsplash (7FC-84Ap_IU)
+    image: 'https://images.unsplash.com/photo-1509557965875-b88c97052f0e?w=800&h=1100&fit=crop&crop=top&q=90',
+    size: 'tall',
+  },
 ];
 
 const CategoryEditorial = () => {
-  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
-
   return (
-    <section className="category-editorial">
-      <div className="category-editorial__container">
-        {/* Left Editorial Image */}
-        <div className="category-editorial__image category-editorial__image--left">
-          <img
-            src="https://images.unsplash.com/photo-1617137984095-74e4e5e3613f?w=600&q=90"
-            alt="Male fashion model"
-            className="category-editorial__img"
-          />
-        </div>
-
-        {/* Center Category List */}
-        <div className="category-editorial__content">
-          <h2 className="category-editorial__heading">Exclusive Editions</h2>
-
-          <nav className="category-editorial__list">
-            {categories.map((category, index) => (
-              <Link
-                key={category.slug}
-                to={`/shop/${category.slug}`}
-                className={`category-editorial__item ${
-                  hoveredIndex === index ? 'category-editorial__item--active' : ''
-                } ${
-                  hoveredIndex !== null && hoveredIndex !== index
-                    ? 'category-editorial__item--dimmed'
-                    : ''
-                }`}
-                onMouseEnter={() => setHoveredIndex(index)}
-                onMouseLeave={() => setHoveredIndex(null)}
-                style={{
-                  animationDelay: `${index * 0.1}s`,
-                }}
-              >
-                {category.name}
-              </Link>
-            ))}
-          </nav>
-        </div>
-
-        {/* Right Editorial Image */}
-        <div className="category-editorial__image category-editorial__image--right">
-          <img
-            src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=600&q=90"
-            alt="Female fashion model"
-            className="category-editorial__img"
-          />
-        </div>
+    <section className="category-editorial" id="new-collection">
+      <div className="category-editorial__grid">
+        {editorialItems.map((item) => (
+          <Link
+            key={item.slug}
+            to="/new-arrivals"
+            className={`category-editorial__card category-editorial__card--${item.size}`}
+          >
+            <div className="category-editorial__card-image">
+              <img
+                src={item.image}
+                alt={item.label}
+                className="category-editorial__img"
+              />
+              <div className="category-editorial__card-overlay" />
+            </div>
+            <div className="category-editorial__card-label">
+              <span className="category-editorial__card-name">{item.label}</span>
+              <span className="category-editorial__card-cta">Shop Now →</span>
+            </div>
+          </Link>
+        ))}
       </div>
     </section>
   );
