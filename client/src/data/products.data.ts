@@ -1043,3 +1043,298 @@ export const getMenProductsByCategory = (categoryFilter: string) =>
 
 export const getMenProductById = (id: string) =>
   menProducts.find((p) => p.id === id) ?? null;
+
+// ══════════════════════════════════════════════════════════════
+// COLLECTIONS (Wedding / Party / Halloween)
+// ══════════════════════════════════════════════════════════════
+
+export type CollectionSlug = 'wedding-collection' | 'party-collection' | 'halloween-collection';
+
+export interface CollectionProduct {
+  id: string;
+  name: string;
+  price: number;
+  discountPrice?: number;
+  images: string[];
+  category: string;
+  collection: CollectionSlug;
+  description: string;
+  stock: number;
+  rating: number;
+  specifications: Record<string, string>;
+}
+
+export const collectionProducts: CollectionProduct[] = [
+  // ── WEDDING COLLECTION ────────────────────────────────────────
+  {
+    id: 'wc1',
+    name: 'Ivory Satin Bridal Gown',
+    price: 1290,
+    images: [
+      'https://images.unsplash.com/photo-1519741497674-611481863552?w=800&h=1000&fit=crop&q=90',
+      'https://images.unsplash.com/photo-1594938298603-c8148c4dae35?w=800&h=1000&fit=crop&q=90',
+    ],
+    category: 'Dresses',
+    collection: 'wedding-collection',
+    description: 'A timeless bridal gown in lustrous ivory satin. The structured bodice and fluid skirt create an effortlessly elegant silhouette for your most important day.',
+    stock: 4,
+    rating: 5.0,
+    specifications: { Material: '100% Silk Satin', Length: 'Floor-length', Fit: 'Structured bodice, A-line skirt', Care: 'Dry clean only', Origin: 'Made in France' },
+  },
+  {
+    id: 'wc2',
+    name: 'Lace Overlay Wedding Dress',
+    price: 890,
+    discountPrice: 749,
+    images: [
+      'https://images.unsplash.com/photo-1606800052052-a08af7148866?w=800&h=1000&fit=crop&q=90',
+    ],
+    category: 'Dresses',
+    collection: 'wedding-collection',
+    description: 'Delicate French lace overlaid on a silk-chiffon base. Subtle floral embroidery at the bodice catches the light with every movement.',
+    stock: 6,
+    rating: 4.9,
+    specifications: { Material: 'French Lace over Silk Chiffon', Length: 'Floor-length', Neckline: 'Sweetheart', Care: 'Dry clean only', Closure: 'Corset back' },
+  },
+  {
+    id: 'wc3',
+    name: 'Pearl Bridal Veil',
+    price: 189,
+    images: [
+      'https://images.unsplash.com/photo-1511285560929-80b456fea0bc?w=800&h=1000&fit=crop&q=90',
+    ],
+    category: 'Accessories',
+    collection: 'wedding-collection',
+    description: 'A cathedral-length veil trimmed with hand-sewn freshwater pearls. The perfect finishing touch for a classic bridal look.',
+    stock: 12,
+    rating: 4.8,
+    specifications: { Material: 'Silk Tulle', Length: 'Cathedral (300 cm)', Trim: 'Freshwater Pearl Edge', Care: 'Store in acid-free tissue' },
+  },
+  {
+    id: 'wc4',
+    name: 'Silk Bridal Slip Dress',
+    price: 590,
+    images: [
+      'https://images.unsplash.com/photo-1465495976277-4387d4b0b4c6?w=800&h=1000&fit=crop&q=90',
+    ],
+    category: 'Dresses',
+    collection: 'wedding-collection',
+    description: 'Minimalist bridal elegance — a bias-cut silk slip dress with a subtle cowl neckline and thin spaghetti straps. Perfect for intimate ceremonies.',
+    stock: 8,
+    rating: 4.7,
+    specifications: { Material: '100% Charmeuse Silk', Length: 'Floor-length', Fit: 'Bias cut', Care: 'Dry clean only', Neckline: 'Cowl neck' },
+  },
+  {
+    id: 'wc5',
+    name: 'Embroidered Wedding Bolero',
+    price: 299,
+    images: [
+      'https://images.unsplash.com/photo-1520012218364-3dbe622b7926?w=800&h=1000&fit=crop&q=90',
+    ],
+    category: 'Outerwear',
+    collection: 'wedding-collection',
+    description: 'A delicate bolero jacket with hand-embroidered floral motifs in ivory silk thread. Adds warmth and romance to any bridal look.',
+    stock: 10,
+    rating: 4.6,
+    specifications: { Material: 'Silk Organza', Embroidery: 'Hand-done floral', Length: 'Cropped bolero', Care: 'Dry clean only' },
+  },
+  {
+    id: 'wc6',
+    name: 'Satin Bridal Heels',
+    price: 245,
+    images: [
+      'https://images.unsplash.com/photo-1543163521-1bf539c55dd2?w=800&h=1000&fit=crop&q=90',
+    ],
+    category: 'Shoes',
+    collection: 'wedding-collection',
+    description: 'Ivory satin block-heel pumps with a delicate ankle strap and subtle pointed toe — elegance you can dance in.',
+    stock: 15,
+    rating: 4.8,
+    specifications: { Material: 'Satin Upper, Leather Sole', Heel: '6 cm block heel', Closure: 'Adjustable ankle strap', Care: 'Spot clean only' },
+  },
+
+  // ── PARTY COLLECTION ──────────────────────────────────────────
+  {
+    id: 'pc1',
+    name: 'Velvet Midnight Gown',
+    price: 599,
+    images: [
+      'https://images.unsplash.com/photo-1539109136881-3be0616acf4b?w=800&h=1000&fit=crop&q=90',
+      'https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?w=800&h=1000&fit=crop&q=90',
+    ],
+    category: 'Dresses',
+    collection: 'party-collection',
+    description: 'Make your entrance in this floor-length velvet gown in deep midnight blue. A plunging back and slim column silhouette ensure you are the most memorable person in the room.',
+    stock: 5,
+    rating: 4.9,
+    specifications: { Material: '100% Stretch Velvet', Length: 'Floor-length', Neckline: 'V-neck', Back: 'Plunge back', Care: 'Dry clean only' },
+  },
+  {
+    id: 'pc2',
+    name: 'Sequin Mini Dress',
+    price: 349,
+    discountPrice: 299,
+    images: [
+      'https://images.unsplash.com/photo-1596783074918-c84cb06531ca?w=800&h=1000&fit=crop&q=90',
+    ],
+    category: 'Dresses',
+    collection: 'party-collection',
+    description: 'All-over champagne sequins catch every light in the room. A stretch fit, off-shoulder neckline, and above-the-knee length keep it playful and effortlessly glamorous.',
+    stock: 9,
+    rating: 4.8,
+    specifications: { Material: 'Sequin on Stretch Mesh', Length: 'Mini', Neckline: 'Off-shoulder', Care: 'Hand wash cold, do not wring' },
+  },
+  {
+    id: 'pc3',
+    name: 'Satin Slip Party Dress',
+    price: 279,
+    images: [
+      'https://images.unsplash.com/photo-1572804013309-59a88b7e92f1?w=800&h=1000&fit=crop&q=90',
+    ],
+    category: 'Dresses',
+    collection: 'party-collection',
+    description: 'A sleek satin slip dress in cherry red — bias-cut for movement and featuring an adjustable lace-trimmed neckline. Understated and undeniably seductive.',
+    stock: 11,
+    rating: 4.7,
+    specifications: { Material: 'Satin-weave Silk', Length: 'Midi', Neckline: 'Lace-trim V', Fit: 'Bias cut', Care: 'Dry clean only' },
+  },
+  {
+    id: 'pc4',
+    name: 'Feather Trim Blazer',
+    price: 449,
+    images: [
+      'https://images.unsplash.com/photo-1509631179647-0177331693ae?w=800&h=1000&fit=crop&q=90',
+    ],
+    category: 'Outerwear',
+    collection: 'party-collection',
+    description: 'A statement blazer with feather-trimmed cuffs and lapels. Wear over a slip dress or tailored trousers to turn any occasion into an event.',
+    stock: 7,
+    rating: 4.8,
+    specifications: { Material: 'Wool-blend Shell, Feather Trim', Fit: 'Oversized', Care: 'Dry clean only', Pockets: 'Two welt pockets' },
+  },
+  {
+    id: 'pc5',
+    name: 'Crystal Embellished Clutch',
+    price: 189,
+    images: [
+      'https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=800&h=1000&fit=crop&q=90',
+    ],
+    category: 'Accessories',
+    collection: 'party-collection',
+    description: 'A fully crystal-embellished minaudière with a detachable chain strap. The perfect finishing touch for a glamorous evening.',
+    stock: 14,
+    rating: 4.9,
+    specifications: { Material: 'Brass Frame, Crystal Embellishment', Strap: 'Detachable gold chain', Closure: 'Magnetic clasp', Size: '20 × 12 × 5 cm' },
+  },
+  {
+    id: 'pc6',
+    name: 'Strappy High-Heel Sandals',
+    price: 299,
+    discountPrice: 249,
+    images: [
+      'https://images.unsplash.com/photo-1515347619252-60a4bf4fff4f?w=800&h=1000&fit=crop&q=90',
+    ],
+    category: 'Shoes',
+    collection: 'party-collection',
+    description: 'Gold metallic strappy sandals with a sculptural stiletto heel. Designed to be seen — and danced in all night.',
+    stock: 13,
+    rating: 4.7,
+    specifications: { Material: 'Metallic Leather', Heel: '10 cm stiletto', Closure: 'Ankle buckle', Care: 'Leather conditioner recommended' },
+  },
+
+  // ── HALLOWEEN COLLECTION ──────────────────────────────────────
+  {
+    id: 'hc1',
+    name: 'Gothic Velvet Cape',
+    price: 199,
+    images: [
+      'https://images.unsplash.com/photo-1509557965875-b88c97052f0e?w=800&h=1000&fit=crop&q=90',
+    ],
+    category: 'Outerwear',
+    collection: 'halloween-collection',
+    description: 'A dramatic floor-length velvet cape in deep crimson, with a structured hood and satin lining. Theatrical, dark, unforgettable.',
+    stock: 8,
+    rating: 4.9,
+    specifications: { Material: 'Crushed Velvet, Satin Lining', Length: 'Floor-length', Hood: 'Structured', Care: 'Dry clean only', Fastening: 'Satin ribbon tie' },
+  },
+  {
+    id: 'hc2',
+    name: 'Dark Corset Dress',
+    price: 279,
+    discountPrice: 229,
+    images: [
+      'https://images.unsplash.com/photo-1635274605638-d44babc08a4f?w=800&h=1000&fit=crop&q=90',
+    ],
+    category: 'Dresses',
+    collection: 'halloween-collection',
+    description: 'A structured corset dress in matte black with lace-up back detailing and a full tulle skirt. Perfectly walks the line between costume and couture.',
+    stock: 10,
+    rating: 4.8,
+    specifications: { Material: 'Cotton Brocade, Tulle Skirt', Length: 'Midi', Bodice: 'Boned corset', Care: 'Dry clean only', Closure: 'Lace-up back' },
+  },
+  {
+    id: 'hc3',
+    name: 'Witches Wide-Brim Hat',
+    price: 89,
+    images: [
+      'https://images.unsplash.com/photo-1508615039623-a25605d2b022?w=800&h=1000&fit=crop&q=90',
+    ],
+    category: 'Accessories',
+    collection: 'halloween-collection',
+    description: 'An oversized wide-brim hat in stiffened black felt, trimmed with a velvet ribbon and antique gold buckle. The defining piece of any Halloween look.',
+    stock: 20,
+    rating: 4.7,
+    specifications: { Material: 'Stiffened Wool Felt', Trim: 'Velvet Ribbon, Antique Gold Buckle', Brim: '18 cm wide', Care: 'Spot clean only' },
+  },
+  {
+    id: 'hc4',
+    name: 'Lace Gloves',
+    price: 59,
+    images: [
+      'https://images.unsplash.com/photo-1571908598228-8d9c22f9f6c0?w=800&h=1000&fit=crop&q=90',
+    ],
+    category: 'Accessories',
+    collection: 'halloween-collection',
+    description: 'Elbow-length black lace gloves with a scalloped edge. Add an air of mystery to any gothic or Halloween ensemble.',
+    stock: 25,
+    rating: 4.6,
+    specifications: { Material: '100% Cotton Lace', Length: 'Elbow', Edge: 'Scalloped', Care: 'Hand wash cold' },
+  },
+  {
+    id: 'hc5',
+    name: 'Platform Gothic Boots',
+    price: 349,
+    images: [
+      'https://images.unsplash.com/photo-1520639888713-7851133b1ed0?w=800&h=1000&fit=crop&q=90',
+    ],
+    category: 'Shoes',
+    collection: 'halloween-collection',
+    description: 'Chunky platform boots in matte black leather with silver hardware and a side zip. Bold enough for Halloween, wearable all autumn long.',
+    stock: 9,
+    rating: 4.9,
+    specifications: { Material: 'Matte Leather', Platform: '4 cm', Heel: '8 cm block', Closure: 'Side zip', Care: 'Leather conditioner recommended' },
+  },
+  {
+    id: 'hc6',
+    name: 'Spider Web Mesh Top',
+    price: 99,
+    discountPrice: 79,
+    images: [
+      'https://images.unsplash.com/photo-1551803091-e20673f15770?w=800&h=1000&fit=crop&q=90',
+    ],
+    category: 'Tops',
+    collection: 'halloween-collection',
+    description: 'An open spider-web mesh top in matte black. Layer over a bodysuit or slip for an effortlessly dark look that works from October and beyond.',
+    stock: 18,
+    rating: 4.5,
+    specifications: { Material: '100% Nylon Mesh', Fit: 'Oversized', Neckline: 'Crew neck', Care: 'Hand wash cold', Pattern: 'Spider web' },
+  },
+];
+
+// ── Collection Helpers ─────────────────────────────────────────
+
+export const getCollectionProducts = (slug: CollectionSlug) =>
+  collectionProducts.filter((p) => p.collection === slug);
+
+export const getCollectionProductById = (id: string) =>
+  collectionProducts.find((p) => p.id === id) ?? null;

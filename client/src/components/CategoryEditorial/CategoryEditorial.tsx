@@ -32,7 +32,7 @@ const CategoryEditorial = () => {
         {editorialItems.map((item) => (
           <Link
             key={item.slug}
-            to="/new-arrivals"
+            to={`/shop/${item.slug}`}
             className={`category-editorial__card category-editorial__card--${item.size}`}
           >
             <div className="category-editorial__card-image">

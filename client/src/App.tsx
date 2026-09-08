@@ -12,6 +12,8 @@ import NewArrivalsPage from './pages/NewArrivalsPage';
 import MenPage from './pages/MenPage';
 import MenCategoryPage from './pages/MenCategoryPage';
 import MenNewArrivalsPage from './pages/MenNewArrivalsPage';
+import CollectionPage from './pages/CollectionPage';
+import ShopCollectionPage from './pages/ShopCollectionPage';
 
 // Placeholder pages
 
@@ -56,6 +58,7 @@ function App() {
     <div className="app">
       <Routes>
         <Route path={ROUTES.HOME} element={<HomePage />} />
+        <Route path="/collection" element={<ShopCollectionPage />} />
         <Route path={ROUTES.LOGIN} element={<LoginPage />} />
         <Route path={ROUTES.REGISTER} element={<RegisterPage />} />
         <Route path="/shop/women" element={<WomenPage />} />
@@ -65,6 +68,7 @@ function App() {
         <Route path="/shop/men" element={<MenPage />} />
         <Route path="/shop/men/new-arrivals" element={<MenNewArrivalsPage />} />
         <Route path="/shop/men/category/:category" element={<MenCategoryPage />} />
+        <Route path="/shop/:slug" element={<CollectionPage />} />
         <Route path={ROUTES.PRODUCT_DETAIL} element={<ProductDetailPage />} />
         <Route path={ROUTES.CART} element={<CartPage />} />
         <Route path={ROUTES.CHECKOUT} element={<CheckoutPage />} />
