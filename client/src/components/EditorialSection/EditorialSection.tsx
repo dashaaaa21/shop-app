@@ -6,12 +6,12 @@ const EditorialSection = () => {
       <div className="editorial-section__container">
         <div className="editorial-section__images">
           <img
-            src="https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=600&q=90"
+            src="https://images.unsplash.com/photo-1509631179647-0177331693ae?w=600&q=90"
             alt="Fashion editorial"
             className="editorial-section__image editorial-section__image--1"
           />
           <img
-            src="https://images.unsplash.com/photo-1529139574466-a303027c1d8b?w=500&q=90"
+            src="https://images.unsplash.com/photo-1539109136881-3be0616acf4b?w=500&q=90"
             alt="Fashion editorial"
             className="editorial-section__image editorial-section__image--2"
           />
@@ -19,12 +19,12 @@ const EditorialSection = () => {
 
         <div className="editorial-section__content">
           <h2 className="editorial-section__title">
-            A modern collection built on comfort,<br />
-            <span className="editorial-section__title--blur">precision,</span> and style.
+            Crafted for those who believe<br />
+            <span className="editorial-section__title--blur">elegance</span> is never accidental.
           </h2>
           <p className="editorial-section__description">
-            Discover expertly crafted pieces designed<br />
-            for timeless moments.
+            Every piece in our new collection is designed<br />
+            to outlast trends and outlive seasons.
           </p>
         </div>
       </div>

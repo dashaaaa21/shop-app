@@ -1,0 +1,131 @@
+.shop-collection-page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Hero Banner */
+.sc-hero {
+  width: 100%;
+  margin-top: var(--header-height, 72px);
+}
+
+.sc-hero__image {
+  position: relative;
+  width: 100%;
+  height: 580px;
+  overflow: hidden;
+}
+
+.sc-hero__image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 25%;
+}
+
+.sc-hero__overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to right,
+    rgba(0, 0, 0, 0.6) 0%,
+    rgba(0, 0, 0, 0.2) 60%,
+    rgba(0, 0, 0, 0.05) 100%
+  );
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 0 6rem;
+}
+
+.sc-hero__label {
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.75);
+  margin: 0 0 1rem 0;
+}
+
+.sc-hero__title {
+  font-family: var(--font-serif);
+  font-size: 4.5rem;
+  font-weight: 400;
+  color: #ffffff;
+  margin: 0 0 1rem 0;
+  line-height: 1.05;
+  letter-spacing: -0.5px;
+}
+
+.sc-hero__subtitle {
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.8);
+  margin: 0 0 2.5rem 0;
+  letter-spacing: 0.3px;
+  max-width: 380px;
+  line-height: 1.6;
+}
+
+.sc-hero__cta {
+  display: inline-block;
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.85);
+  color: #ffffff;
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  text-decoration: none;
+  padding: 14px 36px;
+  width: fit-content;
+  transition: background 0.25s ease, color 0.25s ease, border-color 0.25s ease;
+}
+
+.sc-hero__cta:hover {
+  background: #ffffff;
+  color: #111111;
+  border-color: #ffffff;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .sc-hero__overlay {
+    padding: 0 4rem;
+  }
+
+  .sc-hero__title {
+    font-size: 3.5rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .sc-hero__image {
+    height: 420px;
+  }
+
+  .sc-hero__overlay {
+    padding: 0 2rem;
+  }
+
+  .sc-hero__title {
+    font-size: 2.8rem;
+  }
+
+  .sc-hero__subtitle {
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .sc-hero__image {
+    height: 320px;
+  }
+
+  .sc-hero__title {
+    font-size: 2.2rem;
+  }
+}

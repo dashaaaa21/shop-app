@@ -22,8 +22,10 @@ export const womenProducts: WomenProduct[] = [
     price: 189,
     discountPrice: 149,
     images: [
-      'https://images.unsplash.com/photo-1551488831-00ddcb6c6bd3?w=600&h=600&fit=crop&q=80',
-      'https://images.unsplash.com/photo-1583744946564-b52ac1c389c8?w=600&h=600&fit=crop&q=80',
+      'https://images.unsplash.com/photo-1551488831-00ddcb6c6bd3?w=800&h=1000&fit=crop&q=85',
+      'https://images.unsplash.com/photo-1583744946564-b52ac1c389c8?w=800&h=1000&fit=crop&q=85',
+      'https://images.unsplash.com/photo-1529139574466-a303027c1d8b?w=800&h=1000&fit=crop&q=85',
+      'https://images.unsplash.com/photo-1469334031218-e382a71b716b?w=800&h=1000&fit=crop&q=85',
     ],
     category: 'Blouses',
     gender: 'women',
@@ -46,7 +48,9 @@ export const womenProducts: WomenProduct[] = [
     name: 'Luxe Cashmere Cardigan',
     price: 299,
     images: [
-      'https://images.unsplash.com/photo-1434389677669-e08b4cac3105?w=600&h=600&fit=crop&q=80',
+      'https://images.unsplash.com/photo-1434389677669-e08b4cac3105?w=800&h=1000&fit=crop&q=85',
+      'https://images.unsplash.com/photo-1576566588028-4147f3842f27?w=800&h=1000&fit=crop&q=85',
+      'https://images.unsplash.com/photo-1583744946564-b52ac1c389c8?w=800&h=1000&fit=crop&q=85',
     ],
     category: 'Knitwear',
     gender: 'women',
