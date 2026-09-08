@@ -27,6 +27,9 @@ const Header = () => {
 
         {/* Navigation */}
         <nav className="header__nav">
+          <Link to="/" className="header__nav-link">
+            Home
+          </Link>
           <Link to="/new-arrivals" className="header__nav-link">
             New Arrivals
           </Link>
@@ -36,8 +39,8 @@ const Header = () => {
           <Link to="/shop/men" className="header__nav-link">
             Men
           </Link>
-          <Link to="/collections" className="header__nav-link">
-            Collections
+          <Link to="/collection" className="header__nav-link">
+            New Collection
           </Link>
           <Link to="/about" className="header__nav-link">
             About
