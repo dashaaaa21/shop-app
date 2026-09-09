@@ -95,14 +95,12 @@ const AboutPage = () => {
             muted
             loop
             playsInline
-            poster="https://images.unsplash.com/photo-1469334031218-e382a71b716b?w=1600&h=900&fit=crop&q=80"
+            poster="https://images.unsplash.com/photo-1551488831-00ddcb6c6bd3?w=1600&h=900&fit=crop&q=85"
           >
-            {/* Public fashion runway clip — no auth required */}
             <source
               src="https://videos.pexels.com/video-files/3770494/3770494-uhd_2560_1440_25fps.mp4"
               type="video/mp4"
             />
-            {/* Fallback poster if video unavailable */}
           </video>
           <div className="about-hero__overlay" />
           <div className="about-hero__content">
