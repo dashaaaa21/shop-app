@@ -14,6 +14,7 @@ import MenCategoryPage from './pages/MenCategoryPage';
 import MenNewArrivalsPage from './pages/MenNewArrivalsPage';
 import CollectionPage from './pages/CollectionPage';
 import ShopCollectionPage from './pages/ShopCollectionPage';
+import AboutPage from './pages/AboutPage';
 
 // Placeholder pages
 
@@ -73,6 +74,7 @@ function App() {
         <Route path={ROUTES.CART} element={<CartPage />} />
         <Route path={ROUTES.CHECKOUT} element={<CheckoutPage />} />
         <Route path={ROUTES.ORDERS} element={<OrdersPage />} />
+        <Route path="/about" element={<AboutPage />} />
         <Route path="*" element={<Navigate to={ROUTES.HOME} replace />} />
       </Routes>
     </div>
