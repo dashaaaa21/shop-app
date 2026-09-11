@@ -1879,7 +1879,7 @@ export const collectionProducts: CollectionProduct[] = [
     name: 'Embroidered Wedding Bolero',
     price: 299,
     images: [
-      'https://images.unsplash.com/photo-1520012218364-3dbe622b7926?w=800&h=1000&fit=crop&q=90',
+      'https://images.unsplash.com/photo-1594938298603-c8148c4dae35?w=800&h=1000&fit=crop&q=90',
     ],
     category: 'Outerwear',
     collection: 'wedding-collection',
@@ -1998,7 +1998,7 @@ export const collectionProducts: CollectionProduct[] = [
     name: 'Gothic Velvet Cape',
     price: 199,
     images: [
-      'https://images.unsplash.com/photo-1509557965875-b88c97052f0e?w=800&h=1000&fit=crop&q=90',
+      'https://images.unsplash.com/photo-1635805737707-575885ab0820?w=800&h=1000&fit=crop&q=90',
     ],
     category: 'Outerwear',
     collection: 'halloween-collection',
@@ -2027,7 +2027,7 @@ export const collectionProducts: CollectionProduct[] = [
     name: 'Witches Wide-Brim Hat',
     price: 89,
     images: [
-      'https://images.unsplash.com/photo-1508615039623-a25605d2b022?w=800&h=1000&fit=crop&q=90',
+      'https://images.unsplash.com/photo-1520975916090-3105956dac38?w=800&h=1000&fit=crop&q=90',
     ],
     category: 'Accessories',
     collection: 'halloween-collection',
@@ -2041,7 +2041,7 @@ export const collectionProducts: CollectionProduct[] = [
     name: 'Lace Gloves',
     price: 59,
     images: [
-      'https://images.unsplash.com/photo-1571908598228-8d9c22f9f6c0?w=800&h=1000&fit=crop&q=90',
+      'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&h=1000&fit=crop&q=90',
     ],
     category: 'Accessories',
     collection: 'halloween-collection',
