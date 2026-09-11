@@ -15,22 +15,8 @@ import MenNewArrivalsPage from './pages/MenNewArrivalsPage';
 import CollectionPage from './pages/CollectionPage';
 import ShopCollectionPage from './pages/ShopCollectionPage';
 import AboutPage from './pages/AboutPage';
-
-// Placeholder pages
-
-const LoginPage = () => (
-  <div className="container">
-    <h1>Login</h1>
-    <p>Login page - Coming soon</p>
-  </div>
-);
-
-const RegisterPage = () => (
-  <div className="container">
-    <h1>Register</h1>
-    <p>Register page - Coming soon</p>
-  </div>
-);
+import LoginPage from './pages/LoginPage';
+import RegisterPage from './pages/RegisterPage';
 
 const CheckoutPage = () => (
   <div className="container">
@@ -53,7 +39,7 @@ function App() {
   useEffect(() => {
     initAuth();
     initCart();
-  }, [initAuth, initCart]);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <div className="app">
