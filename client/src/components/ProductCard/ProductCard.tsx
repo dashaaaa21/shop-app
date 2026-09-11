@@ -13,18 +13,13 @@ interface ProductCardProps {
 
 const ProductCard = ({ id, name, price, discountPrice, images = [], category }: ProductCardProps) => {
   const [isHovered, setIsHovered] = useState(false);
-  const [imageIndex, setImageIndex] = useState(0);
 
   const handleMouseEnter = () => {
     setIsHovered(true);
-    if (images && images.length > 1) {
-      setImageIndex(1);
-    }
   };
 
   const handleMouseLeave = () => {
     setIsHovered(false);
-    setImageIndex(0);
   };
 
   const handleImageError = (e: React.SyntheticEvent<HTMLImageElement, Event>) => {
@@ -44,7 +39,7 @@ const ProductCard = ({ id, name, price, discountPrice, images = [], category }: 
       <Link to={`/products/${id}`} className="product-card__link">
         <div className="product-card__image-wrapper">
           <img
-            src={images && images[imageIndex] ? images[imageIndex] : (images && images[0]) || 'https://via.placeholder.com/600x600/f8f7f4/777777?text=Fashion+Item'}
+            src={images && images[0] ? images[0] : 'https://via.placeholder.com/600x600/f8f7f4/777777?text=Fashion+Item'}
             alt={name}
             className="product-card__image"
             onError={handleImageError}
