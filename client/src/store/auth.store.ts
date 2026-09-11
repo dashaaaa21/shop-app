@@ -1,56 +1,130 @@
 import { create } from 'zustand';
-import { User } from '../types/user.types';
-import { storage, STORAGE_KEYS } from '../utils/storage';
+import { supabase, signIn, signOut, signUp, getSession } from '../lib/supabase';
+import type { Session, User as SupabaseUser } from '@supabase/supabase-js';
+
+export interface AppUser {
+  id: string;
+  email: string;
+  name: string;
+  avatar?: string;
+  role: 'user' | 'admin';
+}
 
 interface AuthState {
-  user: User | null;
-  token: string | null;
+  user: AppUser | null;
+  session: Session | null;
   isAuthenticated: boolean;
   isLoading: boolean;
-  setUser: (user: User | null) => void;
-  setToken: (token: string | null) => void;
-  login: (user: User, token: string) => void;
-  logout: () => void;
-  initialize: () => void;
+  error: string | null;
+
+  login: (email: string, password: string) => Promise<void>;
+  register: (name: string, email: string, password: string) => Promise<void>;
+  logout: () => Promise<void>;
+  initialize: () => Promise<void>;
+  clearError: () => void;
 }
+
+const mapSupabaseUser = (supabaseUser: SupabaseUser): AppUser => ({
+  id: supabaseUser.id,
+  email: supabaseUser.email ?? '',
+  name:
+    supabaseUser.user_metadata?.full_name ??
+    supabaseUser.email?.split('@')[0] ??
+    'User',
+  avatar: supabaseUser.user_metadata?.avatar_url,
+  role: (supabaseUser.user_metadata?.role as 'user' | 'admin') ?? 'user',
+});
 
 export const useAuthStore = create<AuthState>((set) => ({
   user: null,
-  token: null,
+  session: null,
   isAuthenticated: false,
   isLoading: true,
+  error: null,
 
-  setUser: (user) => set({ user, isAuthenticated: !!user }),
-
-  setToken: (token) => {
-    if (token) {
-      storage.set(STORAGE_KEYS.AUTH_TOKEN, token);
-    } else {
-      storage.remove(STORAGE_KEYS.AUTH_TOKEN);
+  login: async (email, password) => {
+    set({ isLoading: true, error: null });
+    try {
+      const data = await signIn(email, password);
+      set({
+        user: mapSupabaseUser(data.user),
+        session: data.session,
+        isAuthenticated: true,
+        isLoading: false,
+        error: null,
+      });
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : 'Login failed';
+      set({ isLoading: false, error: message, isAuthenticated: false });
+      throw err;
     }
-    set({ token });
   },
 
-  login: (user, token) => {
-    storage.set(STORAGE_KEYS.USER, user);
-    storage.set(STORAGE_KEYS.AUTH_TOKEN, token);
-    set({ user, token, isAuthenticated: true });
+  register: async (name, email, password) => {
+    set({ isLoading: true, error: null });
+    try {
+      const data = await signUp(email, password, name);
+      if (data.user) {
+        set({
+          user: mapSupabaseUser(data.user),
+          session: data.session,
+          isAuthenticated: !!data.session,
+          isLoading: false,
+          error: null,
+        });
+      } else {
+        // Email confirmation required
+        set({ isLoading: false, error: null });
+      }
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : 'Registration failed';
+      set({ isLoading: false, error: message });
+      throw err;
+    }
   },
 
-  logout: () => {
-    storage.remove(STORAGE_KEYS.USER);
-    storage.remove(STORAGE_KEYS.AUTH_TOKEN);
-    set({ user: null, token: null, isAuthenticated: false });
+  logout: async () => {
+    set({ isLoading: true });
+    try {
+      await signOut();
+    } catch {
+      // ignore signout errors
+    } finally {
+      set({ user: null, session: null, isAuthenticated: false, isLoading: false });
+    }
   },
 
-  initialize: () => {
-    const user = storage.get<User>(STORAGE_KEYS.USER);
-    const token = storage.get<string>(STORAGE_KEYS.AUTH_TOKEN);
-    set({
-      user,
-      token,
-      isAuthenticated: !!(user && token),
-      isLoading: false,
+  initialize: async () => {
+    set({ isLoading: true });
+    try {
+      const session = await getSession();
+      if (session?.user) {
+        set({
+          user: mapSupabaseUser(session.user),
+          session,
+          isAuthenticated: true,
+          isLoading: false,
+        });
+      } else {
+        set({ user: null, session: null, isAuthenticated: false, isLoading: false });
+      }
+    } catch {
+      set({ user: null, session: null, isAuthenticated: false, isLoading: false });
+    }
+
+    // Listen for auth state changes
+    supabase.auth.onAuthStateChange((_event, session) => {
+      if (session?.user) {
+        set({
+          user: mapSupabaseUser(session.user),
+          session,
+          isAuthenticated: true,
+        });
+      } else {
+        set({ user: null, session: null, isAuthenticated: false });
+      }
     });
   },
+
+  clearError: () => set({ error: null }),
 }));

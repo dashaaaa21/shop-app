@@ -146,3 +146,110 @@
     gap: var(--spacing-sm);
   }
 }
+
+/* ── User menu & dropdown ──────────────────────────────────── */
+.header__user-menu {
+  position: relative;
+}
+
+.header__action--user {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  color: var(--color-text-primary);
+  transition: all var(--transition-base);
+}
+
+.header__action--user:hover {
+  color: var(--color-accent-red);
+  transform: translateY(-2px);
+}
+
+.header__user-name {
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.header__dropdown {
+  position: absolute;
+  top: calc(100% + 16px);
+  right: 0;
+  min-width: 200px;
+  background: #fff;
+  border: 1px solid #e8e6e1;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  z-index: 1000;
+  animation: dropdownFade 0.15s ease;
+}
+
+@keyframes dropdownFade {
+  from { opacity: 0; transform: translateY(-6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.header__dropdown-header {
+  padding: 14px 16px 12px;
+}
+
+.header__dropdown-name {
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-text-primary);
+  margin: 0 0 2px;
+}
+
+.header__dropdown-email {
+  font-family: var(--font-sans);
+  font-size: 11px;
+  color: var(--color-text-secondary);
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.header__dropdown-divider {
+  height: 1px;
+  background: #e8e6e1;
+}
+
+.header__dropdown-item {
+  display: block;
+  width: 100%;
+  padding: 11px 16px;
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: 400;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  color: var(--color-text-primary);
+  text-decoration: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  transition: background-color 0.15s, color 0.15s;
+}
+
+.header__dropdown-item:hover {
+  background-color: var(--color-warm-white);
+  color: var(--color-accent-red);
+}
+
+.header__dropdown-item--logout {
+  color: var(--color-text-secondary);
+  border-top: 1px solid #e8e6e1;
+}
+
+.header__dropdown-item--logout:hover {
+  color: #b91c1c;
+  background-color: #fff5f5;
+}
