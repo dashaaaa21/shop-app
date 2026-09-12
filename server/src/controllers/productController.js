@@ -1,107 +1,133 @@
-import Product from '../models/Product.js';
+import { supabaseAdmin } from '../config/supabase.js';
 
+/**
+ * GET /api/products
+ * Query params: gender, category, collection, is_featured, is_new_arrival,
+ *               minPrice, maxPrice, search, sortBy, page, limit
+ */
 export const getAllProducts = async (req, res, next) => {
   try {
-    const { category, minPrice, maxPrice, search, sortBy, page = 1, limit = 12 } = req.query;
+    const {
+      gender, category, collection,
+      is_featured, is_new_arrival,
+      minPrice, maxPrice, search,
+      sortBy = 'created_at', page = 1, limit = 100,
+    } = req.query;
 
-    const query = {};
+    let query = supabaseAdmin
+      .from('products')
+      .select('*', { count: 'exact' });
 
-    if (category) query.category = category;
-    if (minPrice || maxPrice) {
-      query.price = {};
-      if (minPrice) query.price.$gte = Number(minPrice);
-      if (maxPrice) query.price.$lte = Number(maxPrice);
-    }
-    if (search) {
-      query.$text = { $search: search };
-    }
+    if (gender)        query = query.eq('gender', gender);
+    if (category)      query = query.ilike('category', category);
+    if (collection)    query = query.eq('collection', collection);
+    if (is_featured === 'true')    query = query.eq('is_featured', true);
+    if (is_new_arrival === 'true') query = query.eq('is_new_arrival', true);
+    if (minPrice)      query = query.gte('price', Number(minPrice));
+    if (maxPrice)      query = query.lte('price', Number(maxPrice));
+    if (search)        query = query.ilike('name', `%${search}%`);
 
-    let sort = {};
-    switch (sortBy) {
-      case 'price-asc':
-        sort = { price: 1 };
-        break;
-      case 'price-desc':
-        sort = { price: -1 };
-        break;
-      case 'rating':
-        sort = { rating: -1 };
-        break;
-      case 'newest':
-        sort = { createdAt: -1 };
-        break;
-      default:
-        sort = { createdAt: -1 };
-    }
+    // Sorting
+    const sortMap = {
+      'price-asc':  { col: 'price',      asc: true },
+      'price-desc': { col: 'price',      asc: false },
+      'rating':     { col: 'rating',     asc: false },
+      'name':       { col: 'name',       asc: true },
+      'newest':     { col: 'created_at', asc: false },
+    };
+    const sort = sortMap[sortBy] ?? { col: 'created_at', asc: false };
+    query = query.order(sort.col, { ascending: sort.asc });
 
-    const skip = (Number(page) - 1) * Number(limit);
-    const total = await Product.countDocuments(query);
-    const products = await Product.find(query)
-      .sort(sort)
-      .limit(Number(limit))
-      .skip(skip);
+    // Pagination
+    const from = (Number(page) - 1) * Number(limit);
+    query = query.range(from, from + Number(limit) - 1);
+
+    const { data, error, count } = await query;
+    if (error) return res.status(400).json({ message: error.message });
 
     res.json({
-      products,
-      total,
+      products: data,
+      total: count,
       page: Number(page),
-      totalPages: Math.ceil(total / Number(limit)),
+      totalPages: Math.ceil((count ?? 0) / Number(limit)),
     });
-  } catch (error) {
-    next(error);
+  } catch (err) {
+    next(err);
   }
 };
 
+/**
+ * GET /api/products/:id
+ * id can be uuid (Supabase id) or external_id (e.g. "w1", "m3")
+ */
 export const getProductById = async (req, res, next) => {
   try {
-    const product = await Product.findById(req.params.id);
+    const { id } = req.params;
 
-    if (!product) {
-      return res.status(404).json({ message: 'Product not found' });
-    }
+    // Try by uuid first, fall back to external_id
+    const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+    const field = uuidRegex.test(id) ? 'id' : 'external_id';
 
-    res.json(product);
-  } catch (error) {
-    next(error);
+    const { data, error } = await supabaseAdmin
+      .from('products')
+      .select('*')
+      .eq(field, id)
+      .single();
+
+    if (error || !data) return res.status(404).json({ message: 'Product not found' });
+    res.json(data);
+  } catch (err) {
+    next(err);
   }
 };
 
+/**
+ * POST /api/products  (admin)
+ */
 export const createProduct = async (req, res, next) => {
   try {
-    const product = await Product.create(req.body);
-    res.status(201).json(product);
-  } catch (error) {
-    next(error);
+    const { data, error } = await supabaseAdmin
+      .from('products')
+      .insert(req.body)
+      .select()
+      .single();
+    if (error) return res.status(400).json({ message: error.message });
+    res.status(201).json(data);
+  } catch (err) {
+    next(err);
   }
 };
 
+/**
+ * PUT /api/products/:id  (admin)
+ */
 export const updateProduct = async (req, res, next) => {
   try {
-    const product = await Product.findByIdAndUpdate(req.params.id, req.body, {
-      new: true,
-      runValidators: true,
-    });
-
-    if (!product) {
-      return res.status(404).json({ message: 'Product not found' });
-    }
-
-    res.json(product);
-  } catch (error) {
-    next(error);
+    const { data, error } = await supabaseAdmin
+      .from('products')
+      .update({ ...req.body, updated_at: new Date().toISOString() })
+      .eq('id', req.params.id)
+      .select()
+      .single();
+    if (error || !data) return res.status(404).json({ message: 'Product not found' });
+    res.json(data);
+  } catch (err) {
+    next(err);
   }
 };
 
+/**
+ * DELETE /api/products/:id  (admin)
+ */
 export const deleteProduct = async (req, res, next) => {
   try {
-    const product = await Product.findByIdAndDelete(req.params.id);
-
-    if (!product) {
-      return res.status(404).json({ message: 'Product not found' });
-    }
-
+    const { error } = await supabaseAdmin
+      .from('products')
+      .delete()
+      .eq('id', req.params.id);
+    if (error) return res.status(400).json({ message: error.message });
     res.json({ message: 'Product deleted successfully' });
-  } catch (error) {
-    next(error);
+  } catch (err) {
+    next(err);
   }
 };

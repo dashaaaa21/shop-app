@@ -10,10 +10,11 @@ import { protect } from '../middleware/supabaseAuth.js';
 
 const router = express.Router();
 
-router.get('/', protect, getCart);
-router.post('/', protect, addToCart);
-router.put('/:productId', protect, updateCartItem);
-router.delete('/:productId', protect, removeFromCart);
-router.delete('/', protect, clearCart);
+// All cart routes require authentication
+router.get('/', protect, getCart);           // GET /api/cart
+router.post('/', protect, addToCart);        // POST /api/cart
+router.put('/:itemId', protect, updateCartItem);  // PUT /api/cart/:itemId (changed from :productId)
+router.delete('/:itemId', protect, removeFromCart); // DELETE /api/cart/:itemId (changed from :productId)
+router.delete('/', protect, clearCart);      // DELETE /api/cart
 
 export default router;

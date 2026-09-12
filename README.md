@@ -3,7 +3,7 @@
 Full-stack e-commerce application built with React, TypeScript, Node.js, and MongoDB.
 
 ## Project Status
-🚧 This project is currently under active development.
+This project is currently under active development.
 
 ## Features
 

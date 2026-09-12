@@ -1,16 +1,18 @@
 import { useState, useEffect } from 'react';
-import { useParams, useNavigate, Link } from 'react-router-dom';
+import { useParams, useNavigate, useLocation, Link } from 'react-router-dom';
 import { Header } from '../components/Header';
 import { Footer } from '../components/Footer';
 import { Newsletter } from '../components/Newsletter';
 import { Loader } from '../components/loader';
 import { useProductStore } from '../store/product.store';
 import { useCartStore } from '../store/cart.store';
+import { useAuthStore } from '../store/auth.store';
 import './ProductDetailPage.css';
 
 const ProductDetailPage = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
+  const location = useLocation();
   const [selectedImage, setSelectedImage] = useState(0);
   const [quantity, setQuantity] = useState(1);
   const [activeTab, setActiveTab] = useState<'description' | 'details' | 'shipping'>('description');
@@ -18,24 +20,47 @@ const ProductDetailPage = () => {
 
   const { currentProduct, loading, error, fetchProductById } = useProductStore();
   const { addToCart, loading: cartLoading } = useCartStore();
+  const { isAuthenticated } = useAuthStore();
 
   useEffect(() => {
     if (id) fetchProductById(id);
     window.scrollTo(0, 0);
-  }, [id, fetchProductById]);
+  }, [id]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleAddToCart = async () => {
+    if (!isAuthenticated) {
+      // Redirect to login page
+      navigate('/login', { state: { from: location.pathname } });
+      return;
+    }
+
     if (currentProduct) {
-      await addToCart(currentProduct.id, quantity);
-      setAddedToCart(true);
-      setTimeout(() => setAddedToCart(false), 2500);
+      try {
+        await addToCart(currentProduct.external_id, quantity);
+        setAddedToCart(true);
+        setTimeout(() => setAddedToCart(false), 2500);
+      } catch (error) {
+        console.error('Failed to add to cart:', error);
+        // Could show error toast here
+      }
     }
   };
 
   const handleBuyNow = async () => {
+    if (!isAuthenticated) {
+      // Redirect to login page
+      navigate('/login', { state: { from: location.pathname } });
+      return;
+    }
+
     if (currentProduct) {
-      await addToCart(currentProduct.id, quantity);
-      navigate('/checkout');
+      try {
+        await addToCart(currentProduct.external_id, quantity);
+        navigate('/checkout');
+      } catch (error) {
+        console.error('Failed to add to cart:', error);
+        // Could show error toast here
+      }
     }
   };
 
@@ -71,10 +96,15 @@ const ProductDetailPage = () => {
   }
 
   const product = currentProduct;
-  const images = product.images && product.images.length > 0 ? product.images : [product.image];
-  const hasDiscount = product.originalPrice && product.originalPrice > product.price;
-  const discountPercent = hasDiscount
-    ? Math.round(((product.originalPrice! - product.price) / product.originalPrice!) * 100)
+  const images = product.images && product.images.length > 0 ? product.images : [];
+  // Support both Supabase snake_case and legacy camelCase
+  const currentPrice = (product as any).discount_price ?? (product as any).discountPrice ?? product.price;
+  const originalPrice = (product as any).discount_price
+    ? product.price
+    : (product as any).originalPrice ?? null;
+  const hasDiscount = !!((product as any).discount_price || (product as any).originalPrice);
+  const discountPercent = hasDiscount && originalPrice
+    ? Math.round(((originalPrice - currentPrice) / originalPrice) * 100)
     : 0;
 
   return (
@@ -121,7 +151,7 @@ const ProductDetailPage = () => {
                 <span className="pdp__sale-badge">SALE — {discountPercent}% OFF</span>
               )}
               <img
-                src={images[selectedImage]}
+                src={images.length > 0 ? images[selectedImage] : 'https://via.placeholder.com/800x1000/f8f7f4/999999?text=Fashion+Item'}
                 alt={product.name}
                 className="pdp__image"
                 onError={handleImageError}
@@ -157,9 +187,9 @@ const ProductDetailPage = () => {
 
             {/* Price */}
             <div className="pdp__pricing">
-              <span className="pdp__price">€{product.price}</span>
+              <span className="pdp__price">€{currentPrice}</span>
               {hasDiscount && (
-                <span className="pdp__original-price">€{product.originalPrice}</span>
+                <span className="pdp__original-price">€{originalPrice}</span>
               )}
             </div>
 
@@ -203,7 +233,7 @@ const ProductDetailPage = () => {
                 onClick={handleAddToCart}
                 disabled={product.stock === 0 || cartLoading}
               >
-                {addedToCart ? '✓ Added to Cart' : 'Add to Cart'}
+                {addedToCart ? 'Added to Cart' : 'Add to Cart'}
               </button>
               <button
                 className="pdp__buy-btn"

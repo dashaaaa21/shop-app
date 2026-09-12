@@ -34,13 +34,19 @@ const OrdersPage = () => (
 );
 
 function App() {
-  const { initialize: initAuth } = useAuthStore();
-  const { initialize: initCart } = useCartStore();
+  const { initialize: initAuth, isAuthenticated } = useAuthStore();
+  const { fetchCart } = useCartStore();
 
   useEffect(() => {
     initAuth();
-    initCart();
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Fetch cart when user authenticates
+  useEffect(() => {
+    if (isAuthenticated) {
+      fetchCart().catch(console.error);
+    }
+  }, [isAuthenticated, fetchCart]);
 
   return (
     <div className="app">

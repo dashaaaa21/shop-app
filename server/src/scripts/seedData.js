@@ -176,36 +176,36 @@ const sampleUsers = [
 const connectDB = async () => {
   try {
     await mongoose.connect(process.env.MONGODB_URI);
-    console.log('✅ MongoDB connected');
+    console.log('MongoDB connected');
   } catch (error) {
-    console.error('❌ MongoDB connection error:', error);
+    console.error('MongoDB connection error:', error);
     process.exit(1);
   }
 };
 
 const seedDatabase = async () => {
   try {
-    console.log('🌱 Starting database seed...\n');
+    console.log('Starting database seed...\n');
 
     // Clear existing data
-    console.log('🗑️  Clearing existing data...');
+    console.log('Clearing existing data...');
     await User.deleteMany({});
     await Product.deleteMany({});
     await Order.deleteMany({});
-    console.log('✅ Existing data cleared\n');
+    console.log('Existing data cleared\n');
 
     // Create users
-    console.log('👥 Creating users...');
+    console.log('Creating users...');
     const users = await User.create(sampleUsers);
-    console.log(`✅ Created ${users.length} users\n`);
+    console.log(`Created ${users.length} users\n`);
 
     // Create products
-    console.log('📦 Creating products...');
+    console.log('Creating products...');
     const products = await Product.create(sampleProducts);
-    console.log(`✅ Created ${products.length} products\n`);
+    console.log(`Created ${products.length} products\n`);
 
     // Create sample orders
-    console.log('🛒 Creating sample orders...');
+    console.log('Creating sample orders...');
     const customer = users.find((u) => u.role === 'customer');
     
     const sampleOrders = [
@@ -243,20 +243,20 @@ const seedDatabase = async () => {
     ];
 
     const orders = await Order.create(sampleOrders);
-    console.log(`✅ Created ${orders.length} sample orders\n`);
+    console.log(`Created ${orders.length} sample orders\n`);
 
-    console.log('🎉 Database seeding completed successfully!\n');
-    console.log('📋 Summary:');
+    console.log('Database seeding completed successfully!\n');
+    console.log('Summary:');
     console.log(`   Users: ${users.length}`);
     console.log(`   Products: ${products.length}`);
     console.log(`   Orders: ${orders.length}\n`);
-    console.log('🔑 Test Credentials:');
+    console.log('Test Credentials:');
     console.log('   Admin: admin@shop.com / Admin123!');
     console.log('   Customer: customer@shop.com / Customer123!\n');
 
     process.exit(0);
   } catch (error) {
-    console.error('❌ Error seeding database:', error);
+    console.error('Error seeding database:', error);
     process.exit(1);
   }
 };

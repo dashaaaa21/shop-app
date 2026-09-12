@@ -1,9 +1,10 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { Header } from '../components/Header';
 import { Footer } from '../components/Footer';
 import { Button } from '../components/ui/button';
 import { useCartStore } from '../store/cart.store';
+import { useAuthStore } from '../store/auth.store';
 import { ROUTES } from '../constants/routes';
 import './CartPage.css';
 
@@ -13,29 +14,57 @@ const CartPage = () => {
   
   const { 
     items, 
-    total, 
+    subtotal,
+    tax,
+    shipping,
+    total,
+    loading,
+    error,
     updateQuantity, 
     removeFromCart, 
-    clearCart 
+    clearCart,
+    fetchCart
   } = useCartStore();
+
+  const { isAuthenticated } = useAuthStore();
+
+  useEffect(() => {
+    if (!isAuthenticated) {
+      navigate('/login', { state: { from: '/cart' } });
+      return;
+    }
+    fetchCart();
+  }, [isAuthenticated, fetchCart, navigate]);
 
   const handleQuantityChange = async (itemId: string, newQuantity: number) => {
     if (newQuantity < 1) return;
     setIsLoading(true);
-    await updateQuantity(itemId, newQuantity);
+    try {
+      await updateQuantity(itemId, newQuantity);
+    } catch (err) {
+      console.error('Failed to update quantity:', err);
+    }
     setIsLoading(false);
   };
 
   const handleRemoveItem = async (itemId: string) => {
     setIsLoading(true);
-    await removeFromCart(itemId);
+    try {
+      await removeFromCart(itemId);
+    } catch (err) {
+      console.error('Failed to remove item:', err);
+    }
     setIsLoading(false);
   };
 
   const handleClearCart = async () => {
     if (window.confirm('Are you sure you want to remove all items from your cart?')) {
       setIsLoading(true);
-      await clearCart();
+      try {
+        await clearCart();
+      } catch (err) {
+        console.error('Failed to clear cart:', err);
+      }
       setIsLoading(false);
     }
   };
@@ -43,6 +72,46 @@ const CartPage = () => {
   const handleCheckout = () => {
     navigate(ROUTES.CHECKOUT);
   };
+
+  if (!isAuthenticated) {
+    return null; // Will redirect to login
+  }
+
+  if (loading) {
+    return (
+      <div className="cart-page">
+        <Header />
+        <main className="main-content">
+          <div className="container">
+            <div className="cart-loading">
+              <div>Loading cart...</div>
+            </div>
+          </div>
+        </main>
+        <Footer />
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="cart-page">
+        <Header />
+        <main className="main-content">
+          <div className="container">
+            <div className="cart-error">
+              <h2>Error loading cart</h2>
+              <p>{error}</p>
+              <Button onClick={() => fetchCart()} className="retry-btn">
+                Retry
+              </Button>
+            </div>
+          </div>
+        </main>
+        <Footer />
+      </div>
+    );
+  }
 
   if (items.length === 0) {
     return (
@@ -54,7 +123,7 @@ const CartPage = () => {
               <div className="empty-cart-message">Cart</div>
               <h2>Your Cart is Empty</h2>
               <p>Looks like you haven't added any items to your cart yet.</p>
-              <Button onClick={() => navigate(ROUTES.PRODUCTS)} className="continue-shopping-btn">
+              <Button onClick={() => navigate('/shop/women')} className="continue-shopping-btn">
                 Continue Shopping
               </Button>
             </div>
@@ -73,7 +142,7 @@ const CartPage = () => {
         <div className="container">
           <div className="cart-header">
             <h1>Shopping Cart</h1>
-            <button onClick={handleClearCart} className="clear-cart-btn" disabled={isLoading}>
+            <button onClick={handleClearCart} className="clear-cart-btn" disabled={isLoading || loading}>
               Clear Cart
             </button>
           </div>
@@ -88,77 +157,88 @@ const CartPage = () => {
                 <span>Action</span>
               </div>
 
-              {items.map((item) => (
-                <div key={item.id} className="cart-item">
-                  <div className="item-info">
-                    <Link to={`${ROUTES.PRODUCTS}/${item.productId}`} className="item-image">
-                      <img src={item.image} alt={item.name} />
-                    </Link>
-                    <div className="item-details">
-                      <Link 
-                        to={`${ROUTES.PRODUCTS}/${item.productId}`} 
-                        className="item-name"
-                      >
-                        {item.name}
+              {items.map((item) => {
+                const currentPrice = item.product_discount_price || item.product_price;
+                const lineTotal = currentPrice * item.quantity;
+
+                return (
+                  <div key={item.id} className="cart-item">
+                    <div className="item-info">
+                      <Link to={`/product/${item.external_product_id}`} className="item-image">
+                        <img 
+                          src={item.product_image} 
+                          alt={item.product_name}
+                          onError={(e) => {
+                            e.currentTarget.src = 'https://via.placeholder.com/150x150?text=Product';
+                          }}
+                        />
                       </Link>
-                      {item.attributes && Object.keys(item.attributes).length > 0 && (
-                        <div className="item-attributes">
-                          {Object.entries(item.attributes).map(([key, value]) => (
-                            <span key={key} className="attribute">
-                              {key}: {value}
-                            </span>
-                          ))}
+                      <div className="item-details">
+                        <Link 
+                          to={`/product/${item.external_product_id}`} 
+                          className="item-name"
+                        >
+                          {item.product_name}
+                        </Link>
+                        <div className="item-category">
+                          {item.product_category}
                         </div>
-                      )}
+                        {item.product_discount_price && (
+                          <div className="item-discount">
+                            <span className="original-price">€{item.product_price}</span>
+                            <span className="discount-price">€{item.product_discount_price}</span>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+
+                    <div className="item-price">
+                      €{currentPrice.toFixed(2)}
+                    </div>
+
+                    <div className="item-quantity">
+                      <div className="quantity-controls">
+                        <button
+                          onClick={() => handleQuantityChange(item.id, item.quantity - 1)}
+                          disabled={item.quantity <= 1 || isLoading}
+                          className="quantity-btn"
+                        >
+                          −
+                        </button>
+                        <input
+                          type="number"
+                          value={item.quantity}
+                          onChange={(e) => handleQuantityChange(item.id, parseInt(e.target.value) || 1)}
+                          min="1"
+                          className="quantity-input"
+                          disabled={isLoading}
+                        />
+                        <button
+                          onClick={() => handleQuantityChange(item.id, item.quantity + 1)}
+                          disabled={isLoading}
+                          className="quantity-btn"
+                        >
+                          +
+                        </button>
+                      </div>
+                    </div>
+
+                    <div className="item-total">
+                      €{lineTotal.toFixed(2)}
+                    </div>
+
+                    <div className="item-action">
+                      <button
+                        onClick={() => handleRemoveItem(item.id)}
+                        disabled={isLoading}
+                        className="remove-btn"
+                      >
+                        Remove
+                      </button>
                     </div>
                   </div>
-
-                  <div className="item-price">
-                    ${item.price.toFixed(2)}
-                  </div>
-
-                  <div className="item-quantity">
-                    <div className="quantity-controls">
-                      <button
-                        onClick={() => handleQuantityChange(item.id, item.quantity - 1)}
-                        disabled={item.quantity <= 1 || isLoading}
-                        className="quantity-btn"
-                      >
-                        -
-                      </button>
-                      <input
-                        type="number"
-                        value={item.quantity}
-                        onChange={(e) => handleQuantityChange(item.id, parseInt(e.target.value) || 1)}
-                        min="1"
-                        className="quantity-input"
-                        disabled={isLoading}
-                      />
-                      <button
-                        onClick={() => handleQuantityChange(item.id, item.quantity + 1)}
-                        disabled={isLoading}
-                        className="quantity-btn"
-                      >
-                        +
-                      </button>
-                    </div>
-                  </div>
-
-                  <div className="item-total">
-                    ${(item.price * item.quantity).toFixed(2)}
-                  </div>
-
-                  <div className="item-action">
-                    <button
-                      onClick={() => handleRemoveItem(item.id)}
-                      disabled={isLoading}
-                      className="remove-btn"
-                    >
-                      Remove
-                    </button>
-                  </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
 
             <div className="cart-summary">
@@ -167,29 +247,29 @@ const CartPage = () => {
                 
                 <div className="summary-row">
                   <span>Subtotal ({items.length} items)</span>
-                  <span>${total.toFixed(2)}</span>
-                </div>
-                
-                <div className="summary-row">
-                  <span>Shipping</span>
-                  <span>{total >= 50 ? 'Free' : '$5.99'}</span>
+                  <span>€{subtotal.toFixed(2)}</span>
                 </div>
                 
                 <div className="summary-row">
                   <span>Tax</span>
-                  <span>${(total * 0.08).toFixed(2)}</span>
+                  <span>€{tax.toFixed(2)}</span>
+                </div>
+
+                <div className="summary-row">
+                  <span>Shipping</span>
+                  <span>{shipping === 0 ? 'Free' : `€${shipping.toFixed(2)}`}</span>
                 </div>
                 
                 <div className="summary-divider"></div>
                 
                 <div className="summary-row total">
                   <span>Total</span>
-                  <span>${(total + (total < 50 ? 5.99 : 0) + (total * 0.08)).toFixed(2)}</span>
+                  <span>€{total.toFixed(2)}</span>
                 </div>
 
-                {total < 50 && (
+                {shipping > 0 && subtotal < 150 && (
                   <div className="shipping-notice">
-                    <span>Add ${(50 - total).toFixed(2)} more for free shipping!</span>
+                    <span>Add €{(150 - subtotal).toFixed(2)} more for free shipping!</span>
                   </div>
                 )}
 
@@ -198,7 +278,7 @@ const CartPage = () => {
                     Proceed to Checkout
                   </Button>
                   <Button 
-                    onClick={() => navigate(ROUTES.PRODUCTS)} 
+                    onClick={() => navigate('/shop/women')} 
                     variant="outline" 
                     className="continue-shopping-btn"
                   >
@@ -234,7 +314,7 @@ const CartPage = () => {
             <div className="feature">
               <div>
                 <h4>Fast Shipping</h4>
-                <p>Free shipping on orders over $50</p>
+                <p>Free shipping on orders over €150</p>
               </div>
             </div>
           </div>
