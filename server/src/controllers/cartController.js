@@ -1,73 +1,70 @@
-import Product from '../models/Product.js';
+import { supabaseAdmin } from '../config/supabase.js';
 
-// In-memory cart storage (in production, use Redis or database)
-const userCarts = new Map();
-
-// Helper function to get user's cart
-const getUserCart = (userId) => {
-  if (!userCarts.has(userId)) {
-    userCarts.set(userId, []);
-  }
-  return userCarts.get(userId);
-};
-
-// Helper function to calculate cart totals
-const calculateCartTotals = (cartItems) => {
-  const subtotal = cartItems.reduce((sum, item) => {
-    const price = item.product.discountPrice || item.product.price;
-    return sum + price * item.quantity;
-  }, 0);
-
-  const tax = subtotal * 0.1; // 10% tax
-  const shipping = subtotal > 100 ? 0 : 10; // Free shipping over $100
-  const total = subtotal + tax + shipping;
-
-  return { subtotal, tax, shipping, total };
-};
-
-// @desc    Get user's cart
-// @route   GET /api/cart
-// @access  Private
+/**
+ * GET /api/cart
+ * Returns user's cart items with totals
+ */
 export const getCart = async (req, res, next) => {
   try {
-    const cart = getUserCart(req.user._id.toString());
+    // Get user's cart items
+    const { data: cartItems, error: itemsError } = await supabaseAdmin
+      .from('cart_items')
+      .select('*')
+      .eq('user_id', req.user.id)
+      .order('created_at', { ascending: true });
 
-    // Populate product details
-    const cartWithProducts = [];
-    for (const item of cart) {
-      const product = await Product.findById(item.productId);
-      if (product) {
-        cartWithProducts.push({
-          product: {
-            _id: product._id,
-            name: product.name,
-            price: product.price,
-            discountPrice: product.discountPrice,
-            images: product.images,
-            stock: product.stock,
-          },
-          quantity: item.quantity,
-        });
-      }
+    if (itemsError) {
+      return res.status(400).json({ message: itemsError.message });
     }
 
-    const totals = calculateCartTotals(cartWithProducts);
+    // Get cart summary (totals)
+    const { data: summary, error: summaryError } = await supabaseAdmin
+      .from('user_cart_summary')
+      .select('*')
+      .eq('user_id', req.user.id)
+      .single();
 
-    res.status(200).json({
+    if (summaryError && summaryError.code !== 'PGRST116') { // PGRST116 = no rows found
+      return res.status(400).json({ message: summaryError.message });
+    }
+
+    // If no items, return empty cart with zero totals
+    if (!cartItems || cartItems.length === 0) {
+      return res.json({
+        success: true,
+        data: {
+          items: [],
+          items_count: 0,
+          total_quantity: 0,
+          subtotal: 0,
+          tax: 0,
+          shipping: 8, // Default shipping for empty cart
+          total: 8
+        }
+      });
+    }
+
+    res.json({
       success: true,
       data: {
-        items: cartWithProducts,
-        ...totals,
-      },
+        items: cartItems,
+        items_count: summary?.items_count || 0,
+        total_quantity: summary?.total_quantity || 0,
+        subtotal: parseFloat(summary?.subtotal || '0'),
+        tax: parseFloat(summary?.tax || '0'),
+        shipping: parseFloat(summary?.shipping || '8'),
+        total: parseFloat(summary?.total || '8')
+      }
     });
   } catch (error) {
     next(error);
   }
 };
 
-// @desc    Add item to cart
-// @route   POST /api/cart
-// @access  Private
+/**
+ * POST /api/cart
+ * Add item to cart (or update quantity if exists)
+ */
 export const addToCart = async (req, res, next) => {
   try {
     const { productId, quantity = 1 } = req.body;
@@ -75,158 +72,237 @@ export const addToCart = async (req, res, next) => {
     if (!productId) {
       return res.status(400).json({
         success: false,
-        message: 'Product ID is required',
+        message: 'Product ID is required'
       });
     }
 
     if (quantity < 1) {
       return res.status(400).json({
         success: false,
-        message: 'Quantity must be at least 1',
+        message: 'Quantity must be at least 1'
       });
     }
 
-    // Check if product exists
-    const product = await Product.findById(productId);
-    if (!product) {
+    // Get product details for snapshot
+    let product;
+    
+    // Try UUID first, then external_id
+    const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+    const field = uuidRegex.test(productId) ? 'id' : 'external_id';
+    
+    const { data: productData, error: productError } = await supabaseAdmin
+      .from('products')
+      .select('*')
+      .eq(field, productId)
+      .single();
+
+    if (productError || !productData) {
       return res.status(404).json({
         success: false,
-        message: 'Product not found',
+        message: 'Product not found'
       });
     }
+
+    product = productData;
 
     // Check stock availability
     if (product.stock < quantity) {
       return res.status(400).json({
         success: false,
-        message: 'Insufficient stock',
+        message: `Insufficient stock. Only ${product.stock} items available.`
       });
     }
 
-    const cart = getUserCart(req.user._id.toString());
+    // Check if item already exists in cart
+    const { data: existingItem, error: checkError } = await supabaseAdmin
+      .from('cart_items')
+      .select('*')
+      .eq('user_id', req.user.id)
+      .eq('product_id', product.id)
+      .single();
 
-    // Check if item already in cart
-    const existingItemIndex = cart.findIndex(
-      (item) => item.productId.toString() === productId
-    );
+    if (checkError && checkError.code !== 'PGRST116') {
+      return res.status(400).json({ message: checkError.message });
+    }
 
-    if (existingItemIndex > -1) {
-      // Update quantity
-      const newQuantity = cart[existingItemIndex].quantity + quantity;
+    if (existingItem) {
+      // Update existing item quantity
+      const newQuantity = existingItem.quantity + quantity;
+      
       if (product.stock < newQuantity) {
         return res.status(400).json({
           success: false,
-          message: 'Insufficient stock',
+          message: `Insufficient stock. Only ${product.stock} items available.`
         });
       }
-      cart[existingItemIndex].quantity = newQuantity;
-    } else {
-      // Add new item
-      cart.push({ productId, quantity });
-    }
 
-    res.status(200).json({
-      success: true,
-      message: 'Item added to cart',
-    });
+      const { data: updatedItem, error: updateError } = await supabaseAdmin
+        .from('cart_items')
+        .update({ quantity: newQuantity })
+        .eq('id', existingItem.id)
+        .select()
+        .single();
+
+      if (updateError) {
+        return res.status(400).json({ message: updateError.message });
+      }
+
+      return res.json({
+        success: true,
+        message: 'Cart updated successfully',
+        data: updatedItem
+      });
+    } else {
+      // Add new item to cart
+      const cartItem = {
+        user_id: req.user.id,
+        product_id: product.id,
+        external_product_id: product.external_id,
+        product_name: product.name,
+        product_price: product.price,
+        product_discount_price: product.discount_price,
+        product_image: product.images?.[0] || 'https://via.placeholder.com/300x300?text=Product',
+        product_category: product.category,
+        quantity
+      };
+
+      const { data: newItem, error: insertError } = await supabaseAdmin
+        .from('cart_items')
+        .insert(cartItem)
+        .select()
+        .single();
+
+      if (insertError) {
+        return res.status(400).json({ message: insertError.message });
+      }
+
+      return res.status(201).json({
+        success: true,
+        message: 'Item added to cart successfully',
+        data: newItem
+      });
+    }
   } catch (error) {
     next(error);
   }
 };
 
-// @desc    Update cart item quantity
-// @route   PUT /api/cart/:productId
-// @access  Private
+/**
+ * PUT /api/cart/:itemId
+ * Update cart item quantity
+ */
 export const updateCartItem = async (req, res, next) => {
   try {
-    const { productId } = req.params;
+    const { itemId } = req.params;
     const { quantity } = req.body;
 
     if (!quantity || quantity < 1) {
       return res.status(400).json({
         success: false,
-        message: 'Quantity must be at least 1',
+        message: 'Quantity must be at least 1'
       });
     }
 
-    const product = await Product.findById(productId);
-    if (!product) {
+    // Get cart item and verify ownership
+    const { data: cartItem, error: itemError } = await supabaseAdmin
+      .from('cart_items')
+      .select('*, products!cart_items_product_id_fkey(stock)')
+      .eq('id', itemId)
+      .eq('user_id', req.user.id) // Ensure user owns this item
+      .single();
+
+    if (itemError || !cartItem) {
       return res.status(404).json({
         success: false,
-        message: 'Product not found',
+        message: 'Cart item not found'
       });
     }
 
-    if (product.stock < quantity) {
+    // Check stock availability
+    const productStock = cartItem.products?.stock || 0;
+    if (productStock < quantity) {
       return res.status(400).json({
         success: false,
-        message: 'Insufficient stock',
+        message: `Insufficient stock. Only ${productStock} items available.`
       });
     }
 
-    const cart = getUserCart(req.user._id.toString());
-    const itemIndex = cart.findIndex(
-      (item) => item.productId.toString() === productId
-    );
+    // Update quantity
+    const { data: updatedItem, error: updateError } = await supabaseAdmin
+      .from('cart_items')
+      .update({ quantity })
+      .eq('id', itemId)
+      .select()
+      .single();
 
-    if (itemIndex === -1) {
-      return res.status(404).json({
-        success: false,
-        message: 'Item not found in cart',
-      });
+    if (updateError) {
+      return res.status(400).json({ message: updateError.message });
     }
 
-    cart[itemIndex].quantity = quantity;
-
-    res.status(200).json({
+    res.json({
       success: true,
-      message: 'Cart updated',
+      message: 'Cart item updated successfully',
+      data: updatedItem
     });
   } catch (error) {
     next(error);
   }
 };
 
-// @desc    Remove item from cart
-// @route   DELETE /api/cart/:productId
-// @access  Private
+/**
+ * DELETE /api/cart/:itemId
+ * Remove item from cart
+ */
 export const removeFromCart = async (req, res, next) => {
   try {
-    const { productId } = req.params;
+    const { itemId } = req.params;
 
-    const cart = getUserCart(req.user._id.toString());
-    const itemIndex = cart.findIndex(
-      (item) => item.productId.toString() === productId
-    );
+    // Delete item and verify ownership
+    const { data: deletedItem, error: deleteError } = await supabaseAdmin
+      .from('cart_items')
+      .delete()
+      .eq('id', itemId)
+      .eq('user_id', req.user.id) // Ensure user owns this item
+      .select()
+      .single();
 
-    if (itemIndex === -1) {
+    if (deleteError || !deletedItem) {
       return res.status(404).json({
         success: false,
-        message: 'Item not found in cart',
+        message: 'Cart item not found'
       });
     }
 
-    cart.splice(itemIndex, 1);
-
-    res.status(200).json({
+    res.json({
       success: true,
-      message: 'Item removed from cart',
+      message: 'Item removed from cart successfully',
+      data: deletedItem
     });
   } catch (error) {
     next(error);
   }
 };
 
-// @desc    Clear cart
-// @route   DELETE /api/cart
-// @access  Private
+/**
+ * DELETE /api/cart
+ * Clear entire cart
+ */
 export const clearCart = async (req, res, next) => {
   try {
-    userCarts.set(req.user._id.toString(), []);
+    const { data: deletedItems, error: deleteError } = await supabaseAdmin
+      .from('cart_items')
+      .delete()
+      .eq('user_id', req.user.id)
+      .select();
 
-    res.status(200).json({
+    if (deleteError) {
+      return res.status(400).json({ message: deleteError.message });
+    }
+
+    res.json({
       success: true,
-      message: 'Cart cleared',
+      message: `Cleared ${deletedItems?.length || 0} items from cart`,
+      data: { cleared_count: deletedItems?.length || 0 }
     });
   } catch (error) {
     next(error);

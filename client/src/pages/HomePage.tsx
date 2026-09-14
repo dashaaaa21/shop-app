@@ -1,9 +1,9 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Header } from '../components/Header';
 import { Footer } from '../components/Footer';
 import { Newsletter } from '../components/Newsletter';
-import { getFeaturedProducts } from '../data/products.data';
+import { fetchFeaturedProducts, type Product } from '../api/products/products.api';
 import './HomePage.css';
 
 const categories = [
@@ -28,10 +28,24 @@ const categories = [
 ];
 
 const HomePage = () => {
-  const featured = getFeaturedProducts().slice(0, 4);
+  const [featured, setFeatured] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     document.title = 'Shop — AW 2026 Collection';
+    
+    // Fetch featured products from API
+    fetchFeaturedProducts('women')
+      .then((response) => {
+        setFeatured(response.products.slice(0, 4));
+      })
+      .catch((error) => {
+        console.error('Failed to load featured products:', error);
+        setFeatured([]);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   }, []);
 
   return (
@@ -104,40 +118,44 @@ const HomePage = () => {
           <h2 className="home-featured__heading">Featured Pieces</h2>
           <Link to="/new-arrivals" className="home-featured__see-all">See All →</Link>
         </div>
-        <div className="home-featured__grid">
-          {featured.map((product) => (
-            <Link
-              key={product.id}
-              to={`/product/${product.id}`}
-              className="home-featured__card"
-            >
-              <div className="home-featured__img-wrap">
-                <img
-                  src={product.images[0]}
-                  alt={product.name}
-                  className="home-featured__img"
-                />
-                {product.discountPrice && (
-                  <span className="home-featured__badge">Sale</span>
-                )}
-              </div>
-              <div className="home-featured__info">
-                <span className="home-featured__cat">{product.category}</span>
-                <h3 className="home-featured__name">{product.name}</h3>
-                <div className="home-featured__price">
-                  {product.discountPrice ? (
-                    <>
-                      <span className="home-featured__price--sale">€{product.discountPrice}</span>
-                      <span className="home-featured__price--orig">€{product.price}</span>
-                    </>
-                  ) : (
-                    <span>€{product.price}</span>
+        {loading ? (
+          <div className="home-featured__loading">Loading featured products...</div>
+        ) : (
+          <div className="home-featured__grid">
+            {featured.map((product) => (
+              <Link
+                key={product.external_id}
+                to={`/product/${product.external_id}`}
+                className="home-featured__card"
+              >
+                <div className="home-featured__img-wrap">
+                  <img
+                    src={product.images[0]}
+                    alt={product.name}
+                    className="home-featured__img"
+                  />
+                  {product.discount_price && (
+                    <span className="home-featured__badge">Sale</span>
                   )}
                 </div>
-              </div>
-            </Link>
-          ))}
-        </div>
+                <div className="home-featured__info">
+                  <span className="home-featured__cat">{product.category}</span>
+                  <h3 className="home-featured__name">{product.name}</h3>
+                  <div className="home-featured__price">
+                    {product.discount_price ? (
+                      <>
+                        <span className="home-featured__price--sale">€{product.discount_price}</span>
+                        <span className="home-featured__price--orig">€{product.price}</span>
+                      </>
+                    ) : (
+                      <span>€{product.price}</span>
+                    )}
+                  </div>
+                </div>
+              </Link>
+            ))}
+          </div>
+        )}
       </section>
 
       <Newsletter />

@@ -17,6 +17,7 @@ import ShopCollectionPage from './pages/ShopCollectionPage';
 import AboutPage from './pages/AboutPage';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
+import AccountPage from './pages/AccountPage';
 
 const CheckoutPage = () => (
   <div className="container">
@@ -33,13 +34,19 @@ const OrdersPage = () => (
 );
 
 function App() {
-  const { initialize: initAuth } = useAuthStore();
-  const { initialize: initCart } = useCartStore();
+  const { initialize: initAuth, isAuthenticated } = useAuthStore();
+  const { fetchCart } = useCartStore();
 
   useEffect(() => {
     initAuth();
-    initCart();
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Fetch cart when user authenticates
+  useEffect(() => {
+    if (isAuthenticated) {
+      fetchCart().catch(console.error);
+    }
+  }, [isAuthenticated, fetchCart]);
 
   return (
     <div className="app">
@@ -60,6 +67,7 @@ function App() {
         <Route path={ROUTES.CART} element={<CartPage />} />
         <Route path={ROUTES.CHECKOUT} element={<CheckoutPage />} />
         <Route path={ROUTES.ORDERS} element={<OrdersPage />} />
+        <Route path="/account" element={<AccountPage />} />
         <Route path="/about" element={<AboutPage />} />
         <Route path="*" element={<Navigate to={ROUTES.HOME} replace />} />
       </Routes>

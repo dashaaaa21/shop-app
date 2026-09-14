@@ -1,116 +1,147 @@
 import { create } from 'zustand';
-import { CartItem } from '../types/cart.types';
-import { storage, STORAGE_KEYS } from '../utils/storage';
+import { cartApi, type CartItem, type CartSummary } from '../api/cart/cart.api';
+import { useAuthStore } from './auth.store';
 
-interface CartState {
-  items: CartItem[];
-  total: number;
+interface CartState extends CartSummary {
   loading: boolean;
+  error: string | null;
+  
+  // Actions
+  fetchCart: () => Promise<void>;
   addToCart: (productId: string, quantity?: number) => Promise<void>;
-  removeFromCart: (itemId: string) => Promise<void>;
   updateQuantity: (itemId: string, quantity: number) => Promise<void>;
+  removeFromCart: (itemId: string) => Promise<void>;
   clearCart: () => Promise<void>;
+  clearError: () => void;
+  
+  // Helpers
   getItemsCount: () => number;
-  initialize: () => void;
+  getItemByProductId: (productId: string) => CartItem | undefined;
 }
 
-export const useCartStore = create<CartState>((set, get) => ({
+const initialState: CartSummary = {
   items: [],
-  total: 0,
-  loading: false,
+  items_count: 0,
+  total_quantity: 0,
+  subtotal: 0,
+  tax: 0,
+  shipping: 8,
+  total: 8
+};
 
-  addToCart: async (productId, quantity = 1) => {
-    set({ loading: true });
+export const useCartStore = create<CartState>((set, get) => ({
+  ...initialState,
+  loading: false,
+  error: null,
+
+  fetchCart: async () => {
+    const { isAuthenticated } = useAuthStore.getState();
+    
+    if (!isAuthenticated) {
+      set({ ...initialState, loading: false, error: null });
+      return;
+    }
+
+    set({ loading: true, error: null });
     try {
-      // Mock adding to cart - in real app would call API
-      const items = get().items;
-      const existingItem = items.find(item => item.productId === productId);
-      
-      let newItems: CartItem[];
-      if (existingItem) {
-        newItems = items.map(item =>
-          item.productId === productId
-            ? { ...item, quantity: item.quantity + quantity }
-            : item
-        );
-      } else {
-        // Mock product data - in real app would fetch from API
-        const newItem: CartItem = {
-          id: `${productId}_${Date.now()}`,
-          productId,
-          name: `Product ${productId}`,
-          price: 99.99,
-          quantity,
-          image: 'https://via.placeholder.com/100',
-        };
-        newItems = [...items, newItem];
-      }
-      
-      const newTotal = newItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-      
-      storage.set(STORAGE_KEYS.CART, newItems);
-      set({ items: newItems, total: newTotal, loading: false });
+      const cartData = await cartApi.getCart();
+      set({ 
+        ...cartData,
+        loading: false, 
+        error: null 
+      });
     } catch (error) {
-      set({ loading: false });
-      console.error('Error adding to cart:', error);
+      const message = error instanceof Error ? error.message : 'Failed to fetch cart';
+      set({ 
+        ...initialState,
+        loading: false, 
+        error: message 
+      });
+      throw error;
     }
   },
 
-  removeFromCart: async (itemId) => {
-    set({ loading: true });
+  addToCart: async (productId, quantity = 1) => {
+    const { isAuthenticated } = useAuthStore.getState();
+    
+    if (!isAuthenticated) {
+      throw new Error('Please login to add items to cart');
+    }
+
+    set({ loading: true, error: null });
     try {
-      const newItems = get().items.filter(item => item.id !== itemId);
-      const newTotal = newItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-      
-      storage.set(STORAGE_KEYS.CART, newItems);
-      set({ items: newItems, total: newTotal, loading: false });
+      await cartApi.addToCart(productId, quantity);
+      // Refresh cart after adding
+      await get().fetchCart();
     } catch (error) {
       set({ loading: false });
-      console.error('Error removing from cart:', error);
+      const message = error instanceof Error ? error.message : 'Failed to add item to cart';
+      set({ error: message });
+      throw error;
     }
   },
 
   updateQuantity: async (itemId, quantity) => {
     if (quantity <= 0) {
-      get().removeFromCart(itemId);
+      await get().removeFromCart(itemId);
       return;
     }
 
-    set({ loading: true });
+    set({ loading: true, error: null });
     try {
-      const newItems = get().items.map(item =>
-        item.id === itemId ? { ...item, quantity } : item
-      );
-      const newTotal = newItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-      
-      storage.set(STORAGE_KEYS.CART, newItems);
-      set({ items: newItems, total: newTotal, loading: false });
+      await cartApi.updateCartItem(itemId, quantity);
+      // Refresh cart after updating
+      await get().fetchCart();
     } catch (error) {
       set({ loading: false });
-      console.error('Error updating quantity:', error);
+      const message = error instanceof Error ? error.message : 'Failed to update cart item';
+      set({ error: message });
+      throw error;
+    }
+  },
+
+  removeFromCart: async (itemId) => {
+    set({ loading: true, error: null });
+    try {
+      await cartApi.removeFromCart(itemId);
+      // Refresh cart after removing
+      await get().fetchCart();
+    } catch (error) {
+      set({ loading: false });
+      const message = error instanceof Error ? error.message : 'Failed to remove item from cart';
+      set({ error: message });
+      throw error;
     }
   },
 
   clearCart: async () => {
-    set({ loading: true });
+    set({ loading: true, error: null });
     try {
-      storage.remove(STORAGE_KEYS.CART);
-      set({ items: [], total: 0, loading: false });
+      await cartApi.clearCart();
+      set({ 
+        ...initialState,
+        loading: false, 
+        error: null 
+      });
     } catch (error) {
       set({ loading: false });
-      console.error('Error clearing cart:', error);
+      const message = error instanceof Error ? error.message : 'Failed to clear cart';
+      set({ error: message });
+      throw error;
     }
   },
+
+  clearError: () => set({ error: null }),
 
   getItemsCount: () => {
-    return get().items.reduce((sum, item) => sum + item.quantity, 0);
+    const state = get();
+    return state.total_quantity || 0;
   },
 
-  initialize: () => {
-    const savedCart = storage.get<CartItem[]>(STORAGE_KEYS.CART);
-    if (savedCart) {
-      const total = savedCart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-      set({ items: savedCart, total });
-    }
-  },
+  getItemByProductId: (productId) => {
+    const state = get();
+    return state.items.find(item => 
+      item.product_id === productId || item.external_product_id === productId
+    );
+  }
 }));

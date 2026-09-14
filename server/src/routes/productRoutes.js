@@ -6,7 +6,7 @@ import {
   updateProduct,
   deleteProduct,
 } from '../controllers/productController.js';
-import { protect, restrictTo } from '../middleware/auth.js';
+import { protect, restrictTo } from '../middleware/supabaseAuth.js';
 
 const router = express.Router();
 

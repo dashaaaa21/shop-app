@@ -2,7 +2,7 @@
 
 Professional e-commerce backend API built with Node.js, Express, and MongoDB.
 
-## 🚀 Features
+## Features
 
 - **Authentication & Authorization**
   - JWT-based authentication
@@ -52,13 +52,13 @@ Professional e-commerce backend API built with Node.js, Express, and MongoDB.
   - Environment-based configuration
   - Clean code architecture
 
-## 📋 Prerequisites
+## Prerequisites
 
 - Node.js (v18 or higher)
 - MongoDB (v6 or higher)
 - npm or yarn
 
-## 🛠️ Installation
+## Installation
 
 1. **Clone the repository**
    ```bash
@@ -108,7 +108,7 @@ Professional e-commerce backend API built with Node.js, Express, and MongoDB.
    npm start
    ```
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 server/
@@ -155,7 +155,7 @@ server/
 └── README.md
 ```
 
-## 🔑 API Endpoints
+## API Endpoints
 
 See [API_DOCUMENTATION.md](./API_DOCUMENTATION.md) for detailed API documentation.
 
@@ -178,7 +178,7 @@ See [API_DOCUMENTATION.md](./API_DOCUMENTATION.md) for detailed API documentatio
 | `/api/wishlist` | GET | Get wishlist | Yes |
 | `/api/wishlist/:productId` | POST | Add to wishlist | Yes |
 
-## 🔐 Authentication
+## Authentication
 
 The API uses JWT (JSON Web Tokens) for authentication. Include the token in the Authorization header:
 
@@ -191,7 +191,7 @@ Authorization: Bearer <your_jwt_token>
 - **Customer** - Regular user with basic permissions
 - **Admin** - Full access to all resources
 
-## 🧪 Testing
+## Testing
 
 You can test the API using:
 
@@ -210,7 +210,7 @@ You can test the API using:
    curl http://localhost:5000/api/products
    ```
 
-## 🛡️ Security
+## Security
 
 The application implements multiple security measures:
 
@@ -222,7 +222,7 @@ The application implements multiple security measures:
 - **Password Hashing** - Bcrypt with salt rounds
 - **JWT** - Secure token-based authentication
 
-## 📊 Database Models
+## Database Models
 
 ### User
 - Email (unique, required)
@@ -258,7 +258,7 @@ The application implements multiple security measures:
 - User reference
 - Products (array)
 
-## 🚦 Error Handling
+## Error Handling
 
 All errors follow a consistent format:
 
@@ -270,7 +270,7 @@ All errors follow a consistent format:
 }
 ```
 
-## 📝 Scripts
+## Scripts
 
 ```bash
 # Start development server with auto-reload
@@ -283,7 +283,7 @@ npm start
 npm run lint
 ```
 
-## 🌍 Environment Variables
+## Environment Variables
 
 | Variable | Description | Default |
 |----------|-------------|---------|
@@ -294,7 +294,7 @@ npm run lint
 | `JWT_EXPIRES_IN` | JWT expiration time | 7d |
 | `CLIENT_URL` | Frontend URL for CORS | http://localhost:3000 |
 
-## 🤝 Contributing
+## Contributing
 
 1. Fork the repository
 2. Create a feature branch
@@ -302,11 +302,11 @@ npm run lint
 4. Push to the branch
 5. Open a Pull Request
 
-## 📄 License
+## License
 
 This project is licensed under the ISC License.
 
-## 👨‍💻 Developer Notes
+## Developer Notes
 
 ### Code Style
 - Use ES6+ features
@@ -327,7 +327,7 @@ This project is licensed under the ISC License.
 - Paginate large result sets
 - Use MongoDB aggregation for complex queries
 
-## 🔄 Future Enhancements
+## Future Enhancements
 
 - [ ] Payment gateway integration (Stripe, PayPal)
 - [ ] Email notifications
@@ -340,6 +340,6 @@ This project is licensed under the ISC License.
 - [ ] Multi-language support
 - [ ] Automated testing (Jest, Supertest)
 
-## 📞 Support
+## Support
 
 For questions or issues, please open an issue in the repository.

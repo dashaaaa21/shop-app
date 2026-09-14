@@ -1,16 +1,19 @@
 import { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../../store/auth.store';
+import { useCartStore } from '../../store/cart.store';
 import './Header.css';
 
 const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
-  const [cartCount] = useState(0);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
 
   const { isAuthenticated, user, logout } = useAuthStore();
+  const { getItemsCount } = useCartStore();
+  
+  const cartCount = getItemsCount();
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 50);
@@ -86,10 +89,19 @@ const Header = () => {
                   </div>
                   <div className="header__dropdown-divider" />
                   <Link
-                    to="/orders"
+                    to="/account"
                     className="header__dropdown-item"
                     role="menuitem"
                     onClick={() => setUserMenuOpen(false)}
+                  >
+                    My Account
+                  </Link>
+                  <Link
+                    to="/account"
+                    className="header__dropdown-item"
+                    role="menuitem"
+                    onClick={() => { setUserMenuOpen(false); }}
+                    state={{ tab: 'orders' }}
                   >
                     My Orders
                   </Link>
