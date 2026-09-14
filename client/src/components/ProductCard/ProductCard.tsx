@@ -13,6 +13,7 @@ interface ProductCardProps {
 
 const ProductCard = ({ id, name, price, discountPrice, images = [], category }: ProductCardProps) => {
   const [isHovered, setIsHovered] = useState(false);
+  const [imageLoaded, setImageLoaded] = useState(false);
 
   const handleMouseEnter = () => {
     setIsHovered(true);
@@ -27,29 +28,52 @@ const ProductCard = ({ id, name, price, discountPrice, images = [], category }: 
     img.src = 'https://via.placeholder.com/600x600/f8f7f4/777777?text=Fashion+Item';
   };
 
+  const handleImageLoad = () => {
+    setImageLoaded(true);
+  };
+
   const currentPrice = discountPrice || price;
   const hasDiscount = !!discountPrice;
+  const discountPercentage = hasDiscount ? Math.round(((price - currentPrice) / price) * 100) : 0;
 
   return (
     <article 
       className="product-card"
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
+      aria-label={`${name} - ${category}`}
     >
-      <Link to={`/products/${id}`} className="product-card__link">
+      <Link 
+        to={`/products/${id}`} 
+        className="product-card__link"
+        aria-label={`View details for ${name}`}
+      >
         <div className="product-card__image-wrapper">
           <img
             src={images && images[0] ? images[0] : 'https://via.placeholder.com/600x600/f8f7f4/777777?text=Fashion+Item'}
-            alt={name}
-            className="product-card__image"
+            alt={`${name} - ${category}`}
+            className={`product-card__image ${imageLoaded ? 'loaded' : ''}`}
             onError={handleImageError}
+            onLoad={handleImageLoad}
+            loading="lazy"
           />
           {hasDiscount && (
-            <span className="product-card__badge">Sale</span>
+            <span className="product-card__badge" aria-label={`${discountPercentage}% off`}>
+              Sale {discountPercentage}%
+            </span>
           )}
           {isHovered && (
             <div className="product-card__quick-add">
-              <button className="product-card__add-btn">Quick Add</button>
+              <button 
+                className="product-card__add-btn"
+                onClick={(e) => {
+                  e.preventDefault();
+                  // Quick add functionality to be implemented
+                }}
+                aria-label={`Quick add ${name} to cart`}
+              >
+                Quick Add
+              </button>
             </div>
           )}
         </div>
@@ -58,9 +82,13 @@ const ProductCard = ({ id, name, price, discountPrice, images = [], category }: 
           <p className="product-card__category">{category}</p>
           <h3 className="product-card__name">{name}</h3>
           <div className="product-card__price">
-            <span className="product-card__price-current">€{currentPrice}</span>
+            <span className="product-card__price-current" aria-label={`Current price ${currentPrice} euros`}>
+              €{currentPrice.toFixed(2)}
+            </span>
             {hasDiscount && (
-              <span className="product-card__price-original">€{price}</span>
+              <span className="product-card__price-original" aria-label={`Original price ${price} euros`}>
+                €{price.toFixed(2)}
+              </span>
             )}
           </div>
         </div>
