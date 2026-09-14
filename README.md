@@ -1,4 +1,4 @@
-# Shop Application
+# Shop 
 
 Full-stack e-commerce application built with React, TypeScript, Node.js, and MongoDB.
 
