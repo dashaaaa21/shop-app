@@ -8,43 +8,38 @@ import './AccountPage.css';
 
 type Tab = 'profile' | 'orders' | 'security';
 
-// ── Mock orders (replace with real API later) ──────────────────
-const MOCK_ORDERS = [
-  {
-    id: 'ORD-001',
-    date: '12 Aug 2026',
-    status: 'Delivered',
-    total: 448,
-    items: [
-      { name: 'Tailored Wool Suit', qty: 1, price: 499 },
-    ],
-  },
-  {
-    id: 'ORD-002',
-    date: '28 Jul 2026',
-    status: 'Processing',
-    total: 278,
-    items: [
-      { name: 'Merino Polo Shirt', qty: 2, price: 109 },
-      { name: 'Cashmere Scarf', qty: 1, price: 159 },
-    ],
-  },
-  {
-    id: 'ORD-003',
-    date: '10 Jun 2026',
-    status: 'Delivered',
-    total: 319,
-    items: [
-      { name: 'Leather Biker Jacket', qty: 1, price: 449 },
-    ],
-  },
-];
+const API_URL = import.meta.env.VITE_API_URL ?? 'http://localhost:5001/api';
+
+interface OrderItem {
+  id: string;
+  product_id: string;
+  product_name: string;
+  product_image: string | null;
+  quantity: number;
+  price: number;
+}
+
+interface Order {
+  id: string;
+  status: string;
+  total: number;
+  subtotal: number;
+  tax: number;
+  shipping: number;
+  created_at: string;
+  order_items: OrderItem[];
+}
 
 const STATUS_COLOR: Record<string, string> = {
-  Delivered: 'account-status--delivered',
-  Processing: 'account-status--processing',
-  Cancelled: 'account-status--cancelled',
+  delivered: 'account-status--delivered',
+  processing: 'account-status--processing',
+  cancelled: 'account-status--cancelled',
+  pending: 'account-status--processing',
+  shipped: 'account-status--delivered',
 };
+
+const formatDate = (iso: string) =>
+  new Date(iso).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
 
 // ── Profile Tab ────────────────────────────────────────────────
 const ProfileTab = () => {
@@ -155,51 +150,97 @@ const ProfileTab = () => {
 };
 
 // ── Orders Tab ─────────────────────────────────────────────────
-const OrdersTab = () => (
-  <div className="account-section">
-    <h2 className="account-section__title">My Orders</h2>
-    <p className="account-section__sub">Track and review your recent purchases.</p>
+const OrdersTab = () => {
+  const { session } = useAuthStore();
+  const [orders, setOrders] = useState<Order[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
 
-    {MOCK_ORDERS.length === 0 ? (
-      <div className="account-empty">
-        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1">
-          <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
-          <line x1="3" y1="6" x2="21" y2="6"/>
-          <path d="M16 10a4 4 0 0 1-8 0"/>
-        </svg>
-        <p>No orders yet.</p>
+  useEffect(() => {
+    const fetchOrders = async () => {
+      try {
+        const token = session?.access_token;
+        const res = await fetch(`${API_URL}/orders`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        if (!res.ok) throw new Error('Failed to load orders');
+        const json = await res.json();
+        setOrders(json.data ?? []);
+      } catch (err: unknown) {
+        setError(err instanceof Error ? err.message : 'Failed to load orders');
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchOrders();
+  }, [session]);
+
+  if (loading) {
+    return (
+      <div className="account-section">
+        <h2 className="account-section__title">My Orders</h2>
+        <div className="account-loading" style={{ minHeight: 200 }}>
+          <span className="account-spinner account-spinner--lg" />
+        </div>
       </div>
-    ) : (
-      <div className="account-orders">
-        {MOCK_ORDERS.map((order) => (
-          <div key={order.id} className="account-order">
-            <div className="account-order__head">
-              <div className="account-order__meta">
-                <span className="account-order__id">{order.id}</span>
-                <span className="account-order__date">{order.date}</span>
-              </div>
-              <span className={`account-status ${STATUS_COLOR[order.status] ?? ''}`}>
-                {order.status}
-              </span>
-            </div>
-            <div className="account-order__items">
-              {order.items.map((item, i) => (
-                <div key={i} className="account-order__item">
-                  <span className="account-order__item-name">{item.name}</span>
-                  <span className="account-order__item-qty">× {item.qty}</span>
-                  <span className="account-order__item-price">€{item.price}</span>
+    );
+  }
+
+  return (
+    <div className="account-section">
+      <h2 className="account-section__title">My Orders</h2>
+      <p className="account-section__sub">Track and review your recent purchases.</p>
+
+      {error && <div className="account-alert account-alert--error">{error}</div>}
+
+      {orders.length === 0 && !error ? (
+        <div className="account-empty">
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1">
+            <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
+            <line x1="3" y1="6" x2="21" y2="6"/>
+            <path d="M16 10a4 4 0 0 1-8 0"/>
+          </svg>
+          <p>No orders yet.</p>
+        </div>
+      ) : (
+        <div className="account-orders">
+          {orders.map((order) => (
+            <div key={order.id} className="account-order">
+              <div className="account-order__head">
+                <div className="account-order__meta">
+                  <span className="account-order__id">#{order.id.slice(0, 8).toUpperCase()}</span>
+                  <span className="account-order__date">{formatDate(order.created_at)}</span>
                 </div>
-              ))}
+                <span className={`account-status ${STATUS_COLOR[order.status] ?? ''}`}>
+                  {order.status.charAt(0).toUpperCase() + order.status.slice(1)}
+                </span>
+              </div>
+              <div className="account-order__items">
+                {order.order_items.map((item) => (
+                  <div key={item.id} className="account-order__item">
+                    {item.product_image && (
+                      <img
+                        src={item.product_image}
+                        alt={item.product_name}
+                        className="account-order__item-img"
+                      />
+                    )}
+                    <span className="account-order__item-name">{item.product_name}</span>
+                    <span className="account-order__item-qty">× {item.quantity}</span>
+                    <span className="account-order__item-price">€{item.price}</span>
+                  </div>
+                ))}
+              </div>
+              <div className="account-order__foot">
+                <span className="account-order__total">Total: €{order.total}</span>
+              </div>
             </div>
-            <div className="account-order__foot">
-              <span className="account-order__total">Total: €{order.total}</span>
-            </div>
-          </div>
-        ))}
-      </div>
-    )}
-  </div>
-);
+          ))}
+        </div>
+      )}
+    </div>
+  );
+};
 
 // ── Security Tab ───────────────────────────────────────────────
 const SecurityTab = () => {

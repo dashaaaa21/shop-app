@@ -471,3 +471,12 @@
     width: 100%;
   }
 }
+
+/* ── Order item image ─────────────────────────────────────── */
+.account-order__item-img {
+  width: 40px;
+  height: 40px;
+  object-fit: cover;
+  flex-shrink: 0;
+  background: #f0eeea;
+}

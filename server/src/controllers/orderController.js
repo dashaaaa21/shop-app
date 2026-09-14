@@ -1,256 +1,191 @@
-import Order from '../models/Order.js';
-import Product from '../models/Product.js';
+import { supabaseAdmin } from '../config/supabase.js';
 
-// @desc    Create new order
-// @route   POST /api/orders
-// @access  Private
+/**
+ * POST /api/orders
+ * Body: { items: [{productId, productName, productImage, quantity, price}], shippingAddress, paymentMethod }
+ */
 export const createOrder = async (req, res, next) => {
   try {
     const { items, shippingAddress, paymentMethod } = req.body;
 
     if (!items || items.length === 0) {
-      return res.status(400).json({
-        success: false,
-        message: 'No order items provided',
-      });
+      return res.status(400).json({ message: 'No order items provided' });
     }
 
-    // Validate products and calculate totals
-    let subtotal = 0;
-    const orderItems = [];
-
-    for (const item of items) {
-      const product = await Product.findById(item.product);
-
-      if (!product) {
-        return res.status(404).json({
-          success: false,
-          message: `Product not found: ${item.product}`,
-        });
-      }
-
-      if (product.stock < item.quantity) {
-        return res.status(400).json({
-          success: false,
-          message: `Insufficient stock for product: ${product.name}`,
-        });
-      }
-
-      const price = product.discountPrice || product.price;
-      subtotal += price * item.quantity;
-
-      orderItems.push({
-        product: product._id,
-        quantity: item.quantity,
-        price: price,
-      });
-
-      // Update product stock
-      product.stock -= item.quantity;
-      await product.save();
-    }
-
-    // Calculate tax and shipping
-    const tax = subtotal * 0.1; // 10% tax
-    const shipping = subtotal > 100 ? 0 : 10; // Free shipping over $100
-    const total = subtotal + tax + shipping;
+    // Calculate totals
+    const subtotal = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
+    const tax = parseFloat((subtotal * 0.1).toFixed(2));
+    const shipping = subtotal > 100 ? 0 : 10;
+    const total = parseFloat((subtotal + tax + shipping).toFixed(2));
 
     // Create order
-    const order = await Order.create({
-      userId: req.user._id,
-      items: orderItems,
-      subtotal,
-      tax,
-      shipping,
-      total,
-      shippingAddress,
-      paymentMethod,
-    });
+    const { data: order, error: orderErr } = await supabaseAdmin
+      .from('orders')
+      .insert({
+        user_id: req.user.id,
+        status: 'pending',
+        subtotal: parseFloat(subtotal.toFixed(2)),
+        tax,
+        shipping,
+        total,
+        shipping_address: shippingAddress ?? null,
+        payment_method: paymentMethod ?? null,
+      })
+      .select()
+      .single();
 
-    const populatedOrder = await Order.findById(order._id).populate(
-      'items.product',
-      'name images'
-    );
+    if (orderErr) return res.status(400).json({ message: orderErr.message });
 
-    res.status(201).json({
-      success: true,
-      data: populatedOrder,
-    });
-  } catch (error) {
-    next(error);
+    // Create order items
+    const orderItems = items.map((item) => ({
+      order_id: order.id,
+      product_id: item.productId,
+      product_name: item.productName,
+      product_image: item.productImage ?? null,
+      quantity: item.quantity,
+      price: item.price,
+    }));
+
+    const { error: itemsErr } = await supabaseAdmin
+      .from('order_items')
+      .insert(orderItems);
+
+    if (itemsErr) return res.status(400).json({ message: itemsErr.message });
+
+    // Return full order with items
+    const { data: fullOrder } = await supabaseAdmin
+      .from('orders')
+      .select('*, order_items(*)')
+      .eq('id', order.id)
+      .single();
+
+    res.status(201).json({ data: fullOrder });
+  } catch (err) {
+    next(err);
   }
 };
 
-// @desc    Get all orders for logged-in user
-// @route   GET /api/orders
-// @access  Private
+/**
+ * GET /api/orders
+ * Returns all orders for the authenticated user.
+ */
 export const getUserOrders = async (req, res, next) => {
   try {
-    const orders = await Order.find({ userId: req.user._id })
-      .populate('items.product', 'name images')
-      .sort({ createdAt: -1 });
+    const { data: orders, error } = await supabaseAdmin
+      .from('orders')
+      .select('*, order_items(*)')
+      .eq('user_id', req.user.id)
+      .order('created_at', { ascending: false });
 
-    res.status(200).json({
-      success: true,
-      count: orders.length,
-      data: orders,
-    });
-  } catch (error) {
-    next(error);
+    if (error) return res.status(400).json({ message: error.message });
+
+    res.json({ data: orders });
+  } catch (err) {
+    next(err);
   }
 };
 
-// @desc    Get single order by ID
-// @route   GET /api/orders/:id
-// @access  Private
+/**
+ * GET /api/orders/:id
+ */
 export const getOrderById = async (req, res, next) => {
   try {
-    const order = await Order.findById(req.params.id).populate(
-      'items.product',
-      'name images price'
-    );
+    const { data: order, error } = await supabaseAdmin
+      .from('orders')
+      .select('*, order_items(*)')
+      .eq('id', req.params.id)
+      .single();
 
-    if (!order) {
-      return res.status(404).json({
-        success: false,
-        message: 'Order not found',
-      });
+    if (error || !order) return res.status(404).json({ message: 'Order not found' });
+
+    if (order.user_id !== req.user.id && req.user.role !== 'admin') {
+      return res.status(403).json({ message: 'Not authorized' });
     }
 
-    // Make sure user owns this order or is admin
-    if (order.userId.toString() !== req.user._id.toString() && req.user.role !== 'admin') {
-      return res.status(403).json({
-        success: false,
-        message: 'Not authorized to access this order',
-      });
-    }
-
-    res.status(200).json({
-      success: true,
-      data: order,
-    });
-  } catch (error) {
-    next(error);
+    res.json({ data: order });
+  } catch (err) {
+    next(err);
   }
 };
 
-// @desc    Update order status
-// @route   PUT /api/orders/:id/status
-// @access  Private/Admin
+/**
+ * PUT /api/orders/:id/status  (admin only)
+ */
 export const updateOrderStatus = async (req, res, next) => {
   try {
     const { status } = req.body;
-
-    const validStatuses = ['pending', 'processing', 'shipped', 'delivered', 'cancelled'];
-    if (!validStatuses.includes(status)) {
-      return res.status(400).json({
-        success: false,
-        message: 'Invalid order status',
-      });
+    const valid = ['pending', 'processing', 'shipped', 'delivered', 'cancelled'];
+    if (!valid.includes(status)) {
+      return res.status(400).json({ message: 'Invalid status' });
     }
 
-    const order = await Order.findById(req.params.id);
+    const { data, error } = await supabaseAdmin
+      .from('orders')
+      .update({ status, updated_at: new Date().toISOString() })
+      .eq('id', req.params.id)
+      .select()
+      .single();
 
-    if (!order) {
-      return res.status(404).json({
-        success: false,
-        message: 'Order not found',
-      });
-    }
-
-    order.status = status;
-    await order.save();
-
-    res.status(200).json({
-      success: true,
-      data: order,
-    });
-  } catch (error) {
-    next(error);
+    if (error) return res.status(400).json({ message: error.message });
+    res.json({ data });
+  } catch (err) {
+    next(err);
   }
 };
 
-// @desc    Cancel order
-// @route   DELETE /api/orders/:id
-// @access  Private
+/**
+ * DELETE /api/orders/:id  (cancel)
+ */
 export const cancelOrder = async (req, res, next) => {
   try {
-    const order = await Order.findById(req.params.id);
+    const { data: order, error: fetchErr } = await supabaseAdmin
+      .from('orders')
+      .select('*')
+      .eq('id', req.params.id)
+      .single();
 
-    if (!order) {
-      return res.status(404).json({
-        success: false,
-        message: 'Order not found',
-      });
-    }
-
-    // Make sure user owns this order
-    if (order.userId.toString() !== req.user._id.toString()) {
-      return res.status(403).json({
-        success: false,
-        message: 'Not authorized to cancel this order',
-      });
-    }
-
-    // Can only cancel pending or processing orders
+    if (fetchErr || !order) return res.status(404).json({ message: 'Order not found' });
+    if (order.user_id !== req.user.id) return res.status(403).json({ message: 'Not authorized' });
     if (!['pending', 'processing'].includes(order.status)) {
-      return res.status(400).json({
-        success: false,
-        message: 'Cannot cancel order with current status',
-      });
+      return res.status(400).json({ message: 'Cannot cancel order with current status' });
     }
 
-    // Restore product stock
-    for (const item of order.items) {
-      const product = await Product.findById(item.product);
-      if (product) {
-        product.stock += item.quantity;
-        await product.save();
-      }
-    }
+    const { data, error } = await supabaseAdmin
+      .from('orders')
+      .update({ status: 'cancelled', updated_at: new Date().toISOString() })
+      .eq('id', req.params.id)
+      .select()
+      .single();
 
-    order.status = 'cancelled';
-    await order.save();
-
-    res.status(200).json({
-      success: true,
-      data: order,
-    });
-  } catch (error) {
-    next(error);
+    if (error) return res.status(400).json({ message: error.message });
+    res.json({ data });
+  } catch (err) {
+    next(err);
   }
 };
 
-// @desc    Get all orders (Admin)
-// @route   GET /api/orders/admin/all
-// @access  Private/Admin
+/**
+ * GET /api/orders/admin/all  (admin only)
+ */
 export const getAllOrders = async (req, res, next) => {
   try {
     const { status, page = 1, limit = 20 } = req.query;
+    const from = (page - 1) * limit;
+    const to = from + limit - 1;
 
-    const query = {};
-    if (status) {
-      query.status = status;
-    }
+    let query = supabaseAdmin
+      .from('orders')
+      .select('*, order_items(*)', { count: 'exact' })
+      .order('created_at', { ascending: false })
+      .range(from, to);
 
-    const orders = await Order.find(query)
-      .populate('userId', 'name email')
-      .populate('items.product', 'name images')
-      .limit(limit * 1)
-      .skip((page - 1) * limit)
-      .sort({ createdAt: -1 });
+    if (status) query = query.eq('status', status);
 
-    const count = await Order.countDocuments(query);
+    const { data, error, count } = await query;
+    if (error) return res.status(400).json({ message: error.message });
 
-    res.status(200).json({
-      success: true,
-      count: orders.length,
-      total: count,
-      totalPages: Math.ceil(count / limit),
-      currentPage: page,
-      data: orders,
-    });
-  } catch (error) {
-    next(error);
+    res.json({ data, total: count, page, limit });
+  } catch (err) {
+    next(err);
   }
 };

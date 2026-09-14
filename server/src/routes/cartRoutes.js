@@ -6,15 +6,14 @@ import {
   removeFromCart,
   clearCart,
 } from '../controllers/cartController.js';
-import { protect } from '../middleware/auth.js';
-import { mongoIdValidation } from '../middleware/validator.js';
+import { protect } from '../middleware/supabaseAuth.js';
 
 const router = express.Router();
 
 router.get('/', protect, getCart);
 router.post('/', protect, addToCart);
-router.put('/:productId', protect, mongoIdValidation, updateCartItem);
-router.delete('/:productId', protect, mongoIdValidation, removeFromCart);
+router.put('/:productId', protect, updateCartItem);
+router.delete('/:productId', protect, removeFromCart);
 router.delete('/', protect, clearCart);
 
 export default router;
