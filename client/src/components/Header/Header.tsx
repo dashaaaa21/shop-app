@@ -86,10 +86,19 @@ const Header = () => {
                   </div>
                   <div className="header__dropdown-divider" />
                   <Link
-                    to="/orders"
+                    to="/account"
                     className="header__dropdown-item"
                     role="menuitem"
                     onClick={() => setUserMenuOpen(false)}
+                  >
+                    My Account
+                  </Link>
+                  <Link
+                    to="/account"
+                    className="header__dropdown-item"
+                    role="menuitem"
+                    onClick={() => { setUserMenuOpen(false); }}
+                    state={{ tab: 'orders' }}
                   >
                     My Orders
                   </Link>

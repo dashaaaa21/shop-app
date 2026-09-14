@@ -17,6 +17,7 @@ import ShopCollectionPage from './pages/ShopCollectionPage';
 import AboutPage from './pages/AboutPage';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
+import AccountPage from './pages/AccountPage';
 
 const CheckoutPage = () => (
   <div className="container">
@@ -60,6 +61,7 @@ function App() {
         <Route path={ROUTES.CART} element={<CartPage />} />
         <Route path={ROUTES.CHECKOUT} element={<CheckoutPage />} />
         <Route path={ROUTES.ORDERS} element={<OrdersPage />} />
+        <Route path="/account" element={<AccountPage />} />
         <Route path="/about" element={<AboutPage />} />
         <Route path="*" element={<Navigate to={ROUTES.HOME} replace />} />
       </Routes>
