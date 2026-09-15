@@ -36,12 +36,13 @@ const ProductDetailPage = () => {
 
     if (currentProduct) {
       try {
-        await addToCart(currentProduct.external_id, quantity);
+        // Use UUID id instead of external_id
+        await addToCart(currentProduct.id, quantity);
         setAddedToCart(true);
         setTimeout(() => setAddedToCart(false), 2500);
-      } catch (error) {
+      } catch (error: any) {
         console.error('Failed to add to cart:', error);
-        // Could show error toast here
+        alert(error?.message || 'Failed to add item to cart. Please try again.');
       }
     }
   };
@@ -55,11 +56,12 @@ const ProductDetailPage = () => {
 
     if (currentProduct) {
       try {
-        await addToCart(currentProduct.external_id, quantity);
+        // Use UUID id instead of external_id
+        await addToCart(currentProduct.id, quantity);
         navigate('/checkout');
-      } catch (error) {
+      } catch (error: any) {
         console.error('Failed to add to cart:', error);
-        // Could show error toast here
+        alert(error?.message || 'Failed to add item to cart. Please try again.');
       }
     }
   };
