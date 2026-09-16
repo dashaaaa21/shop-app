@@ -289,9 +289,15 @@ const CartPage = () => {
                 <div className="payment-methods">
                   <p>We accept:</p>
                   <div className="payment-icons">
-                    <span>Card</span>
-                    <span>Bank</span>
-                    <span>Mobile</span>
+                    <div className="payment-icon card">
+                      <span>💳 Card</span>
+                    </div>
+                    <div className="payment-icon bank">
+                      <span>🏦 Bank</span>
+                    </div>
+                    <div className="payment-icon mobile">
+                      <span>📱 Mobile</span>
+                    </div>
                   </div>
                 </div>
               </div>
