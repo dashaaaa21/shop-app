@@ -354,65 +354,30 @@
   letter-spacing: 0.5px;
 }
 
-.payment-icons {
-  display: flex;
-  justify-content: center;
-  gap: 1.5rem;
-  font-size: 1rem;
+.payment-notice {
+  font-size: 0.9rem;
+  color: #666;
+  margin-bottom: 1rem;
+  line-height: 1.5;
 }
 
-.payment-icon {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 60px;
-  height: 60px;
-  border-radius: 8px;
-  background-color: #fff;
-  border: 2px solid #e0e0e0;
+.whatsapp-link {
+  display: inline-block;
+  padding: 0.75rem 1.5rem;
+  background: linear-gradient(135deg, #25d366 0%, #128c7e 100%);
+  color: #fff;
+  text-decoration: none;
+  border-radius: 6px;
   font-weight: 600;
-  color: #000;
-  font-size: 0.85rem;
+  font-size: 0.9rem;
   transition: all 0.3s ease;
+  border: 2px solid #25d366;
 }
 
-.payment-icon:hover {
-  border-color: #000;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+.whatsapp-link:hover {
   transform: translateY(-2px);
-}
-
-.payment-icon.card {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  border-color: #667eea;
-  color: #fff;
-}
-
-.payment-icon.card:hover {
-  border-color: #764ba2;
-  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
-}
-
-.payment-icon.bank {
-  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-  border-color: #f093fb;
-  color: #fff;
-}
-
-.payment-icon.bank:hover {
-  border-color: #f5576c;
-  box-shadow: 0 6px 20px rgba(245, 87, 108, 0.4);
-}
-
-.payment-icon.mobile {
-  background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-  border-color: #4facfe;
-  color: #fff;
-}
-
-.payment-icon.mobile:hover {
-  border-color: #00f2fe;
-  box-shadow: 0 6px 20px rgba(79, 172, 254, 0.4);
+  box-shadow: 0 6px 20px rgba(37, 211, 102, 0.4);
+  background: linear-gradient(135deg, #128c7e 0%, #25d366 100%);
 }
 
 .cart-features {

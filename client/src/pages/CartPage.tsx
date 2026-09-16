@@ -287,18 +287,13 @@ const CartPage = () => {
                 </div>
 
                 <div className="payment-methods">
-                  <p>We accept:</p>
-                  <div className="payment-icons">
-                    <div className="payment-icon card">
-                      <span>💳 Card</span>
-                    </div>
-                    <div className="payment-icon bank">
-                      <span>🏦 Bank</span>
-                    </div>
-                    <div className="payment-icon mobile">
-                      <span>📱 Mobile</span>
-                    </div>
+                  <p>Need help with ordering?</p>
+                  <div className="payment-notice">
+                    Contact us on WhatsApp for personalized assistance
                   </div>
+                  <a href="https://wa.me/380YourPhoneNumber" className="whatsapp-link" target="_blank" rel="noopener noreferrer">
+                    Message on WhatsApp
+                  </a>
                 </div>
               </div>
             </div>
