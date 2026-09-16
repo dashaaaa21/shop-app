@@ -11,9 +11,7 @@ const Header = () => {
   const navigate = useNavigate();
 
   const { isAuthenticated, user, logout } = useAuthStore();
-  const { getItemsCount } = useCartStore();
-  
-  const cartCount = getItemsCount();
+  const cartCount = useCartStore(state => state.getItemsCount());
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 50);
