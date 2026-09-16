@@ -289,34 +289,95 @@
 }
 
 .checkout-btn {
-  padding: 1rem;
-  font-size: 1rem;
-  font-weight: 600;
+  padding: 1.2rem;
+  font-size: 1.1rem;
+  font-weight: 700;
+  background-color: #000;
+  color: #fff;
+  border: 2px solid #000;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.checkout-btn:hover:not(:disabled) {
+  background-color: #333;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.checkout-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
 }
 
 .continue-shopping-btn {
   padding: 1rem;
   font-size: 1rem;
+  font-weight: 600;
+  background-color: #fff;
+  color: #000;
+  border: 2px solid #000;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.continue-shopping-btn:hover:not(:disabled) {
+  background-color: #f5f5f5;
+  transform: translateY(-1px);
+}
+
+.continue-shopping-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
 }
 
 .payment-methods {
   text-align: center;
-  margin-top: 1.5rem;
-  padding-top: 1.5rem;
-  border-top: 1px solid var(--border-color);
+  margin-top: 2rem;
+  padding: 1.5rem;
+  border-top: 2px solid var(--border-color);
+  border-radius: 8px;
+  background-color: #f9f9f9;
 }
 
 .payment-methods p {
-  font-size: 0.9rem;
-  color: var(--text-muted);
-  margin-bottom: 0.5rem;
+  font-size: 0.95rem;
+  color: var(--text-color);
+  margin: 0 0 1rem 0;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
-.payment-icons {
-  display: flex;
-  justify-content: center;
-  gap: 0.5rem;
-  font-size: 1.5rem;
+.payment-notice {
+  font-size: 0.9rem;
+  color: #666;
+  margin-bottom: 1rem;
+  line-height: 1.5;
+}
+
+.whatsapp-link {
+  display: inline-block;
+  padding: 0.75rem 1.5rem;
+  background: linear-gradient(135deg, #25d366 0%, #128c7e 100%);
+  color: #fff;
+  text-decoration: none;
+  border-radius: 6px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
+  border: 2px solid #25d366;
+}
+
+.whatsapp-link:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(37, 211, 102, 0.4);
+  background: linear-gradient(135deg, #128c7e 0%, #25d366 100%);
 }
 
 .cart-features {
@@ -394,5 +455,21 @@
   
   .cart-features {
     grid-template-columns: 1fr;
+  }
+
+  .payment-icons {
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  .payment-icon {
+    width: 50px;
+    height: 50px;
+    font-size: 0.75rem;
+  }
+
+  .checkout-btn {
+    padding: 1rem;
+    font-size: 1rem;
   }
 }

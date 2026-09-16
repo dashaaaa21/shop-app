@@ -18,20 +18,9 @@ import AboutPage from './pages/AboutPage';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import AccountPage from './pages/AccountPage';
-
-const CheckoutPage = () => (
-  <div className="container">
-    <h1>Checkout</h1>
-    <p>Checkout page - Coming soon</p>
-  </div>
-);
-
-const OrdersPage = () => (
-  <div className="container">
-    <h1>My Orders</h1>
-    <p>Orders page - Coming soon</p>
-  </div>
-);
+import CheckoutPage from './pages/CheckoutPage';
+import OrdersPage from './pages/OrdersPage';
+import OrderDetailPage from './pages/OrderDetailPage';
 
 function App() {
   const { initialize: initAuth, isAuthenticated } = useAuthStore();
@@ -67,6 +56,7 @@ function App() {
         <Route path={ROUTES.CART} element={<CartPage />} />
         <Route path={ROUTES.CHECKOUT} element={<CheckoutPage />} />
         <Route path={ROUTES.ORDERS} element={<OrdersPage />} />
+        <Route path={ROUTES.ORDER_DETAIL} element={<OrderDetailPage />} />
         <Route path="/account" element={<AccountPage />} />
         <Route path="/about" element={<AboutPage />} />
         <Route path="*" element={<Navigate to={ROUTES.HOME} replace />} />
