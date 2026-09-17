@@ -7,7 +7,10 @@ import './Header.css';
 const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
   const menuRef = useRef<HTMLDivElement>(null);
+  const searchRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
 
   const { isAuthenticated, user, logout } = useAuthStore();
@@ -25,6 +28,9 @@ const Header = () => {
       if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
         setUserMenuOpen(false);
       }
+      if (searchRef.current && !searchRef.current.contains(e.target as Node)) {
+        setSearchOpen(false);
+      }
     };
     document.addEventListener('mousedown', handleClick);
     return () => document.removeEventListener('mousedown', handleClick);
@@ -34,6 +40,15 @@ const Header = () => {
     setUserMenuOpen(false);
     await logout();
     navigate('/');
+  };
+
+  const handleSearch = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (searchQuery.trim()) {
+      navigate(`/search?q=${encodeURIComponent(searchQuery)}`);
+      setSearchOpen(false);
+      setSearchQuery('');
+    }
   };
 
   return (
@@ -56,12 +71,37 @@ const Header = () => {
 
         {/* Actions */}
         <div className="header__actions">
-          <button className="header__action" aria-label="Search">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-              <circle cx="11" cy="11" r="8"/>
-              <path d="m21 21-4.35-4.35"/>
-            </svg>
-          </button>
+          <div className="header__search" ref={searchRef}>
+            <button 
+              className="header__action" 
+              aria-label="Search"
+              onClick={() => setSearchOpen(!searchOpen)}
+            >
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+                <circle cx="11" cy="11" r="8"/>
+                <path d="m21 21-4.35-4.35"/>
+              </svg>
+            </button>
+
+            {searchOpen && (
+              <form className="header__search-modal" onSubmit={handleSearch}>
+                <input
+                  type="text"
+                  className="header__search-input"
+                  placeholder="Search products..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  autoFocus
+                />
+                <button type="submit" className="header__search-submit" aria-label="Submit search">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+                    <circle cx="11" cy="11" r="8"/>
+                    <path d="m21 21-4.35-4.35"/>
+                  </svg>
+                </button>
+              </form>
+            )}
+          </div>
 
           {/* Account — authenticated dropdown or guest links */}
           {isAuthenticated && user ? (

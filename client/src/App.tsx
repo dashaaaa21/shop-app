@@ -21,6 +21,7 @@ import AccountPage from './pages/AccountPage';
 import CheckoutPage from './pages/CheckoutPage';
 import OrdersPage from './pages/OrdersPage';
 import OrderDetailPage from './pages/OrderDetailPage';
+import SearchPage from './pages/SearchPage';
 
 function App() {
   const { initialize: initAuth, isAuthenticated } = useAuthStore();
@@ -57,6 +58,7 @@ function App() {
         <Route path={ROUTES.CHECKOUT} element={<CheckoutPage />} />
         <Route path={ROUTES.ORDERS} element={<OrdersPage />} />
         <Route path={ROUTES.ORDER_DETAIL} element={<OrderDetailPage />} />
+        <Route path="/search" element={<SearchPage />} />
         <Route path="/account" element={<AccountPage />} />
         <Route path="/about" element={<AboutPage />} />
         <Route path="*" element={<Navigate to={ROUTES.HOME} replace />} />
