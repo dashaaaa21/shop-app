@@ -1,0 +1,172 @@
+.search-page {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.search-main {
+  flex: 1;
+  padding: 60px 0 80px;
+  background-color: #f9f9f9;
+}
+
+.search-header {
+  margin-bottom: 40px;
+  text-align: center;
+}
+
+.search-title {
+  font-size: 32px;
+  font-weight: 700;
+  color: #000;
+  margin: 0 0 16px 0;
+}
+
+.search-query {
+  font-size: 16px;
+  color: #666;
+  margin: 0 0 8px 0;
+}
+
+.search-query strong {
+  color: #000;
+  font-weight: 600;
+}
+
+.search-count {
+  font-size: 14px;
+  color: #999;
+  margin: 0;
+}
+
+.search-empty,
+.search-no-results {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 80px 20px;
+  text-align: center;
+}
+
+.search-empty-icon {
+  color: #ddd;
+  margin-bottom: 24px;
+}
+
+.search-empty h2,
+.search-no-results h2 {
+  font-size: 24px;
+  font-weight: 600;
+  color: #000;
+  margin: 0 0 12px 0;
+}
+
+.search-empty p,
+.search-no-results p {
+  font-size: 14px;
+  color: #666;
+  margin: 0;
+  max-width: 400px;
+}
+
+.search-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 80px 20px;
+  text-align: center;
+}
+
+.search-loading p {
+  font-size: 16px;
+  color: #666;
+  margin-top: 16px;
+}
+
+.loader {
+  width: 40px;
+  height: 40px;
+  border: 3px solid #f0f0f0;
+  border-top-color: #000;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.search-error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  text-align: center;
+  background: #fff;
+  border-radius: 8px;
+  border: 1px solid #e0e0e0;
+}
+
+.search-error h2 {
+  font-size: 20px;
+  margin-bottom: 8px;
+  color: #d32f2f;
+}
+
+.search-error p {
+  color: #666;
+  font-size: 14px;
+}
+
+@media (max-width: 768px) {
+  .search-main {
+    padding: 40px 0 60px;
+  }
+
+  .search-title {
+    font-size: 24px;
+  }
+
+  .search-header {
+    margin-bottom: 30px;
+  }
+
+  .search-empty,
+  .search-no-results,
+  .search-loading {
+    padding: 60px 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .search-main {
+    padding: 30px 0 50px;
+  }
+
+  .search-title {
+    font-size: 20px;
+  }
+
+  .search-query {
+    font-size: 14px;
+  }
+
+  .search-count {
+    font-size: 12px;
+  }
+
+  .search-empty h2,
+  .search-no-results h2 {
+    font-size: 20px;
+  }
+
+  .search-empty p,
+  .search-no-results p {
+    font-size: 12px;
+  }
+}
