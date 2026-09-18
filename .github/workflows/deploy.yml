@@ -5,23 +5,44 @@ on:
     branches: [main]
 
 jobs:
-  deploy:
+  deploy-backend:
     runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Deploy Backend to Render
+        run: |
+          curl https://api.render.com/deploy/srv-dame2pv40ujc73ajb0vg?key=${{ secrets.RENDER_DEPLOY_KEY }}
+
+  deploy-frontend:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Deploy Frontend to Vercel
+        uses: amondnet/vercel-action@v20
+        with:
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
+          scope: ${{ secrets.VERCEL_ORG_ID }}
+
+  generate-urls:
+    runs-on: ubuntu-latest
+    needs: [deploy-backend, deploy-frontend]
     steps:
       - uses: actions/checkout@v3
 
       - name: Generate deployment URLs
         run: |
-          echo "## VALORÉ Shop Deployment" >> $GITHUB_STEP_SUMMARY
+          echo "## VALORÉ Shop Deployment - Complete" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "Frontend: https://shop-app-te6c.vercel.app" >> $GITHUB_STEP_SUMMARY
-          echo "Backend: https://shop-app-0fiy.onrender.com" >> $GITHUB_STEP_SUMMARY
+          echo "### Live URLs" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "[Open Frontend](https://shop-app-te6c.vercel.app)" >> $GITHUB_STEP_SUMMARY
-          echo "[Open Backend](https://shop-app-0fiy.onrender.com)" >> $GITHUB_STEP_SUMMARY
+          echo "- **Frontend**: https://shop-app-te6c.vercel.app" >> $GITHUB_STEP_SUMMARY
+          echo "- **Backend API**: https://shop-app-0fiy.onrender.com" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "[🎨 Open Frontend](https://shop-app-te6c.vercel.app) | [⚙️ Open Backend](https://shop-app-0fiy.onrender.com)" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Deployment Status**: ✅ Complete" >> $GITHUB_STEP_SUMMARY
 
-      - name: Notify deployment
-        run: |
-          echo "Deployment URLs:"
-          echo "Frontend: https://shop-app-te6c.vercel.app"
-          echo "Backend: https://shop-app-0fiy.onrender.com"
