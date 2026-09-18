@@ -34,15 +34,6 @@ export interface Order {
   updatedAt: string;
 }
 
-export interface CreateOrderRequest {
-  items: {
-    product: string;
-    quantity: number;
-  }[];
-  shippingAddress: ShippingAddress;
-  paymentMethod: string;
-}
-
 export interface OrdersResponse {
   success: boolean;
   count: number;

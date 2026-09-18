@@ -13,7 +13,7 @@ export const useCart = () => {
       setIsLoading(true);
       setError(null);
       const response = await cartApi.getCart();
-      return response.data;
+      return response;
     } catch (err: any) {
       const message = err.response?.data?.message || 'Failed to sync cart';
       setError(message);
@@ -27,7 +27,7 @@ export const useCart = () => {
     try {
       setIsLoading(true);
       setError(null);
-      await cartApi.addToCart({ productId, quantity });
+      await cartApi.addToCart(productId, quantity);
     } catch (err: any) {
       const message = err.response?.data?.message || 'Failed to add item to cart';
       setError(message);
@@ -41,7 +41,7 @@ export const useCart = () => {
     try {
       setIsLoading(true);
       setError(null);
-      await cartApi.updateCartItem(productId, { quantity });
+      await cartApi.updateCartItem(productId, quantity);
       updateQuantity(productId, quantity);
     } catch (err: any) {
       const message = err.response?.data?.message || 'Failed to update cart item';

@@ -3,6 +3,8 @@ import { useNavigate, Link } from 'react-router-dom';
 import { Header } from '../components/Header';
 import { Footer } from '../components/Footer';
 import { Button } from '../components/ui/button';
+import { ErrorBoundary } from '../components/ErrorBoundary';
+import { SkeletonCartItem } from '../components/Skeleton';
 import { useCartStore } from '../store/cart.store';
 import { useAuthStore } from '../store/auth.store';
 import { ROUTES } from '../constants/routes';
@@ -83,8 +85,20 @@ const CartPage = () => {
         <Header />
         <main className="main-content">
           <div className="container">
-            <div className="cart-loading">
-              <div>Loading cart...</div>
+            <div className="cart-header">
+              <h1>Shopping Cart</h1>
+            </div>
+            <div className="cart-content">
+              <div className="cart-items">
+                <SkeletonCartItem />
+                <SkeletonCartItem />
+                <SkeletonCartItem />
+              </div>
+              <div className="cart-summary">
+                <div className="summary-card">
+                  <div style={{ marginBottom: '1rem', width: '100%', height: '20px' }} className="skeleton" />
+                </div>
+              </div>
             </div>
           </div>
         </main>
@@ -135,19 +149,19 @@ const CartPage = () => {
   }
 
   return (
-    <div className="cart-page">
-      <Header />
-      
-      <main className="main-content">
-        <div className="container">
-          <div className="cart-header">
-            <h1>Shopping Cart</h1>
-            <button onClick={handleClearCart} className="clear-cart-btn" disabled={isLoading || loading}>
-              Clear Cart
-            </button>
-          </div>
+    <ErrorBoundary>
+      <div className="cart-page">
+        <Header />
+        <main className="main-content">
+          <div className="container">
+            <div className="cart-header">
+              <h1>Shopping Cart</h1>
+              <button onClick={handleClearCart} className="clear-cart-btn" disabled={isLoading || loading}>
+                Clear Cart
+              </button>
+            </div>
 
-          <div className="cart-content">
+            <div className="cart-content">
             <div className="cart-items">
               <div className="cart-items-header">
                 <span>Product</span>
@@ -318,12 +332,13 @@ const CartPage = () => {
                 <p>Free shipping on orders over €150</p>
               </div>
             </div>
+            </div>
           </div>
-        </div>
-      </main>
+        </main>
 
-      <Footer />
-    </div>
+        <Footer />
+      </div>
+    </ErrorBoundary>
   );
 };
 

@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { Header } from '../components/Header';
 import { Footer } from '../components/Footer';
 import { Button } from '../components/ui/button';
+import { ErrorBoundary } from '../components/ErrorBoundary';
 import { useAuthStore } from '../store/auth.store';
 import { ordersApi, type Order } from '../api/orders/orders.api';
 import './OrderDetailPage.css';
@@ -134,8 +135,9 @@ const OrderDetailPage = () => {
   }
 
   return (
-    <div className="order-detail-page">
-      <Header />
+    <ErrorBoundary>
+      <div className="order-detail-page">
+        <Header />
 
       <main className="order-detail-main">
         <div className="container">
@@ -285,7 +287,8 @@ const OrderDetailPage = () => {
       </main>
 
       <Footer />
-    </div>
+      </div>
+    </ErrorBoundary>
   );
 };
 

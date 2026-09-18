@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Header } from '../components/Header';
 import { Footer } from '../components/Footer';
 import { Button } from '../components/ui/button';
+import { ErrorBoundary } from '../components/ErrorBoundary';
 import { useCartStore } from '../store/cart.store';
 import { useAuthStore } from '../store/auth.store';
 import { ordersApi, type ShippingAddress } from '../api/orders/orders.api';
@@ -11,7 +12,7 @@ import './CheckoutPage.css';
 const CheckoutPage = () => {
   const navigate = useNavigate();
   const { items, subtotal, tax, shipping, total, fetchCart, clearCart } = useCartStore();
-  const { isAuthenticated, user } = useAuthStore();
+  const { isAuthenticated } = useAuthStore();
 
   const [isProcessing, setIsProcessing] = useState(false);
   const [paymentMethod, setPaymentMethod] = useState('card');
@@ -87,8 +88,9 @@ const CheckoutPage = () => {
 
   if (items.length === 0) {
     return (
-      <div className="checkout-page">
-        <Header />
+      <ErrorBoundary>
+        <div className="checkout-page">
+          <Header />
         <main className="checkout-main">
           <div className="container">
             <div className="empty-checkout">
@@ -102,6 +104,7 @@ const CheckoutPage = () => {
         </main>
         <Footer />
       </div>
+      </ErrorBoundary>
     );
   }
 

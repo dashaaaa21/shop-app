@@ -1,6 +1,5 @@
 import { useState } from 'react';
-import { ordersApi } from '@/api/orders/orders.api';
-import { Order, CreateOrderRequest } from '@/types/order.types';
+import { ordersApi, CreateOrderRequest, type Order } from '@/api/orders/orders.api';
 
 export const useOrders = () => {
   const [orders, setOrders] = useState<Order[]>([]);
@@ -13,7 +12,7 @@ export const useOrders = () => {
       setIsLoading(true);
       setError(null);
       const response = await ordersApi.createOrder(orderData);
-      return response.data;
+      return response;
     } catch (err: any) {
       const message = err.response?.data?.message || 'Failed to create order';
       setError(message);
@@ -28,8 +27,8 @@ export const useOrders = () => {
       setIsLoading(true);
       setError(null);
       const response = await ordersApi.getUserOrders();
-      setOrders(response.data);
-      return response.data;
+      setOrders(response);
+      return response;
     } catch (err: any) {
       const message = err.response?.data?.message || 'Failed to fetch orders';
       setError(message);
@@ -44,8 +43,8 @@ export const useOrders = () => {
       setIsLoading(true);
       setError(null);
       const response = await ordersApi.getOrderById(orderId);
-      setCurrentOrder(response.data);
-      return response.data;
+      setCurrentOrder(response);
+      return response;
     } catch (err: any) {
       const message = err.response?.data?.message || 'Failed to fetch order';
       setError(message);
@@ -62,12 +61,12 @@ export const useOrders = () => {
       const response = await ordersApi.cancelOrder(orderId);
       // Update local state
       setOrders((prev) =>
-        prev.map((order) => (order.id === orderId ? response.data : order))
+        prev.map((order) => (order.id === orderId ? response : order))
       );
       if (currentOrder?.id === orderId) {
-        setCurrentOrder(response.data);
+        setCurrentOrder(response);
       }
-      return response.data;
+      return response;
     } catch (err: any) {
       const message = err.response?.data?.message || 'Failed to cancel order';
       setError(message);
@@ -85,7 +84,7 @@ export const useOrders = () => {
       setIsLoading(true);
       setError(null);
       const response = await ordersApi.updateOrderStatus(orderId, { status });
-      return response.data;
+      return response;
     } catch (err: any) {
       const message = err.response?.data?.message || 'Failed to update order status';
       setError(message);
