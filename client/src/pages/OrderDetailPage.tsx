@@ -287,6 +287,7 @@ const OrderDetailPage = () => {
       </main>
 
       <Footer />
+      </div>
     </ErrorBoundary>
   );
 };

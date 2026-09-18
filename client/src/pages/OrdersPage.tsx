@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { useState, useEffect } from 'react';
 import { Header } from '../components/Header';
 import { Footer } from '../components/Footer';
 import { Button } from '../components/ui/button';
@@ -117,8 +116,7 @@ const OrdersPage = () => {
     <ErrorBoundary>
       <div className="orders-page">
         <Header />
-      
-      <main className="orders-main">
+        <main className="orders-main">
         <div className="container">
           <div className="orders-header">
             <h1>My Orders</h1>
@@ -201,10 +199,11 @@ const OrdersPage = () => {
               </div>
             ))}
           </div>
-        </div>
-      </main>
+          </div>
+        </main>
 
-      <Footer />
+        <Footer />
+      </div>
     </ErrorBoundary>
   );
 };

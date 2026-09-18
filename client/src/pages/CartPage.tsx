@@ -96,7 +96,7 @@ const CartPage = () => {
               </div>
               <div className="cart-summary">
                 <div className="summary-card">
-                  <div style={{ marginBottom: '1rem' }} className="skeleton" style={{ width: '100%', height: '20px' }} />
+                  <div style={{ marginBottom: '1rem', width: '100%', height: '20px' }} className="skeleton" />
                 </div>
               </div>
             </div>
@@ -152,17 +152,16 @@ const CartPage = () => {
     <ErrorBoundary>
       <div className="cart-page">
         <Header />
-      
-      <main className="main-content">
-        <div className="container">
-          <div className="cart-header">
-            <h1>Shopping Cart</h1>
-            <button onClick={handleClearCart} className="clear-cart-btn" disabled={isLoading || loading}>
-              Clear Cart
-            </button>
-          </div>
+        <main className="main-content">
+          <div className="container">
+            <div className="cart-header">
+              <h1>Shopping Cart</h1>
+              <button onClick={handleClearCart} className="clear-cart-btn" disabled={isLoading || loading}>
+                Clear Cart
+              </button>
+            </div>
 
-          <div className="cart-content">
+            <div className="cart-content">
             <div className="cart-items">
               <div className="cart-items-header">
                 <span>Product</span>
@@ -333,11 +332,12 @@ const CartPage = () => {
                 <p>Free shipping on orders over €150</p>
               </div>
             </div>
+            </div>
           </div>
-        </div>
-      </main>
+        </main>
 
-      <Footer />
+        <Footer />
+      </div>
     </ErrorBoundary>
   );
 };
