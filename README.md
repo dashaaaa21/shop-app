@@ -9,7 +9,7 @@ Try it out right now:
 - **Frontend**: https://shop-app-te6c.vercel.app
 - **Backend API**: https://shop-app-0fiy.onrender.com
 
-Or run locally - see [Getting Started](#getting-started) below.
+[View Full Deployment Status](./LIVE.md)
 
 ## About
 
