@@ -2,10 +2,27 @@
 # VALORÉ - E-Commerce Shop
 
 Modern e-commerce platform I built with React, TypeScript, Node.js, Express, and Supabase. Fast, secure, and made to actually work for both users and developers.
+
+## Live Demo
+
+Try it out right now:
+- **Frontend**: https://shop-app-te6c.vercel.app
+- **Backend API**: https://shop-app-0fiy.onrender.com
+
+Or run locally - see [Getting Started](#getting-started) below.
+
+## About
+
+VALORÉ is a full-featured e-commerce platform designed for both shoppers and developers. I built this to showcase modern web development practices: clean code, proper authentication, real inventory management, and actual order processing. It's production-ready but also a great learning resource.
+
+View all deployment URLs in [DEPLOYMENT_URLS.md](./DEPLOYMENT_URLS.md)
+
 <img width="1521" height="836" alt="Знімок екрана 2026-09-18 о 08 20 18" src="https://github.com/user-attachments/assets/c8afa5c2-56a5-49f4-937c-dfe75e02a004" /><img width="1537" height="835" alt="Знімок екрана 2026-09-18 о 08 20 31" src="https://github.com/user-attachments/assets/ca356e90-bfdc-4ef9-a727-d63aaacda104" />
 
 ## Quick Links
 
+- [About](#about)
+- [Live Demo](#live-demo)
 - [Features](#features)
 - [Tech Stack](#tech-stack)
 - [Getting Started](#getting-started)
