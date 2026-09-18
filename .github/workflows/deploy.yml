@@ -1,0 +1,27 @@
+name: Deploy VALORÉ Shop
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Generate deployment URLs
+        run: |
+          echo "## VALORÉ Shop Deployment" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "Frontend: https://shop-app-te6c.vercel.app" >> $GITHUB_STEP_SUMMARY
+          echo "Backend: https://shop-app-0fiy.onrender.com" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "[Open Frontend](https://shop-app-te6c.vercel.app)" >> $GITHUB_STEP_SUMMARY
+          echo "[Open Backend](https://shop-app-0fiy.onrender.com)" >> $GITHUB_STEP_SUMMARY
+
+      - name: Notify deployment
+        run: |
+          echo "Deployment URLs:"
+          echo "Frontend: https://shop-app-te6c.vercel.app"
+          echo "Backend: https://shop-app-0fiy.onrender.com"
