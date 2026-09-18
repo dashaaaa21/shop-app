@@ -1,41 +1,69 @@
-# Deployment Guide
+# 🚀 VALORÉ Shop - FREE Deployment Guide
 
-This guide covers deploying the e-commerce shop application to production.
+**Deploy to production for FREE using Vercel + Render + Supabase**
+
+## 📊 Architecture
+
+```
+Frontend (Vercel)     Backend (Render)      Database (Supabase)
+    ↓                       ↓                        ↓
+React/Vite  ←--API--→  Express.js  ←---DB---→  PostgreSQL
+:3000                    :5001              
+FREE                     FREE                    FREE (Free tier)
+```
+
+---
 
 ## Prerequisites
 
-- Node.js 18+ and npm
-- Supabase account with project created
-- Git repository with SSH keys configured
-- Hosting provider account (Vercel, Netlify, Railway, etc.)
+- Node.js 18+ and npm ✅
+- GitHub account (free)
+- Vercel account (free at vercel.com)
+- Render account (free at render.com)
+- Supabase account (free at supabase.com)
 
-##  Environment Setup
+---
 
-### 1. Generate Strong Secrets
+## Step 1: Prepare Repository
 
-Generate a strong JWT secret for server:
 ```bash
-node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
+# Ensure code is on GitHub in main branch
+git checkout main
+git push origin main
+
+# Verify no uncommitted changes
+git status
 ```
 
-### 2. Supabase Configuration
+---
 
-1. Create a new Supabase project at [supabase.com](https://supabase.com)
-2. Go to **Settings > API**
-3. Copy:
-   - Project URL → `SUPABASE_URL`
-   - Public Anon Key → `VITE_SUPABASE_ANON_KEY` (client)
-   - Secret Key → `SUPABASE_SECRET_KEY` (server only)
+## Step 2: Deploy Backend to Render (FREE)
 
-### 3. Set Environment Variables
+### 2.1 Create Render Account
+1. Go to [render.com](https://render.com)
+2. Sign up with GitHub
+3. Authorize access to your repositories
 
-**Server (.env):**
+### 2.2 Create Web Service
+```
+1. Dashboard → New+ → Web Service
+2. Select your Shop repository
+3. Select "server" as root directory
+4. Name: "valoré-backend" (or any name)
+5. Environment: Node
+6. Build command: npm install
+7. Start command: npm start
+8. Plan: **FREE** ✅
+```
+
+### 2.3 Set Environment Variables
+In Render dashboard → Environment:
+
 ```env
 NODE_ENV=production
-PORT=5001
-CLIENT_URL=https://yourdomain.com
+PORT=3000
 
-JWT_SECRET=your_generated_secret_key
+JWT_SECRET=<GENERATE_RANDOM_KEY>
 JWT_EXPIRE=7d
 
 SUPABASE_URL=https://your-project.supabase.co
@@ -44,234 +72,288 @@ SUPABASE_SECRET_KEY=your_secret_key
 SUPABASE_JWKS_URL=https://your-project.supabase.co/auth/v1/.well-known/jwks.json
 ```
 
-**Client (.env):**
+**Generate JWT Secret:**
+```bash
+node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
+```
+
+### 2.4 Deploy
+- Click "Create Web Service"
+- Render auto-deploys from GitHub
+- Wait for build completion
+- Copy your backend URL: `https://valoré-backend.onrender.com`
+
+⚠️ **Note**: Render free tier spins down after 15 minutes of inactivity. This is acceptable for development.
+
+---
+
+## Step 3: Deploy Frontend to Vercel (FREE)
+
+### 3.1 Create Vercel Account
+1. Go to [vercel.com](https://vercel.com)
+2. Sign up with GitHub
+3. Authorize access
+
+### 3.2 Import Project
+```
+1. Dashboard → Add New → Project
+2. Select your Shop repository
+3. Framework: Vite
+4. Root Directory: client
+5. Plan: FREE ✅
+```
+
+### 3.3 Configure Build Settings
+```
+Build Command: npm run build
+Output Directory: dist
+Install Command: npm install
+```
+
+### 3.4 Set Environment Variables
+In Vercel dashboard → Settings → Environment Variables:
+
 ```env
-VITE_API_URL=https://api.yourdomain.com/api
+VITE_API_URL=https://valoré-backend.onrender.com/api
 VITE_SUPABASE_URL=https://your-project.supabase.co
 VITE_SUPABASE_ANON_KEY=your_anon_key
 ```
 
-## 🚀 Deployment Options
+### 3.5 Deploy
+- Click "Deploy"
+- Vercel auto-deploys from GitHub main branch
+- Copy your frontend URL: `https://valoré-shop.vercel.app`
 
-### Option 1: Vercel (Recommended for Frontend)
+---
 
-#### Frontend Deployment
-1. Push code to GitHub
-2. Go to [vercel.com](https://vercel.com)
-3. Click "New Project" → Select repository
-4. Configure:
-   - Framework: Vite
-   - Build command: `npm run build`
-   - Output directory: `dist`
-5. Add environment variables:
-   - `VITE_API_URL`: Your API URL
-   - `VITE_SUPABASE_URL`
-   - `VITE_SUPABASE_ANON_KEY`
-6. Deploy
+## Step 4: Configure Supabase
 
-#### Backend Deployment (Railway or Render)
-See options below.
+### 4.1 Create/Setup Supabase Project
+1. Go to [supabase.com](https://supabase.com)
+2. Create new project (free tier)
+3. Go to Settings → API
+4. Copy:
+   - **Project URL** → `SUPABASE_URL`
+   - **Anon Key** → `VITE_SUPABASE_ANON_KEY` and `SUPABASE_PUBLISHABLE_KEY`
+   - **Service Role Key** → `SUPABASE_SECRET_KEY`
 
-### Option 2: Railway (Full Stack)
+### 4.2 Run Database Migrations
+In Supabase SQL Editor, create tables:
 
-**Frontend + Backend on Railway:**
+```sql
+-- Products table
+CREATE TABLE products (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  external_id TEXT UNIQUE,
+  name TEXT NOT NULL,
+  price DECIMAL(10,2),
+  discount_price DECIMAL(10,2),
+  category TEXT,
+  gender TEXT,
+  description TEXT,
+  stock INT DEFAULT 0,
+  images TEXT[],
+  created_at TIMESTAMP DEFAULT NOW(),
+  updated_at TIMESTAMP DEFAULT NOW()
+);
 
-1. Go to [railway.app](https://railway.app)
-2. Create new project
-3. Connect GitHub repository
-4. Create two services:
-   - **Frontend Service**
-     - Root directory: `client`
-     - Build command: `npm run build`
-     - Start command: `npm run preview`
-   - **Backend Service**
-     - Root directory: `server`
-     - Build command: `npm install`
-     - Start command: `npm start`
+-- Orders table
+CREATE TABLE orders (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id UUID REFERENCES auth.users(id),
+  status TEXT DEFAULT 'pending',
+  subtotal DECIMAL(10,2),
+  tax DECIMAL(10,2),
+  shipping DECIMAL(10,2),
+  total DECIMAL(10,2),
+  shipping_address JSONB,
+  payment_method TEXT,
+  created_at TIMESTAMP DEFAULT NOW(),
+  updated_at TIMESTAMP DEFAULT NOW()
+);
 
-5. Add environment variables to Backend service
-6. Set up PostgreSQL (Railway provides it)
-7. Deploy
+-- Order Items table
+CREATE TABLE order_items (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  order_id UUID REFERENCES orders(id) ON DELETE CASCADE,
+  product_id UUID REFERENCES products(id),
+  product_name TEXT,
+  product_image TEXT,
+  quantity INT,
+  price DECIMAL(10,2),
+  created_at TIMESTAMP DEFAULT NOW()
+);
 
-### Option 3: Render
-
-**Frontend:**
-1. Go to [render.com](https://render.com)
-2. Create Static Site
-3. Connect GitHub
-4. Build command: `npm run build`
-5. Publish directory: `dist`
-
-**Backend:**
-1. Create Web Service
-2. Build command: `npm install`
-3. Start command: `npm start`
-4. Add environment variables
-
-### Option 4: Docker (Self-hosted or Any Cloud)
-
-#### Build Docker Image
-
-**Dockerfile:**
-```dockerfile
-FROM node:18-alpine
-
-WORKDIR /app
-
-# Copy package files
-COPY package*.json ./
-RUN npm ci --only=production
-
-# Copy source
-COPY . .
-
-# Build client
-WORKDIR /app/client
-COPY client/package*.json ./
-RUN npm ci
-
-# Build
-RUN npm run build
-
-# Set up server
-WORKDIR /app/server
-COPY server/package*.json ./
-RUN npm ci
-
-EXPOSE 5001
-CMD ["npm", "start"]
+-- Cart table
+CREATE TABLE carts (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id UUID REFERENCES auth.users(id) UNIQUE,
+  items JSONB DEFAULT '[]',
+  created_at TIMESTAMP DEFAULT NOW(),
+  updated_at TIMESTAMP DEFAULT NOW()
+);
 ```
 
-**Build and push:**
+### 4.3 Seed Products (Optional)
+Run from server directory:
 ```bash
-docker build -t shop-app:1.0.0 .
-docker tag shop-app:1.0.0 your-registry/shop-app:1.0.0
-docker push your-registry/shop-app:1.0.0
+# First update SUPABASE credentials in .env
+npm run seed  # If seed script exists
 ```
 
-## ✅ Pre-Deployment Checklist
+---
 
-- [ ] All environment variables configured
-- [ ] Supabase database migrations applied
-- [ ] Database backups enabled
-- [ ] SSL certificate configured (auto-renew)
-- [ ] CORS configured for frontend domain
-- [ ] Rate limiting enabled
-- [ ] Error monitoring set up (Sentry)
-- [ ] CDN configured for static assets
-- [ ] Database connection pooling enabled
-- [ ] Monitoring and alerting configured
-- [ ] Health check endpoint accessible
-- [ ] All secrets rotate from .env.example, not hardcoded
+## Step 5: Update Backend Render Config
 
-##  Health Checks
+After getting Vercel URL, update Render environment:
 
-After deployment, verify:
+```env
+CLIENT_URL=https://valoré-shop.vercel.app
+```
 
+This ensures CORS allows requests from your frontend.
+
+---
+
+## Step 6: Test Everything
+
+### Test Backend
 ```bash
-# Check health endpoint
-curl https://api.yourdomain.com/api/health
-
-# Response should be:
-# {"status":"ok","message":"Server is running"}
-
-# Check Supabase connection
-curl https://yourdomain.com/api/auth/me \
-  -H "Authorization: Bearer YOUR_TOKEN"
+curl https://valoré-backend.onrender.com/api/products
+# Should return: {"products": [...]}
 ```
 
-## 📊 Monitoring
+### Test Frontend
+1. Open https://valoré-shop.vercel.app
+2. Test login with Supabase
+3. Add items to cart
+4. Create an order
+5. Check order history
 
-### Set Up Sentry for Error Tracking
-1. Create [Sentry](https://sentry.io) account
-2. Create project for Node.js and React
-3. Add SENTRY_DSN to environment variables
-4. Errors will be automatically tracked
+### Test API Connection
+1. Open browser DevTools (F12)
+2. Go to Network tab
+3. Try to load products
+4. Check for CORS errors
 
-### Set Up Application Metrics
-- Monitor database query times
-- Track API response times
-- Monitor error rates
-- Set up alerts for high error rates (>5%)
+---
 
-## 🔄 Database Backups
+## 🔧 Troubleshooting
 
-**Supabase Backups:**
-1. Go to Settings > Backups
-2. Enable daily backups
-3. Set retention to 7+ days
-4. Enable point-in-time recovery if available
+### Backend won't start
+```
+Check Render logs:
+- Render Dashboard → your-service → Logs
+- Verify NODE_ENV=production
+- Check all env vars are set
+```
 
-## 🚨 Rollback Procedure
+### Frontend shows blank page
+```
+Check Vercel logs:
+- Vercel Dashboard → Deployments → Logs
+- Verify VITE_API_URL is correct
+- Check browser console (F12)
+```
 
-If deployment fails:
+### CORS error: "Access to XMLHttpRequest blocked"
+```
+Solution:
+- Update CLIENT_URL in Render env vars
+- Verify CORS middleware in server/src/server.js
+- Check API URL in client .env
+```
 
-1. **Check logs:**
-   ```bash
-   # Railway/Render/Vercel: Check deployment logs in dashboard
-   # Docker: docker logs <container-id>
-   ```
+### Login not working
+```
+Check:
+1. SUPABASE_URL is correct
+2. SUPABASE_ANON_KEY is correct (public key)
+3. No SUPABASE_SECRET_KEY exposed in client
+```
 
-2. **Rollback to previous version:**
-   - Vercel: Click "Deployments" → Select previous → "Redeploy"
-   - Railway: Select previous deployment
-   - Docker: Pull and run previous image tag
+### Products not loading
+```
+Check:
+1. Database tables exist in Supabase
+2. Products have been seeded
+3. SUPABASE_SECRET_KEY is set in backend
+4. Backend can reach Supabase
+```
 
-3. **Database rollback** (if needed):
-   - Supabase: Use "Restore from backup"
+---
 
-## 🔐 Production Security Checklist
+## 📊 Cost Analysis
 
-- [ ] HTTPS enabled (SSL/TLS)
-- [ ] CORS properly configured
-- [ ] Rate limiting enabled
-- [ ] Input validation on all endpoints
-- [ ] SQL injection protection (ORM/parameterized queries)
-- [ ] XSS protection headers configured
-- [ ] CSRF protection enabled
-- [ ] Secrets never in logs
-- [ ] Database credentials rotated
-- [ ] Regular security updates applied
+| Service | Free Tier | Cost/Month |
+|---------|-----------|-----------|
+| **Vercel** (Frontend) | ✅ Yes | $0 |
+| **Render** (Backend) | ✅ Yes | $0 |
+| **Supabase** (Database) | ✅ Yes (limited) | $0 |
+| **TOTAL** | | **$0/month** |
 
-##  Performance Optimization
+**Limitations:**
+- Render: Spins down after 15 min inactivity (OK for testing)
+- Supabase Free: 500MB storage, limited requests
 
-- Enable gzip compression
-- Use CDN for static assets
-- Enable database query caching
-- Use connection pooling
-- Optimize images and assets
-- Enable browser caching headers
+---
 
-## Troubleshooting
+## 🔄 Continuous Deployment
 
-### Service won't start
-- Check environment variables
-- Check database connection
-- Check logs for error messages
-- Verify all required dependencies installed
+After initial setup:
+1. Make changes locally
+2. Commit to main branch: `git push origin main`
+3. Both Vercel and Render auto-deploy
+4. Changes live in ~2-5 minutes
 
-### High latency
-- Check database performance
-- Check network connectivity
-- Enable caching
-- Review slow queries
+---
 
-### Memory issues
-- Check for memory leaks
-- Increase allocated memory
-- Review application logs
-- Consider horizontal scaling
+## 📈 Production Checklist
 
-## 📞 Support Resources
+- [ ] Backend deployed on Render
+- [ ] Frontend deployed on Vercel
+- [ ] Supabase project created
+- [ ] Database tables migrated
+- [ ] All environment variables set
+- [ ] CORS configured properly
+- [ ] JWT_SECRET is random (32+ chars)
+- [ ] SUPABASE_SECRET_KEY not exposed
+- [ ] Frontend → Backend API communication works
+- [ ] Login/logout works
+- [ ] Cart operations work
+- [ ] Orders can be created
+- [ ] Stock deduction works
+- [ ] No console errors
 
-- Supabase Docs: https://supabase.com/docs
-- Node.js Best Practices: https://nodejs.org/en/docs/
-- Vercel Docs: https://vercel.com/docs
-- Railway Docs: https://docs.railway.app
-- Render Docs: https://render.com/docs
+---
 
-## 🔗 Links
+## 🚀 Next Steps
 
-- Project Repository: https://github.com/dashaaaa21/shop-app
-- Setup Guide: See SETUP.md
-- Local Development: See README.md
+1. **Custom Domain** (Optional)
+   - Vercel: Projects → Settings → Domains
+   - Render: Services → Environment → Custom Domain
+
+2. **Error Monitoring** (Optional)
+   - Add Sentry for error tracking
+   - Set up email alerts
+
+3. **Analytics** (Optional)
+   - Google Analytics
+   - Vercel Analytics
+
+4. **Database Backups**
+   - Supabase auto-backups (7-day retention on free tier)
+   - Upgrade to Pro for longer retention
+
+---
+
+## 📞 Support
+
+- **Vercel Docs**: https://vercel.com/docs
+- **Render Docs**: https://render.com/docs
+- **Supabase Docs**: https://supabase.com/docs
+- **Express Docs**: https://expressjs.com
+
+---
+
+**Status**: Ready for FREE production deployment ✅
