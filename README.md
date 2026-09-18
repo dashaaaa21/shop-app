@@ -1,6 +1,8 @@
+
 # VALORÉ - E-Commerce Shop
 
 Modern e-commerce platform I built with React, TypeScript, Node.js, Express, and Supabase. Fast, secure, and made to actually work for both users and developers.
+<img width="1521" height="836" alt="Знімок екрана 2026-09-18 о 08 20 18" src="https://github.com/user-attachments/assets/c8afa5c2-56a5-49f4-937c-dfe75e02a004" /><img width="1537" height="835" alt="Знімок екрана 2026-09-18 о 08 20 31" src="https://github.com/user-attachments/assets/ca356e90-bfdc-4ef9-a727-d63aaacda104" />
 
 ## Quick Links
 
@@ -61,6 +63,19 @@ cd server
 cp .env.example .env
 npm install
 ```
+<img width="1428" height="823" alt="Знімок екрана 2026-09-18 о 08 25 52" src="https://github.com/user-attachments/assets/e9c4928b-cdf3-4984-a763-e75452c70ae8" />
+<img width="1425" height="834" alt="Знімок екрана 2026-09-18 о 08 25 32" src="https://github.com/user-attachments/assets/42318900-9636-478e-9538-056010e80cda" />
+<img width="1449" height="816" alt="Знімок екрана 2026-09-18 о 08 25 20" src="https://github.com/user-attachments/assets/64d23189-90ba-4fca-8093-e4928cd7f723" />
+<img width="569" height="429" alt="Знімок екрана 2026-09-18 о 08 25 09" src="https://github.com/user-attachments/assets/2fe4f2f6-c536-49b6-9e11-dc6de738deb5" />
+<img width="1508" height="832" alt="Знімок екрана 2026-09-18 о 08 24 53" src="https://github.com/user-attachments/assets/161eb4d2-e711-462c-810f-12169e029434" />
+<img width="1489" height="811" alt="Знімок екрана 2026-09-18 о 08 22 05" src="https://github.com/user-attachments/assets/9b8bd549-15b8-4920-8881-26f75aafa638" />
+<img width="1454" height="820" alt="Знімок екрана 2026-09-18 о 08 21 39" src="https://github.com/user-attachments/assets/e9aa9ff8-f60d-493f-9766-6ab05c6f7462" />
+<img width="1515" height="782" alt="Знімок екрана 2026-09-18 о 08 21 30" src="https://github.com/user-attachments/assets/7263e510-1626-4496-af36-d3ae9119dd14" />
+<img width="1507" height="819" alt="Знімок екрана 2026-09-18 о 08 21 22" src="https://github.com/user-attachments/assets/81230de9-e7cd-4aa0-afc6-10fca00114b2" />
+<img width="1479" height="840" alt="Знімок екрана 2026-09-18 о 08 21 12" src="https://github.com/user-attachments/assets/42de4464-34c5-41cb-a92b-f0a683ac8969" />
+<img width="1475" height="831" alt="Знімок екрана 2026-09-18 о 08 21 04" src="https://github.com/user-attachments/assets/3cc362ce-1857-45f6-8fb2-6f5b7c0b779d" />
+<img width="1499" height="806" alt="Знімок екрана 2026-09-18 о 08 20 52" src="https://github.com/user-attachments/assets/88dbfdbe-d81f-4f10-8ef1-a939e6c8d0a1" />
+<img width="1552" height="831" alt="Знімок екрана 2026-09-18 о 08 20 42" src="https://github.com/user-attachments/assets/9aa27bcc-98af-4689-9cee-a441cc8679de" />
 
 ### Run
 
