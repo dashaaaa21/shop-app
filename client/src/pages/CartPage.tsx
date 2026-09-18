@@ -4,6 +4,7 @@ import { Header } from '../components/Header';
 import { Footer } from '../components/Footer';
 import { Button } from '../components/ui/button';
 import { ErrorBoundary } from '../components/ErrorBoundary';
+import { SkeletonCartItem } from '../components/Skeleton';
 import { useCartStore } from '../store/cart.store';
 import { useAuthStore } from '../store/auth.store';
 import { ROUTES } from '../constants/routes';
@@ -84,8 +85,20 @@ const CartPage = () => {
         <Header />
         <main className="main-content">
           <div className="container">
-            <div className="cart-loading">
-              <div>Loading cart...</div>
+            <div className="cart-header">
+              <h1>Shopping Cart</h1>
+            </div>
+            <div className="cart-content">
+              <div className="cart-items">
+                <SkeletonCartItem />
+                <SkeletonCartItem />
+                <SkeletonCartItem />
+              </div>
+              <div className="cart-summary">
+                <div className="summary-card">
+                  <div style={{ marginBottom: '1rem' }} className="skeleton" style={{ width: '100%', height: '20px' }} />
+                </div>
+              </div>
             </div>
           </div>
         </main>

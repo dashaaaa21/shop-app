@@ -5,6 +5,7 @@ import { Header } from '../components/Header';
 import { Footer } from '../components/Footer';
 import { Button } from '../components/ui/button';
 import { ErrorBoundary } from '../components/ErrorBoundary';
+import { SkeletonOrderItem } from '../components/Skeleton';
 import { useAuthStore } from '../store/auth.store';
 import { ordersApi, type Order } from '../api/orders/orders.api';
 import './OrdersPage.css';
@@ -59,7 +60,14 @@ const OrdersPage = () => {
         <Header />
         <main className="orders-main">
           <div className="container">
-            <div className="orders-loading">Loading your orders...</div>
+            <div className="orders-header">
+              <h1>My Orders</h1>
+            </div>
+            <div className="orders-list">
+              <SkeletonOrderItem />
+              <SkeletonOrderItem />
+              <SkeletonOrderItem />
+            </div>
           </div>
         </main>
         <Footer />
