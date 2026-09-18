@@ -118,3 +118,42 @@ export const getMe = async (req, res, next) => {
     next(error);
   }
 };
+
+/**
+ * POST /api/auth/refresh
+ * Refresh JWT token for currently authenticated user
+ * Requires Authorization header with valid (but possibly expired) token
+ */
+export const refreshToken = async (req, res, next) => {
+  try {
+    // If we reached here, the token passed protect middleware validation
+    // This means token is still valid or can be refreshed
+    
+    if (!req.user) {
+      return res.status(401).json({ message: 'Not authenticated' });
+    }
+
+    // Generate a new JWT token using Supabase
+    // For now, return the user info - client should handle re-login if needed
+    const { data: { session }, error } = await supabase.auth.refreshSession(
+      { refresh_token: req.body.refreshToken }
+    );
+
+    if (error || !session) {
+      return res.status(401).json({ message: 'Failed to refresh token - please login again' });
+    }
+
+    res.json({
+      token: session.access_token,
+      refreshToken: session.refresh_token,
+      user: {
+        id: req.user.id,
+        email: req.user.email,
+        name: req.user.name,
+        role: req.user.role,
+      },
+    });
+  } catch (error) {
+    next(error);
+  }
+};
