@@ -1,4 +1,4 @@
-# VALORÉ Shop - Live Deployment URLs
+# VALORÉ Shop - Deployment URLs
 
 Last Updated: See git commit history
 
