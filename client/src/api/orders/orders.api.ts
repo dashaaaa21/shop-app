@@ -1,6 +1,6 @@
 import { supabase } from '../../lib/supabase';
 
-const API = import.meta.env.CONFIG_API_URL ?? 'http://localhost:5001/api';
+const API = import.meta.env.VITE_API_URL ?? 'http://localhost:5001/api';
 
 export interface OrderItem {
   id?: string;

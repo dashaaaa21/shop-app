@@ -2,7 +2,7 @@ import axios from 'axios';
 import { storage, STORAGE_KEYS } from '@/utils/storage';
 
 export const api = axios.create({
-  baseURL: import.meta.env.CONFIG_API_URL || '/api',
+  baseURL: import.meta.env.VITE_API_URL || '/api',
   headers: {
     'Content-Type': 'application/json',
   },
@@ -111,7 +111,7 @@ async function attemptTokenRefresh(): Promise<string> {
   try {
     // Try to refresh via the backend auth endpoint (if available)
     const response = await axios.post(
-      `${import.meta.env.CONFIG_API_URL || '/api'}/auth/refresh`,
+      `${import.meta.env.VITE_API_URL || '/api'}/auth/refresh`,
       {}
     );
 
