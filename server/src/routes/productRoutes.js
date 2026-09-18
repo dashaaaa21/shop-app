@@ -7,15 +7,21 @@ import {
   deleteProduct,
 } from '../controllers/productController.js';
 import { protect, restrictTo } from '../middleware/supabaseAuth.js';
+import { 
+  validateCreateProduct, 
+  validateUpdateProduct, 
+  validateProductId,
+  validateSearchQuery 
+} from '../middleware/validation.js';
 
 const router = express.Router();
 
-router.get('/', getAllProducts);
-router.get('/:id', getProductById);
+router.get('/', validateSearchQuery, getAllProducts);
+router.get('/:id', validateProductId, getProductById);
 
 // Admin only routes
-router.post('/', protect, restrictTo('admin'), createProduct);
-router.put('/:id', protect, restrictTo('admin'), updateProduct);
-router.delete('/:id', protect, restrictTo('admin'), deleteProduct);
+router.post('/', protect, restrictTo('admin'), validateCreateProduct, createProduct);
+router.put('/:id', protect, restrictTo('admin'), validateUpdateProduct, updateProduct);
+router.delete('/:id', protect, restrictTo('admin'), validateProductId, deleteProduct);
 
 export default router;
