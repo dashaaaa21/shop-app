@@ -177,6 +177,12 @@ cd server && npm start
 
 Check [DEPLOYMENT.md](./DEPLOYMENT.md) for cloud options: Vercel, Railway, Render, Docker
 
+**View Deployed Apps**
+```bash
+./open-deployment.sh
+```
+This automatically opens your frontend and backend in the browser.
+
 ## Security
 
 - JWT authentication
