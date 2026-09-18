@@ -75,7 +75,7 @@ cd client && npm run dev
 - Frontend: http://localhost:3000
 - Backend: http://localhost:5001
 
-See [SETUP.md](./SETUP.md) for detailed setup.
+See [DEPLOYMENT.md](./DEPLOYMENT.md) for detailed setup.
 
 ## Project Structure
 
@@ -98,8 +98,7 @@ shop-app/
 │   │   ├── config/       # Config files
 │   │   └── server.js
 │
-├── SETUP.md
-├── DEPLOYMENT.md
+├── DEPLOYMENT.md        # Setup & deployment guide
 └── README.md
 ```
 

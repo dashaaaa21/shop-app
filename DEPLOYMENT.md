@@ -1,4 +1,84 @@
-# VALORÉ Shop - FREE Deployment Guide
+# VALORÉ Shop - Setup & Deployment Guide
+
+## Local Development Setup
+
+### Environment Variables
+
+Never commit `.env` files with real secrets. Use `.env.example` as a template.
+
+### Frontend Setup
+
+1. Copy `.env.example` to `.env`:
+```bash
+cd client
+cp .env.example .env
+```
+
+2. Update with your Supabase credentials:
+```env
+CONFIG_API_URL=http://localhost:5001/api
+CONFIG_SUPABASE_URL=your_supabase_url
+CONFIG_SUPABASE_ANON_KEY=your_anon_key
+```
+
+### Backend Setup
+
+1. Copy `.env.example` to `.env`:
+```bash
+cd server
+cp .env.example .env
+```
+
+2. Generate JWT secret:
+```bash
+node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
+```
+
+3. Update `.env`:
+```env
+NODE_ENV=development
+PORT=5001
+CLIENT_URL=http://localhost:3000
+JWT_SECRET=your_generated_secret_key
+JWT_EXPIRE=7d
+
+SUPABASE_URL=your_supabase_url
+SUPABASE_PUBLISHABLE_KEY=your_publishable_key
+SUPABASE_SECRET_KEY=your_secret_key
+SUPABASE_JWKS_URL=https://your-project.supabase.co/auth/v1/.well-known/jwks.json
+```
+
+### Installation
+
+```bash
+# Frontend
+cd client
+npm install
+
+# Backend
+cd ../server
+npm install
+```
+
+### Run Locally
+
+Terminal 1 - Backend:
+```bash
+cd server
+npm run dev
+```
+Runs on http://localhost:5001
+
+Terminal 2 - Frontend:
+```bash
+cd client
+npm run dev
+```
+Runs on http://localhost:3000
+
+---
+
+# Production Deployment
 
 Deploy to production for FREE using Vercel + Render + Supabase
 
@@ -104,9 +184,9 @@ Install Command: npm install
 In Vercel dashboard → Settings → Environment Variables:
 
 ```env
-VITE_API_URL=https://valoré-backend.onrender.com/api
-VITE_SUPABASE_URL=https://your-project.supabase.co
-VITE_SUPABASE_ANON_KEY=your_anon_key
+CONFIG_API_URL=https://shop-app-0fiy.onrender.com/api
+CONFIG_SUPABASE_URL=https://your-project.supabase.co
+CONFIG_SUPABASE_ANON_KEY=your_anon_key
 ```
 
 ### 3.5 Deploy
@@ -122,7 +202,7 @@ VITE_SUPABASE_ANON_KEY=your_anon_key
 3. Go to Settings → API
 4. Copy:
    - Project URL → SUPABASE_URL
-   - Anon Key → VITE_SUPABASE_ANON_KEY and SUPABASE_PUBLISHABLE_KEY
+   - Anon Key → CONFIG_SUPABASE_ANON_KEY and SUPABASE_PUBLISHABLE_KEY
    - Service Role Key → SUPABASE_SECRET_KEY
 
 ### 4.2 Run Database Migrations
@@ -229,7 +309,7 @@ Check Render logs:
 ### Frontend shows blank page
 Check Vercel logs:
 - Vercel Dashboard → Deployments → Logs
-- Verify VITE_API_URL is correct
+- Verify CONFIG_API_URL is correct
 - Check browser console (F12)
 
 ### CORS error: "Access to XMLHttpRequest blocked"
