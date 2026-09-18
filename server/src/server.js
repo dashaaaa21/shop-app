@@ -60,6 +60,11 @@ app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', message: 'Server is running' });
 });
 
+// Root route
+app.get('/', (req, res) => {
+  res.json({ message: 'VALORÉ Shop API is running' });
+});
+
 // Error handler
 app.use(errorHandler);
 
