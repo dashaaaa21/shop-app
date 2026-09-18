@@ -3,6 +3,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import { Header } from '../components/Header';
 import { Footer } from '../components/Footer';
 import { Button } from '../components/ui/button';
+import { ErrorBoundary } from '../components/ErrorBoundary';
 import { useCartStore } from '../store/cart.store';
 import { useAuthStore } from '../store/auth.store';
 import { ROUTES } from '../constants/routes';
@@ -135,8 +136,9 @@ const CartPage = () => {
   }
 
   return (
-    <div className="cart-page">
-      <Header />
+    <ErrorBoundary>
+      <div className="cart-page">
+        <Header />
       
       <main className="main-content">
         <div className="container">
@@ -323,7 +325,7 @@ const CartPage = () => {
       </main>
 
       <Footer />
-    </div>
+    </ErrorBoundary>
   );
 };
 
