@@ -142,11 +142,13 @@ SUPABASE_URL=https://your-project.supabase.co
 SUPABASE_PUBLISHABLE_KEY=your_anon_key
 SUPABASE_SECRET_KEY=your_secret_key
 SUPABASE_JWKS_URL=https://your-project.supabase.co/auth/v1/.well-known/jwks.json
+
+CLIENT_URL=https://your-frontend-domain.vercel.app
 ```
 
-Generate JWT Secret:
-```bash
-node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
+For multiple preview deployments, use comma-separated URLs (no spaces):
+```env
+CLIENT_URL=https://shop-app-te6c.vercel.app,https://your-preview-url.vercel.app
 ```
 
 ### 2.4 Deploy
