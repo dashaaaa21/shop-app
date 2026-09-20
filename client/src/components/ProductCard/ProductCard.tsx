@@ -1,9 +1,11 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { cartApi } from '../../api/cart/cart.api';
 import './ProductCard.css';
 
 interface ProductCardProps {
   id: string;
+  externalId?: string;
   name: string;
   price: number;
   discountPrice?: number;
@@ -11,9 +13,10 @@ interface ProductCardProps {
   category: string;
 }
 
-const ProductCard = ({ id, name, price, discountPrice, images = [], category }: ProductCardProps) => {
+const ProductCard = ({ id, externalId, name, price, discountPrice, images = [], category }: ProductCardProps) => {
   const [isHovered, setIsHovered] = useState(false);
   const [imageLoaded, setImageLoaded] = useState(false);
+  const [isAdding, setIsAdding] = useState(false);
 
   const handleMouseEnter = () => {
     setIsHovered(true);
@@ -32,9 +35,24 @@ const ProductCard = ({ id, name, price, discountPrice, images = [], category }: 
     setImageLoaded(true);
   };
 
+  const handleQuickAdd = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    setIsAdding(true);
+    try {
+      await cartApi.addToCart(id, 1);
+      alert(`${name} added to cart!`);
+    } catch (error) {
+      console.error('Failed to add to cart:', error);
+      alert('Failed to add to cart');
+    } finally {
+      setIsAdding(false);
+    }
+  };
+
   const currentPrice = discountPrice || price;
   const hasDiscount = !!discountPrice;
   const discountPercentage = hasDiscount ? Math.round(((price - currentPrice) / price) * 100) : 0;
+  const linkPath = externalId ? `/products/${externalId}` : `/products/${id}`;
 
   return (
     <article 
@@ -44,7 +62,7 @@ const ProductCard = ({ id, name, price, discountPrice, images = [], category }: 
       aria-label={`${name} - ${category}`}
     >
       <Link 
-        to={`/products/${id}`} 
+        to={linkPath}
         className="product-card__link"
         aria-label={`View details for ${name}`}
       >
@@ -66,13 +84,11 @@ const ProductCard = ({ id, name, price, discountPrice, images = [], category }: 
             <div className="product-card__quick-add">
               <button 
                 className="product-card__add-btn"
-                onClick={(e) => {
-                  e.preventDefault();
-                  // Quick add functionality to be implemented
-                }}
+                onClick={handleQuickAdd}
+                disabled={isAdding}
                 aria-label={`Quick add ${name} to cart`}
               >
-                Quick Add
+                {isAdding ? 'Adding...' : 'Quick Add'}
               </button>
             </div>
           )}
