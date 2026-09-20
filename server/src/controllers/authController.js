@@ -15,12 +15,12 @@ export const register = async (req, res, next) => {
 
     const fullName = [firstName, lastName].filter(Boolean).join(' ') || email.split('@')[0];
 
-    const { data, error } = await supabase.auth.signUp({
+    // Use admin API to create user without email confirmation requirement
+    const { data, error } = await supabaseAdmin.auth.admin.createUser({
       email,
       password,
-      options: {
-        data: { full_name: fullName },
-      },
+      email_confirm: true, // Automatically confirm email
+      user_metadata: { full_name: fullName },
     });
 
     if (error) {
@@ -32,19 +32,26 @@ export const register = async (req, res, next) => {
       return res.status(400).json({ message: 'Registration failed' });
     }
 
+    // Now sign in the user to get a session
+    const { data: sessionData, error: signInError } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    });
+
+    if (signInError) {
+      return res.status(400).json({ message: 'Registration successful but login failed' });
+    }
+
     res.status(201).json({
-      message: data.session
-        ? 'Registration successful'
-        : 'Registration successful — please confirm your email',
+      message: 'Registration successful',
       user: {
         id: data.user.id,
         email: data.user.email,
         name: data.user.user_metadata?.full_name,
-        emailConfirmed: !!data.user.email_confirmed_at,
+        emailConfirmed: true,
       },
-      ...(data.session && {
-        token: data.session.access_token,
-      }),
+      token: sessionData?.session?.access_token || null,
+      refreshToken: sessionData?.session?.refresh_token || null,
     });
   } catch (error) {
     next(error);
