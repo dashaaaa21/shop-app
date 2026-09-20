@@ -15,7 +15,6 @@ const RegisterPage = () => {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
-  const [success, setSuccess] = useState(false);
   const [fieldErrors, setFieldErrors] = useState<{
     name?: string; email?: string; password?: string; confirmPassword?: string;
   }>({});
@@ -53,34 +52,6 @@ const RegisterPage = () => {
       // error handled by store
     }
   };
-
-  if (success && !isAuthenticated) {
-    return (
-      <div className="auth-page">
-        <Header />
-        <main className="auth-main">
-          <div className="auth-card">
-            <div className="auth-success">
-              <div className="auth-success__icon">
-                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-                  <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
-                  <polyline points="22 4 12 14.01 9 11.01"/>
-                </svg>
-              </div>
-              <h2 className="auth-success__title">Welcome to VALORÉ!</h2>
-              <p className="auth-success__text">
-                Your account is ready. No email confirmation needed. Start exploring our collection now!
-              </p>
-              <Link to="/" className="auth-submit" style={{ display: 'block', textAlign: 'center' }}>
-                Continue Shopping
-              </Link>
-            </div>
-          </div>
-        </main>
-        <Footer />
-      </div>
-    );
-  }
 
   return (
     <div className="auth-page">
