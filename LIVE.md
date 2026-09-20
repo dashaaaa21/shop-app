@@ -35,7 +35,7 @@ REST API for all operations. Base path: `/api`
 |-----------|----------|--------|-----|
 | Frontend | Vercel | ✅ Live | https://shop-app-te6c.vercel.app |
 | Backend | Render | ✅ Live | https://shop-app-0fiy.onrender.com |
-| Database | Supabase | ✅ Live | https://mvzbmogsixnvvnhruroc.supabase.co |
+
 
 ## Auto-Deploy
 
