@@ -34,8 +34,8 @@ View all deployment URLs in [DEPLOYMENT_URLS.md](./DEPLOYMENT_URLS.md)
 
 **Frontend**
 - Product catalog with filtering & search
-- Real-time shopping cart
-- Supabase authentication
+- Real-time shopping cart with Quick Add
+- Instant authentication (no email confirmation)
 - Order tracking & history
 - Mobile-responsive design
 - Error handling & skeleton loaders
@@ -45,6 +45,7 @@ View all deployment URLs in [DEPLOYMENT_URLS.md](./DEPLOYMENT_URLS.md)
 - Clean REST API
 - Input validation on all endpoints
 - Stock management & inventory tracking
+- Instant user registration without email confirmation
 - JWT token refresh
 - Rate limiting & security headers
 - Supabase integration
@@ -109,6 +110,19 @@ cd client && npm run dev
 
 See [DEPLOYMENT.md](./DEPLOYMENT.md) for detailed setup.
 
+## Authentication
+
+**Instant Registration**
+
+Users can sign up and start using the shop immediately—no email confirmation required. The registration process:
+
+1. User submits email, password, and name
+2. Account created with auto-confirmed email
+3. User automatically logged in
+4. Access token returned immediately
+
+This makes onboarding frictionless while maintaining security.
+
 ## Project Structure
 
 ```
@@ -139,7 +153,7 @@ shop-app/
 Base URL: `http://localhost:5001/api`
 
 **Auth**
-- `POST /auth/register` - Sign up
+- `POST /auth/register` - Sign up (instant, no email confirmation needed)
 - `POST /auth/login` - Log in
 - `POST /auth/refresh` - Refresh token
 - `GET /auth/me` - Get user
