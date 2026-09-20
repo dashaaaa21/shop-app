@@ -77,6 +77,7 @@ export const cartApi = {
 
   // Add item to cart
   addToCart: async (productId: string, quantity: number = 1): Promise<CartItem> => {
+    console.log('cartApi.addToCart called with:', { productId, quantity });
     const res = await fetch(`${API}/cart`, {
       method: 'POST',
       headers: await getHeaders(),

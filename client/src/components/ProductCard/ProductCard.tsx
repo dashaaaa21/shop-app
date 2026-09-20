@@ -38,6 +38,7 @@ const ProductCard = ({ id, externalId, name, price, discountPrice, images = [], 
   const handleQuickAdd = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     setIsAdding(true);
+    console.log('Adding to cart - Product ID:', id, 'Type:', typeof id);
     try {
       await cartApi.addToCart(id, 1);
       alert(`${name} added to cart!`);
