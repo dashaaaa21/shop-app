@@ -47,9 +47,8 @@ const RegisterPage = () => {
     if (!validate()) return;
     try {
       await register(name, email, password);
-      // If Supabase email confirmation is off → isAuthenticated becomes true → redirect
-      // If confirmation is on → show success message
-      setSuccess(true);
+      // With instant registration (no email confirmation), 
+      // user is automatically authenticated and redirected
     } catch {
       // error handled by store
     }
@@ -68,13 +67,12 @@ const RegisterPage = () => {
                   <polyline points="22 4 12 14.01 9 11.01"/>
                 </svg>
               </div>
-              <h2 className="auth-success__title">Check your email</h2>
+              <h2 className="auth-success__title">Welcome to VALORÉ!</h2>
               <p className="auth-success__text">
-                We sent a confirmation link to <strong>{email}</strong>.
-                Please verify your email to activate your account.
+                Your account is ready. No email confirmation needed. Start exploring our collection now!
               </p>
-              <Link to="/login" className="auth-submit" style={{ display: 'block', textAlign: 'center' }}>
-                Go to Sign In
+              <Link to="/" className="auth-submit" style={{ display: 'block', textAlign: 'center' }}>
+                Continue Shopping
               </Link>
             </div>
           </div>

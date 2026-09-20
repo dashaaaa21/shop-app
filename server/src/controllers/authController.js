@@ -16,6 +16,7 @@ export const register = async (req, res, next) => {
     const fullName = [firstName, lastName].filter(Boolean).join(' ') || email.split('@')[0];
 
     // Use admin API to create user without email confirmation requirement
+    // Don't send confirmation email - user is auto-confirmed
     const { data, error } = await supabaseAdmin.auth.admin.createUser({
       email,
       password,
@@ -43,7 +44,7 @@ export const register = async (req, res, next) => {
     }
 
     res.status(201).json({
-      message: 'Registration successful',
+      message: 'Registration successful — ready to use',
       user: {
         id: data.user.id,
         email: data.user.email,
