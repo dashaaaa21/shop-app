@@ -67,9 +67,9 @@ export const getCart = async (req, res, next) => {
  */
 export const addToCart = async (req, res, next) => {
   try {
-    const { productId, quantity = 1 } = req.body;
+    const { product_id, quantity = 1 } = req.body;
 
-    if (!productId) {
+    if (!product_id) {
       return res.status(400).json({
         success: false,
         message: 'Product ID is required'
@@ -88,12 +88,12 @@ export const addToCart = async (req, res, next) => {
     
     // Try UUID first, then external_id
     const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
-    const field = uuidRegex.test(productId) ? 'id' : 'external_id';
+    const field = uuidRegex.test(product_id) ? 'id' : 'external_id';
     
     const { data: productData, error: productError } = await supabaseAdmin
       .from('products')
       .select('*')
-      .eq(field, productId)
+      .eq(field, product_id)
       .single();
 
     if (productError || !productData) {

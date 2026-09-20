@@ -4,6 +4,7 @@ import { Header } from '../components/Header';
 import { Footer } from '../components/Footer';
 import { Newsletter } from '../components/Newsletter';
 import { fetchFeaturedProducts, type Product } from '../api/products/products.api';
+import { cartApi } from '../api/cart/cart.api';
 import './HomePage.css';
 
 const categories = [
@@ -30,6 +31,7 @@ const categories = [
 const HomePage = () => {
   const [featured, setFeatured] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
+  const [addingToCart, setAddingToCart] = useState<string | null>(null);
 
   useEffect(() => {
     document.title = 'Shop — AW 2026 Collection';
@@ -47,6 +49,19 @@ const HomePage = () => {
         setLoading(false);
       });
   }, []);
+
+  const handleQuickAdd = async (product: Product) => {
+    setAddingToCart(product.id);
+    try {
+      await cartApi.addToCart(product.id, 1);
+      alert(`${product.name} added to cart!`);
+    } catch (error) {
+      console.error('Failed to add to cart:', error);
+      alert('Failed to add to cart');
+    } finally {
+      setAddingToCart(null);
+    }
+  };
 
   return (
     <div className="homepage">
@@ -123,20 +138,34 @@ const HomePage = () => {
         ) : (
           <div className="home-featured__grid">
             {featured.map((product) => (
-              <Link
+              <div
                 key={product.external_id}
-                to={`/product/${product.external_id}`}
                 className="home-featured__card"
               >
-                <div className="home-featured__img-wrap">
-                  <img
-                    src={product.images[0]}
-                    alt={product.name}
-                    className="home-featured__img"
-                  />
-                  {product.discount_price && (
-                    <span className="home-featured__badge">Sale</span>
-                  )}
+                <Link
+                  to={`/product/${product.external_id}`}
+                  className="home-featured__link"
+                >
+                  <div className="home-featured__img-wrap">
+                    <img
+                      src={product.images[0]}
+                      alt={product.name}
+                      className="home-featured__img"
+                    />
+                    {product.discount_price && (
+                      <span className="home-featured__badge">Sale</span>
+                    )}
+                  </div>
+                </Link>
+                <div className="home-featured__overlay">
+                  <button
+                    className="home-featured__quick-add"
+                    onClick={() => handleQuickAdd(product)}
+                    disabled={addingToCart === product.id}
+                    aria-label={`Quick add ${product.name} to cart`}
+                  >
+                    {addingToCart === product.id ? 'Adding...' : 'Quick Add'}
+                  </button>
                 </div>
                 <div className="home-featured__info">
                   <span className="home-featured__cat">{product.category}</span>
@@ -152,7 +181,7 @@ const HomePage = () => {
                     )}
                   </div>
                 </div>
-              </Link>
+              </div>
             ))}
           </div>
         )}

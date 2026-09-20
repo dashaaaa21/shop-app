@@ -284,6 +284,12 @@
 .home-featured__card {
   text-decoration: none;
   display: block;
+  position: relative;
+}
+
+.home-featured__link {
+  text-decoration: none;
+  display: block;
 }
 
 .home-featured__img-wrap {
@@ -303,6 +309,47 @@
 
 .home-featured__card:hover .home-featured__img {
   transform: scale(1.04);
+}
+
+.home-featured__overlay {
+  position: absolute;
+  inset: 0;
+  bottom: auto;
+  height: calc(100% - 1rem);
+  background: rgba(0, 0, 0, 0);
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding-bottom: 1rem;
+  transition: background 0.3s ease;
+  opacity: 0;
+}
+
+.home-featured__card:hover .home-featured__overlay {
+  background: rgba(0, 0, 0, 0.4);
+  opacity: 1;
+}
+
+.home-featured__quick-add {
+  background: #000;
+  color: #fff;
+  border: none;
+  font-family: var(--font-sans);
+  font-size: 12px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  padding: 12px 32px;
+  cursor: pointer;
+  transition: background 0.2s ease, opacity 0.2s ease;
+}
+
+.home-featured__quick-add:hover:not(:disabled) {
+  background: #333;
+}
+
+.home-featured__quick-add:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
 }
 
 .home-featured__badge {
