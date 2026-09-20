@@ -15,12 +15,11 @@ export const register = async (req, res, next) => {
 
     const fullName = [firstName, lastName].filter(Boolean).join(' ') || email.split('@')[0];
 
-    // Use admin API to create user without email confirmation requirement
-    // Don't send confirmation email - user is auto-confirmed
+    // Use admin API to create user and auto-confirm without sending email
     const { data, error } = await supabaseAdmin.auth.admin.createUser({
       email,
       password,
-      email_confirm: true, // Automatically confirm email
+      email_confirm: true, // Auto-confirm without sending email
       user_metadata: { full_name: fullName },
     });
 
@@ -33,18 +32,18 @@ export const register = async (req, res, next) => {
       return res.status(400).json({ message: 'Registration failed' });
     }
 
-    // Now sign in the user to get a session
+    // Auto-login the user after registration
     const { data: sessionData, error: signInError } = await supabase.auth.signInWithPassword({
       email,
       password,
     });
 
     if (signInError) {
-      return res.status(400).json({ message: 'Registration successful but login failed' });
+      return res.status(400).json({ message: 'Registration successful but auto-login failed' });
     }
 
     res.status(201).json({
-      message: 'Registration successful — ready to use',
+      message: 'Registration successful! You are now logged in.',
       user: {
         id: data.user.id,
         email: data.user.email,
