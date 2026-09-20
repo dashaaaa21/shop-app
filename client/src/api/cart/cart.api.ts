@@ -80,7 +80,7 @@ export const cartApi = {
     const res = await fetch(`${API}/cart`, {
       method: 'POST',
       headers: await getHeaders(),
-      body: JSON.stringify({ productId, quantity })
+      body: JSON.stringify({ product_id: productId, quantity })
     });
     
     if (!res.ok) {
